@@ -44,5 +44,6 @@ typedef struct s_data{
 //==================== PARSING =====================//
 int		parsing(int argc, char **argv);
 t_data	*get_data(char **argv);
+t_list *skip_metadata_in_file(t_list *file);
 
 #endif
