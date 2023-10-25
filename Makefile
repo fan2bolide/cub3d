@@ -6,13 +6,13 @@
 #    By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/17 16:28:53 by bajeanno          #+#    #+#              #
-#    Updated: 2022/12/18 11:58:59 by bajeanno         ###   ########lyon.fr    #
+#    Updated: 2023/10/25 06:39:38 by bajeanno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 
+NAME = cub3d
 
-FLAGS = -Werror -Wall -Wextra -I stack_lib -I libft -I .
+FLAGS = -Werror -Wall -Wextra -I libft/head -I head
 
 DEBUG_FLAGS = -fsanitize=address -g3
 
@@ -20,30 +20,15 @@ LIBFT = libft/libft.a
 
 SRC = cub3d.c
 
-BONUS_SRC = 
-
-DEPENDS	:=	$(addprefix obj/,$(SRC:.c=.d)) $(addprefix obj/,${BONUS_SRC:.c=.d})
+DEPENDS	:=	$(addprefix obj/,$(SRC:.c=.d))
 
 OBJ = $(addprefix obj/,$(SRC:.c=.o))
 
-BONUS_OBJ = $(addprefix obj/,$(BONUS_SRC:.c=.o))
-
-all : lib .main
+all : lib
 	$(MAKE) $(NAME)
 
-.main :
-	touch .main
-	$(RM) .bonus
-
-$(NAME) : $(OBJ) .main
+$(NAME) : $(OBJ)
 	$(CC) $(OBJ) $(LIBFT) $(STACK_LIB) $(FLAGS) -o $(NAME)
-
-bonus : create_obj_folder lib .bonus
-
-.bonus : $(OBJ) $(BONUS_OBJ)
-	$(CC) $(OBJ) $(BONUS_OBJ) $(LIBFT) $(STACK_LIB) $(FLAGS) -o $(NAME)
-	touch .bonus
-	$(RM) .mandatory
 
 create_obj_folder :
 	mkdir -p obj
