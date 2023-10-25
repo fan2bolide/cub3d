@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/17 16:28:53 by bajeanno          #+#    #+#              #
-#    Updated: 2022/12/18 11:58:59 by bajeanno         ###   ########lyon.fr    #
+#    Updated: 2023/10/25 06:31:26 by nfaust           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 
+NAME = cub3D
 
 FLAGS = -Werror -Wall -Wextra -I stack_lib -I libft -I .
 
@@ -18,7 +18,8 @@ DEBUG_FLAGS = -fsanitize=address -g3
 
 LIBFT = libft/libft.a
 
-SRC = cub3d.c
+SRC = 	cub3d.c \
+		srcs\parsing.c \
 
 BONUS_SRC = 
 
