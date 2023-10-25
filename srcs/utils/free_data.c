@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   free_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 06:38:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 11:09:48 by nfaust           ###   ########.fr       */
+/*   Created: 2023/10/25 14:41:23 by nfaust            #+#    #+#             */
+/*   Updated: 2023/10/25 15:18:37 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-int	parsing(int argc, char **argv)
+void	free_data(t_data *data)
 {
-	t_data	*data;
-
-	if (argc != 2)
-		return (printf(ERR WRONG_ARG_N), 1);
-	data = get_data(argv);
-	if (!data)
-		return (1);
-	free(data->floor_color);
-	free(data->ceiling_color);
-	free(data->n_texture);
-	free(data->s_texture);
-	free(data->e_texture);
-	free(data->w_texture);
-	free(data);
-	return (0);
+	if (data)
+	{
+		if (data->s_texture)
+			free(data->s_texture);
+		if (data->n_texture)
+			free(data->n_texture);
+		if (data->e_texture)
+			free(data->e_texture);
+		if (data->w_texture)
+			free(data->w_texture);
+		if (data->ceiling_color)
+			free(data->ceiling_color);
+		if (data->floor_color)
+			free(data->floor_color);
+		free(data);
+	}
 }

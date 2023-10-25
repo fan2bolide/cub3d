@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 11:23:02 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/25 17:06:41 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,6 @@ static t_list	*list_from_file(char *input_path)
 		curr = curr->next;
 	}
 	return (list);
-}
-
-int	get_texture_path(char **texture_ptr, char *err_code, char *content)
-{
-	if (!(*texture_ptr))
-		*texture_ptr = ft_substr(content, 3, ft_strlen(content) - 3);
-	else
-		return (ft_putstr_fd(err_code, 2), 1);
-	return (0);
-}
-
-int	get_textures_paths(t_data *data, t_list *file)
-{
-	if (!ft_strncmp(file->content, "NO ", 3))
-		return (get_texture_path(&data->n_texture,
-				ERR DB_DEF NO_TXTR, file->content));
-	if (!ft_strncmp(file->content, "SO ", 3))
-		return (get_texture_path(&data->s_texture,
-				ERR DB_DEF SO_TXTR, file->content));
-	if (!ft_strncmp(file->content, "WE ", 3))
-		return (get_texture_path(&data->w_texture,
-				ERR DB_DEF WE_TXTR, file->content));
-	if (!ft_strncmp(file->content, "EA ", 3))
-		return (get_texture_path(&data->e_texture,
-				ERR DB_DEF EA_TXTR, file->content));
-	return (0);
 }
 
 size_t	get_size(char **tab)
@@ -94,7 +68,7 @@ static int	get_colors(t_data *data, t_list *file)
 			ft_split_destroy(colors);
 		}
 		else
-			return (ft_putstr_fd(ERR DB_DEF FL_CLR, 2), 1);
+			return (ft_putstr_fd(ERR MULT_DEF FL_CLR, 2), 1);
 	}
 	if (!ft_strncmp(file->content, "C ", 2))
 	{
@@ -112,7 +86,7 @@ static int	get_colors(t_data *data, t_list *file)
 			ft_split_destroy(colors);
 		}
 		else
-			return (ft_putstr_fd(ERR DB_DEF CL_CLR, 2), 1);
+			return (ft_putstr_fd(ERR MULT_DEF CL_CLR, 2), 1);
 	}
 	return (0);
 }
@@ -125,11 +99,12 @@ t_data	*get_data(char **argv)
 
 	file = list_from_file(argv[1]);//todo secure
 	data = ft_calloc(1, sizeof(t_data));
+	refactor_spaces(file);
 	curr = file;
+	if (parse_textures(data, curr))
+		return (ft_lstclear(&file, free), NULL);
 	while (curr && curr->content)
 	{
-		if (get_textures_paths(data, curr))
-			return (free(data->ceiling_color), free(data->floor_color), free(data), ft_lstclear(&file, free), NULL);
 		if (get_colors(data, curr))
 			return (free(data->ceiling_color), free(data->floor_color), free(data), ft_lstclear(&file, free), NULL);
 		curr = curr->next;

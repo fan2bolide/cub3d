@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 09:07:31 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/25 15:18:00 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,13 @@ typedef struct s_data{
 
 //==================== PARSING =====================//
 int		parsing(int argc, char **argv);
+int		parse_textures(t_data *data, t_list *file);
 t_data	*get_data(char **argv);
+int		check_file_path(t_data *data);
+
+//===================== UTILS ======================//
+void	free_data(t_data *data);
+int		refactor_spaces(t_list *list);
+
 
 #endif

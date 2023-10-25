@@ -1,13 +1,13 @@
-NO /usr/bin
-SO /dejded
-WE /deodkedkekd
-EA /dejdedjedj
+SO                               zizicacamixtape.c
+                    WE zizicac                               amixtape.c
+EA zizicacamixtape.c
 
 C 255,255,        13
-F 201,101,200
+F       201,101,200
 
 1111111
 1000001
 1000001
 1111111
 
+NO salit

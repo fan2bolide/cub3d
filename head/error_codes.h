@@ -6,22 +6,26 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:58:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 11:14:54 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/25 17:04:11 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_CODES_H
 # define ERROR_CODES_H
 
-# define ERR			"Error: "
+# define ERR			"Error\n"
 # define WRONG_ARG_N 	"Wrong number of parameters (expected one)\n"
-# define DB_DEF			"Double definition of: "
+# define MULT_DEF		"Multiple definition of: "
+# define AMB_ASS		"Ambiguous assignation for: "
+# define NO_DEF			"No definition of: "
 # define NO_TXTR		"'North texture'\n"
 # define SO_TXTR		"'South texture'\n"
 # define EA_TXTR		"'East texture'\n"
-# define FL_CLR			"'Floor color'\n"
 # define WE_TXTR		"'West texture'\n"
+# define FL_CLR			"'Floor color'\n"
 # define CL_CLR			"'Ceiling color'\n"
+# define NO_FILE		"no such file or directory: "
+# define IS_DIR			"is a directory: "
 # define ESC_KEY 53
 # define MINUS_KEY 6
 # define PLUS_KEY 7
