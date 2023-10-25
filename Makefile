@@ -1,6 +1,7 @@
 #===========================VARIABLE===============================#
 SRCS		:=	cub3D.c\
 				parsing/parsing.c\
+				parsing/get_map.c\
 
 SRCS_D		:=	srcs/
 
@@ -37,7 +38,7 @@ CFLAGS		:=	-Wall -Wextra -Werror
 DFLAGS		:=	-MP -MMD
 
 #=========================DEBUG==============================#
-ASAN_F		:=	-g3 #-fsanitize=address
+ASAN_F		:=	-g3 -fsanitize=address
 
 ENV			:=	env -i
 

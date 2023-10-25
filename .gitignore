@@ -1,2 +1,4 @@
 *.o
 .idea
+*.a
+cub3D
