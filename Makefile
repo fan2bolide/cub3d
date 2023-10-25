@@ -1,72 +1,81 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/12/17 16:28:53 by bajeanno          #+#    #+#              #
-#    Updated: 2023/10/25 06:39:38 by bajeanno         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+#===========================VARIABLE===============================#
+SRCS		:=	cub3D.c\
+				parsing/parsing.c\
 
-NAME = cub3d
+SRCS_D		:=	srcs/
 
-FLAGS = -Werror -Wall -Wextra -I libft/head -I head
+OBJS_D		:=	objs/
 
-DEBUG_FLAGS = -fsanitize=address -g3
+OBJS		:=	$(SRCS:%.c=$(OBJS_D)%.o)
 
-LIBFT = libft/libft.a
+DEPS		:=	$(SRCS:%.c=$(OBJS_D)%.d)
 
-SRC = 	cub3d.c \
-		srcs\parsing.c \
+HEAD		:=	\
+				cub3D.h\
 
-DEPENDS	:=	$(addprefix obj/,$(SRC:.c=.d))
+HEAD_D		:=	head/
 
-OBJ = $(addprefix obj/,$(SRC:.c=.o))
+HEAD_A		:=	$(addprefix $(HEAD_D), $(HEAD))
 
-all : lib
-	$(MAKE) $(NAME)
+NAME		:=	cub3D
 
-$(NAME) : $(OBJ)
-	$(CC) $(OBJ) $(LIBFT) $(STACK_LIB) $(FLAGS) -o $(NAME)
+LIB			:=	libft.a
 
-create_obj_folder :
-	mkdir -p obj
+LIB_D		:=	libft/
 
-obj/%.o : src/%.c Makefile
-	cc -Wall -Wextra -Werror -c $< -MD -I libft/headers -I head -o $@
+LIB_H		:=	$(LIB_D)$(HEAD_D)
 
-debug : lib
-	$(CC) $(OBJ) $(LIBFT) $(FLAGS) $(DEBUG_FLAGS) -o debug$(NAME)
+LIB_A		:=	$(LIB_D)$(LIB)
 
-lib : $(LIBFT)
+#=========================FLAG===============================#
+CC			:=	cc
 
-$(LIBFT) : libft
-	$(MAKE) -C libft
+RM			:=	rm -rf
 
-libft :
-	git clone git@github.com:fan2bolide/libft.git
+CFLAGS		:=	-Wall -Wextra -Werror
 
-run : all
-	./a.out
+DFLAGS		:=	-MP -MMD
 
-clean :
-	$(RM) $(OBJ) $(BONUS_OBJ) $(DEPENDS)
-	$(RM) -r $(NAME).dSYM
-	$(MAKE) clean -C libft
-	
-fclean : clean
-	$(RM) $(NAME)
-	$(RM) .main .bonus
-	$(MAKE) fclean -C libft
+#=========================DEBUG==============================#
+ASAN_F		:=	-g3 #-fsanitize=address
 
-rm_lib :
-	$(RM) -r libft
+ENV			:=	env -i
 
-re : fclean
-	$(MAKE) all
+VALGRIND	:=	valgrind --leak-check=full --show-leak-kinds=all\
+				--track-fds=yes --show-mismatched-frees=yes --read-var-info=yes -s
 
-.PHONY : all lib run re clean fclean bonus rm_lib
+#========================EXEC===============================#
 
--include $(DEPENDS)
+all			:	$(NAME)
+
+$(NAME)		:	$(OBJS_D) $(OBJS) $(LIB_A)
+			$(CC) $(CFLAGS) $(ASAN_F) -o $(NAME) $(OBJS) $(LIB_A)
+
+$(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.c $(HEAD_A) $(LIB_H)libft.h
+			$(CC) $(CFLAGS) $(ASAN_F) $(DFLAGS) -I$(HEAD_D) -I$(LIB_H) -c $< -o $@
+
+$(OBJS_D)	:
+			@mkdir -p $(OBJS_D)
+			@mkdir -p $(OBJS_D)parsing
+
+$(LIB_A)	:	$(LIB_D)
+			make -C $(LIB_D)
+
+leaks		:	all $(IGN_TXT)
+			$(VALGRIND) ./$(NAME)
+
+env_leaks	:	all $(IGN_TXT)
+			 $(ENV) $(LEAKS) ./$(NAME)
+
+clean		:
+			$(RM) $(OBJS) $(OBJS_D) $(OBJSB_D)
+			make clean -C $(LIB_D)
+
+fclean		:	clean
+			$(RM) $(NAME) $(BONUS)
+			make fclean -C $(LIB_D)
+			$(RM) $(IGN_TXT)
+
+re			:	fclean all
+
+.PHONY		:	all clean fclean re leaks env_leaks
