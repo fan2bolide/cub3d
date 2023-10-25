@@ -1,6 +1,7 @@
-SO                               zizicacamixtape.c
-                    WE zizicac                               amixtape.c
-EA zizicacamixtape.c
+SO                               salut.xpm
+                    WE salut.dxpm
+
+EA salut.xpm
 
 C 255,255,        13
 F       201,101,200
@@ -10,4 +11,4 @@ F       201,101,200
 1000001
 1111111
 
-NO salit
+NO salut.xpm

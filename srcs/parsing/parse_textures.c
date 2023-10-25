@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 11:57:08 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 17:09:23 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/25 17:23:35 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	get_texture_path(char **texture_ptr, char *err_code, char *content)
 {
 	if (!(*texture_ptr))
-		*texture_ptr = ft_substr(content, 3, ft_strlen(content) - 4);
+		*texture_ptr = ft_substr(content, 3, ft_strlen(content) - 3);
 	else
 		return (ft_putstr_fd(err_code, 2), 1);
 	return (0);
@@ -74,6 +74,19 @@ int check_assignation(t_data *data)
 	return (0);
 }
 
+int	check_format(t_data *data)
+{
+	if (ft_strncmp(data->s_texture + ft_strlen(data->s_texture) - 4, ".xpm", 5))
+		return (ft_putstr_fd(ERR WRONG_FORMAT SO_TXTR, 2), 1);
+	if (ft_strncmp(data->n_texture + ft_strlen(data->n_texture) - 4, ".xpm", 5))
+		return (ft_putstr_fd(ERR WRONG_FORMAT NO_TXTR, 2), 1);
+	if (ft_strncmp(data->w_texture + ft_strlen(data->w_texture) - 4, ".xpm", 5))
+		return (ft_putstr_fd(ERR WRONG_FORMAT WE_TXTR, 2), 1);
+	if (ft_strncmp(data->e_texture + ft_strlen(data->e_texture) - 4, ".xpm", 5))
+		return (ft_putstr_fd(ERR WRONG_FORMAT EA_TXTR, 2), 1);
+	return (0);
+}
+
 int	parse_textures(t_data *data, t_list *file)
 {
 
@@ -84,7 +97,7 @@ int	parse_textures(t_data *data, t_list *file)
 			return (free_data(data), 1);
 		file = file->next;
 	}
-	if (check_definition(data) || check_assignation(data) || (check_file_path(data)))
+	if (check_definition(data) || check_assignation(data) || check_file_path(data) || check_format(data))
 		return (free_data(data), 1);
 	return (0);
 }
