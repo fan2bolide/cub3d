@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/26 19:30:34 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/10/26 20:09:36 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <math.h>
 # include "mlx.h"
 # include "libft.h"
 
@@ -66,6 +67,7 @@ typedef struct s_cub
 	int 	win_size[2];
 	t_data img;
 	t_position *player_position;
+	double	view_angle;
 }		t_cub;
 
 

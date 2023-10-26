@@ -1,5 +1,7 @@
 #include "cub3D.h"
 
+double get_orientation(char **map, t_position *pos);
+
 t_position *create_position(double i, double j)
 {
 	t_position *pos;
@@ -32,10 +34,22 @@ t_position *get_position(char **map)
 
 void ray_casting(t_cub *cub)
 {
-
-	t_position *pos = get_position(cub->file->map);
-	cub->player_position = pos;
-	printf("position : \t%f, %f\n", pos->x, pos->y);
-	printf("orientation : \t%c\n", cub->file->map[(int)pos->y][(int)pos->x]);
+	cub->player_position = get_position(cub->file->map);
+	cub->view_angle = get_orientation(cub->file->map, cub->player_position);
+	printf("position : \t%f, %f\n", cub->player_position->x, cub->player_position->y);
+	printf("orientation : \t%c\n", cub->file->map[(int)cub->player_position->y][(int)cub->player_position->x]);
 }
 
+double get_orientation(char **map, t_position *pos) {
+	char orientation;
+
+	orientation = map[(int)pos->y][(int)pos->x];
+	if (orientation == 'N')
+		return (M_PI_2);
+	if (orientation == 'E')
+		return (0);
+	if (orientation == 'W')
+		return (M_PI);
+	if (orientation == 'S')
+		return (3 * M_PI_2);
+}
