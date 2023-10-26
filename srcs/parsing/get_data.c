@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_map.c                                          :+:      :+:    :+:   */
+/*   get_data.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/26 11:09:58 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/26 16:38:55 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@ bool is_all_metadata_set(t_data *data);
 
 void print_map(char **map);
 
+static int check_file_format(char *path)
+{
+	if (ft_strncmp(path + ft_strlen(path) - 4, ".cub", 5))
+	{
+		ft_putstr_fd(ERR WRONG_FORMAT, 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(EOL, 2);
+		return (1);
+	}
+	return (0);
+}
+
 static t_list	*list_from_file(char *input_path)
 {
 	t_list	*list;
@@ -25,12 +37,14 @@ static t_list	*list_from_file(char *input_path)
 	int		input_fd;
 	char	*line;
 
+	if (check_file_format(input_path) || is_directory(input_path))
+		return (NULL);
 	input_fd = open(input_path, O_RDONLY);
 	if (input_fd == -1)
 		return (ft_putstr_fd(ERR, 2), perror(input_path), NULL);
 	line = get_next_line(input_fd);
 	if (!line)
-		return (ft_putstr_fd(EMPTY_FILE, 2), NULL);
+		return (close(input_fd), ft_putstr_fd(ERR EMPTY_FILE OR ALLOC_ERR EOL, 2), NULL);
 	list = ft_lstnew(line);
 	curr = list;
 	while (line)
@@ -38,10 +52,10 @@ static t_list	*list_from_file(char *input_path)
 		line = get_next_line(input_fd);
 		curr->next = ft_lstnew(line);
 		if (!curr->next)
-			return (ft_lstclear(&list, free), ft_putstr_fd(ALLOC_ERR, 2), NULL);
+			return (close(input_fd), ft_lstclear(&list, free), ft_putstr_fd(ERR ALLOC_ERR, 2), NULL);
 		curr = curr->next;
 	}
-	return (list);
+	return (close(input_fd), list);
 }
 
 size_t	get_size(char **tab)
@@ -101,6 +115,17 @@ bool are_all_colors_set(t_data *data) {
 	return (data->ceiling_color && data->floor_color);
 }
 
+int is_empty(t_list *file)
+{
+	while (file && file->content)
+	{
+		if (((char *) (file->content))[0])
+			return (0);
+		file = file->next;
+	}
+	return (ft_putstr_fd(ERR EMPTY_FILE EOL, 2), 1);
+}
+
 t_data	*get_data(char **argv)
 {
 	t_list	*file;
@@ -115,21 +140,23 @@ t_data	*get_data(char **argv)
 	if (!data)
 		return (free(file), NULL);
 	refactor_spaces(file);
+	if (is_empty(file))
+		return (destroy_data(data), ft_lstclear(&file, free), NULL);
 	curr = file;
-	end_of_mdata = skip_metadata_in_file(file);
 	if (parse_textures(data, curr))
 		return (ft_lstclear(&file, free), NULL);
+	end_of_mdata = skip_metadata_in_file(file);
 	while (curr && curr->content && curr != end_of_mdata)
 	{
 		if (get_colors(data, curr))
-			return (free_data(data), ft_lstclear(&file, free), NULL);
+			return (destroy_data(data), ft_lstclear(&file, free), NULL);
 		curr = curr->next;
 	}
 	if (!are_all_colors_set(data))
-		return (ft_putstr_fd(ERR MISS_COL EOL, 2), free_data(data), ft_lstclear(&file, free), NULL); //todo change that shit
+		return (ft_putstr_fd(ERR MISS_COL EOL, 2), destroy_data(data), ft_lstclear(&file, free), NULL);
 	data->map = get_map_from_file(file);
 	if (!data->map)
-		return (perror("ma grosse bite"), NULL); //todo change that shit
+		return (perror(MAP_E), NULL);
 	print_map(data->map);
 	return (ft_lstclear(&file, free), data);
 }
@@ -153,7 +180,7 @@ char **get_map_from_file(t_list *file)
 	i = 0;
 	file = skip_metadata_in_file(file);
 	if (!file)
-		return (NULL);
+		return (printf("im heer\n"), NULL);
 	curr = file;
 	while (curr && curr->content)
 	{

@@ -21,6 +21,6 @@ int	parsing(int argc, char **argv)
 	data = get_data(argv);
 	if (!data)
 		return (1);
-	free_data(data);
+	destroy_data(data);
 	return (0);
 }

@@ -1,7 +1,7 @@
 #===========================VARIABLE===============================#
 SRCS		:=	cub3D.c\
 				parsing/parsing.c\
-				parsing/get_map.c\
+				parsing/get_data.c\
 				parsing/parse_textures.c\
 				parsing/file_path_checking.c\
 				utils/free_data.c\
@@ -43,12 +43,14 @@ CFLAGS		:=	-Wall -Wextra -Werror
 DFLAGS		:=	-MP -MMD
 
 #=========================DEBUG==============================#
-ASAN_F		:=	-g3 -fsanitize=address
+ASAN_F		:=	-g3 #-fsanitize=address
 
 ENV			:=	env -i
 
 VALGRIND	:=	valgrind --leak-check=full --show-leak-kinds=all\
 				--track-fds=yes --show-mismatched-frees=yes --read-var-info=yes -s
+
+PARAMETERS	:=
 
 #========================EXEC===============================#
 
@@ -68,10 +70,10 @@ $(OBJS_D)	:
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)
 
-leaks		:	all $(IGN_TXT)
-			$(VALGRIND) ./$(NAME)
+leaks		:	all
+			$(VALGRIND) ./$(NAME) $(PARAMETERS)
 
-env_leaks	:	all $(IGN_TXT)
+env_leaks	:	all
 			 $(ENV) $(LEAKS) ./$(NAME)
 
 clean		:

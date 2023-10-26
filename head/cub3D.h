@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 09:07:31 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/26 12:05:07 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ t_list *skip_metadata_in_file(t_list *file);
 int		check_file_path(t_data *data);
 
 //===================== UTILS ======================//
-void	free_data(t_data *data);
+void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
+int		is_directory(char *path);
 
 
 #endif
