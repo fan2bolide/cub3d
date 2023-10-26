@@ -21,7 +21,7 @@ static int	get_texture_path(char **texture_ptr, char *err_code, char *content)
 	return (0);
 }
 
-static int	get_textures_paths(t_data *data, t_list *file)
+static int	get_textures_paths(t_file *data, t_list *file)
 {
 	if (!ft_strncmp(file->content, "NO ", 3))
 		return (get_texture_path(&data->n_texture,
@@ -38,7 +38,7 @@ static int	get_textures_paths(t_data *data, t_list *file)
 	return (0);
 }
 
-int	check_definition(t_data *data)
+int	check_definition(t_file *data)
 {
 	if (!data->s_texture || !data->s_texture[0])
 		return (ft_putstr_fd(ERR NO_DEF SO_TXTR, 2), 1);
@@ -51,7 +51,7 @@ int	check_definition(t_data *data)
 	return (0);
 }
 
-int check_assignation(t_data *data)
+int check_assignation(t_file *data)
 {
 	size_t	i;
 
@@ -74,7 +74,7 @@ int check_assignation(t_data *data)
 	return (0);
 }
 
-int	check_format(t_data *data)
+int	check_format(t_file *data)
 {
 	if (ft_strncmp(data->s_texture + ft_strlen(data->s_texture) - 4, ".xpm", 5))
 		return (ft_putstr_fd(ERR WRONG_FORMAT SO_TXTR, 2), 1);
@@ -87,7 +87,7 @@ int	check_format(t_data *data)
 	return (0);
 }
 
-int	parse_textures(t_data *data, t_list *file)
+int	parse_textures(t_file *data, t_list *file)
 {
 	t_list	*end_of_metadata;
 

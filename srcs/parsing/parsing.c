@@ -14,7 +14,7 @@
 
 int	parsing(int argc, char **argv)
 {
-	t_data	*data;
+	t_file	*data;
 
 	if (argc != 2)
 		return (printf(ERR WRONG_ARG_N), 1);

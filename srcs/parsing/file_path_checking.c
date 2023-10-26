@@ -44,7 +44,7 @@ int	is_directory(char *path)
 	return (0);
 }
 
-int	check_file_path(t_data *data)
+int	check_file_path(t_file *data)
 {
 	if (is_directory(data->e_texture) || is_directory(data->w_texture)
 		|| is_directory(data->n_texture) || is_directory(data->s_texture))

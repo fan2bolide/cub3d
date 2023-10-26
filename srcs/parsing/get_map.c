@@ -14,7 +14,7 @@
 
 char **get_map_from_file(t_list *file);
 
-bool is_all_metadata_set(t_data *data);
+bool is_all_metadata_set(t_file *data);
 
 void print_map(char **map);
 
@@ -54,7 +54,7 @@ size_t	get_size(char **tab)
 	return (i);
 }
 
-static int	get_colors(t_data *data, t_list *file)
+static int	get_colors(t_file *data, t_list *file)
 {
 	char	**colors;
 
@@ -97,21 +97,21 @@ static int	get_colors(t_data *data, t_list *file)
 	return (0);
 }
 
-bool are_all_colors_set(t_data *data) {
+bool are_all_colors_set(t_file *data) {
 	return (data->ceiling_color && data->floor_color);
 }
 
-t_data	*get_data(char **argv)
+t_file	*get_data(char **argv)
 {
 	t_list	*file;
 	t_list	*end_of_mdata;
 	t_list	*curr;
-	t_data	*data;
+	t_file	*data;
 
 	file = list_from_file(argv[1]);
 	if (!file)
 		return (NULL);
-	data = ft_calloc(1, sizeof(t_data));
+	data = ft_calloc(1, sizeof(t_file));
 	if (!data)
 		return (free(file), NULL);
 	refactor_spaces(file);

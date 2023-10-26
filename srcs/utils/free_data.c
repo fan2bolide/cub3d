@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-void	free_data(t_data *data)
+void	free_data(t_file *data)
 {
 	if (data)
 	{
