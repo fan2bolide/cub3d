@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:58:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/26 16:38:55 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/26 16:39:21 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define NO_FILE		"No such file or directory: "
 # define IS_DIR			"Is a directory: "
 # define MISS_COL		"Missings one or several colors in source file."
+# define WRONG_COL_ASS	"Wrong color assignation format! expected (0-255,0-255,0-255)"
+# define UNEXP_LINE		"Unexpected line: "
 # define MAP_E			"Could not load map"
 # define EMPTY_FILE 	"Empty file"
 # define OR				" or "

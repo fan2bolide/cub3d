@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/26 16:38:55 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/26 20:10:43 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static t_list	*list_from_file(char *input_path)
 			return (close(input_fd), ft_lstclear(&list, free), ft_putstr_fd(ERR ALLOC_ERR, 2), NULL);
 		curr = curr->next;
 	}
+	curr = NULL;
 	return (close(input_fd), list);
 }
 
@@ -68,24 +69,44 @@ size_t	get_size(char **tab)
 	return (i);
 }
 
-static int	get_colors(t_data *data, t_list *file)
+int	fill_color_struct(t_color **f_c_color, char *line)
 {
 	char	**colors;
+	int 	checker;
 
+	*f_c_color = ft_calloc(1, sizeof(t_color));
+	if (!(*f_c_color))
+		return (ft_putstr_fd(ERR ALLOC_ERR, 2), 0);
+	colors = ft_split(line + 2, ',');
+	if (!colors)
+		return (ft_putstr_fd(ERR ALLOC_ERR, 2), 0);
+	if (get_size(colors) != 3)
+		return (ft_split_destroy(colors), ft_putstr_fd(ERR WRONG_COL_ASS EOL, 2), 0);
+	checker = ft_atoi(colors[0]);
+	if (checker < 0 || checker > 255)
+		return (ft_split_destroy(colors), ft_putstr_fd(ERR WRONG_COL_ASS EOL, 2), 0);
+	(*f_c_color)->red = checker;
+	checker = ft_atoi(colors[1]);
+	if (checker < 0 || checker > 255)
+		return (ft_split_destroy(colors), ft_putstr_fd(ERR WRONG_COL_ASS EOL, 2), 0);
+	(*f_c_color)->green = checker;
+	checker = ft_atoi(colors[2]);
+	if (checker < 0 || checker > 255)
+		return (ft_split_destroy(colors), ft_putstr_fd(ERR WRONG_COL_ASS EOL, 2), 0);
+	(*f_c_color)->blue = checker;
+	ft_split_destroy(colors);
+	return (1);
+}
+
+static int	get_colors(t_data *data, t_list *file)
+{
 	if (!ft_strncmp(file->content, "F ", 2))
 	{
 		if (!data->floor_color)
 		{
-			data->floor_color = ft_calloc(1, sizeof(t_color));
-			colors = ft_split(file->content + 2, ',');
-			if (!colors)
-				return (-1);
-			if (get_size(colors) != 3)
-				return (ft_split_destroy(colors), 1);
-			data->floor_color->red = ft_atoi(colors[0]);
-			data->floor_color->green = ft_atoi(colors[1]);
-			data->floor_color->blue = ft_atoi(colors[2]);
-			ft_split_destroy(colors);
+			fill_color_struct(&(data->floor_color), file->content);
+			if (!data->floor_color)
+				return (1); //! proteger ca
 		}
 		else
 			return (ft_putstr_fd(ERR MULT_DEF FL_CLR, 2), 1);
@@ -94,25 +115,14 @@ static int	get_colors(t_data *data, t_list *file)
 	{
 		if (!data->ceiling_color)
 		{
-			data->ceiling_color = ft_calloc(1, sizeof(t_color));
-			colors = ft_split(file->content + 2, ',');
-			if (!colors)
-				return (-1);
-			if (get_size(colors) != 3)
-				return (ft_split_destroy(colors), 1);
-			data->ceiling_color->red = ft_atoi(colors[0]);
-			data->ceiling_color->green = ft_atoi(colors[1]);
-			data->ceiling_color->blue = ft_atoi(colors[2]);
-			ft_split_destroy(colors);
+			fill_color_struct(&(data->ceiling_color), file->content);
+			if (!data->ceiling_color)
+				return (1); //! proteger ca
 		}
 		else
 			return (ft_putstr_fd(ERR MULT_DEF CL_CLR, 2), 1);
 	}
 	return (0);
-}
-
-bool are_all_colors_set(t_data *data) {
-	return (data->ceiling_color && data->floor_color);
 }
 
 int is_empty(t_list *file)
@@ -124,6 +134,32 @@ int is_empty(t_list *file)
 		file = file->next;
 	}
 	return (ft_putstr_fd(ERR EMPTY_FILE EOL, 2), 1);
+}
+
+int check_for_unexpected_char(t_list *line)
+{
+	size_t	i;
+
+	i = 0;
+	while (((char *)(line->content))[i])
+	{
+		if (ft_strchr("CFNOSWEA ", ((char *) (line->content))[i])
+			&& (i < 3 || ((!ft_strncmp((char *)(line->content), "SO ", 3))
+				&& (!ft_strncmp((char *)(line->content), "NO ", 3))
+				&& (!ft_strncmp((char *)(line->content), "WE ", 3))
+				&& (!ft_strncmp((char *)(line->content), "EA ", 3)))))
+			return (0);
+		else if ()
+		{
+			ft_putstr_fd(ERR UNEXP_LINE, 2);
+			ft_putstr_fd("'", 2);
+			ft_putstr_fd(line->content, 2);
+			ft_putstr_fd("'.\n", 2);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
 }
 
 t_data	*get_data(char **argv)
@@ -148,11 +184,11 @@ t_data	*get_data(char **argv)
 	end_of_mdata = skip_metadata_in_file(file);
 	while (curr && curr->content && curr != end_of_mdata)
 	{
-		if (get_colors(data, curr))
+		if (check_for_unexpected_char(curr) || get_colors(data, curr))
 			return (destroy_data(data), ft_lstclear(&file, free), NULL);
 		curr = curr->next;
 	}
-	if (!are_all_colors_set(data))
+	if (!(data->ceiling_color && data->floor_color))
 		return (ft_putstr_fd(ERR MISS_COL EOL, 2), destroy_data(data), ft_lstclear(&file, free), NULL);
 	data->map = get_map_from_file(file);
 	if (!data->map)
@@ -180,7 +216,7 @@ char **get_map_from_file(t_list *file)
 	i = 0;
 	file = skip_metadata_in_file(file);
 	if (!file)
-		return (printf("im heer\n"), NULL);
+		return (printf("lol\n"), NULL);
 	curr = file;
 	while (curr && curr->content)
 	{

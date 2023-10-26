@@ -87,16 +87,18 @@ SRC			=	ft_atoi.c			\
 
 OBJ = $(addprefix obj/,$(SRC:.c=.o))
 
+FLAGS = -Wall -Wextra -Werror
+
 all	: create_obj_folder $(NAME)
 
 $(NAME): $(OBJ)
 	ar -rcs $(NAME) $(OBJ)
 
 obj/%.o : src/%.c Makefile head/libft.h
-	cc -Wall -Wextra -Werror -c $< -o $@ -I head -g
+	cc $(FLAGS) -c $< -o $@ -I head
 
 create_obj_folder :
-	mkdir -p obj
+	@mkdir -p obj
 
 clean:
 	$(RM) $(OBJ)
@@ -106,7 +108,10 @@ clean:
 fclean: clean
 	$(RM) -f $(NAME)
 
+fsan_a: FLAGS += -fsanitize=address -g3
+fsan_a: all
+
 re: fclean all
 
-.PHONY : all bonus clean fclean re
+.PHONY : all bonus clean fclean re fsan_a
 
