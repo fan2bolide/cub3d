@@ -1,6 +1,11 @@
 #===========================VARIABLE===============================#
 SRCS		:=	cub3D.c\
 				parsing/parsing.c\
+				parsing/get_map.c\
+				parsing/parse_textures.c\
+				parsing/file_path_checking.c\
+				utils/free_data.c\
+				utils/refactor_spaces.c\
 
 SRCS_D		:=	srcs/
 
@@ -12,6 +17,7 @@ DEPS		:=	$(SRCS:%.c=$(OBJS_D)%.d)
 
 HEAD		:=	\
 				cub3D.h\
+				error_codes.h\
 
 HEAD_D		:=	head/
 
@@ -37,7 +43,7 @@ CFLAGS		:=	-Wall -Wextra -Werror
 DFLAGS		:=	-MP -MMD
 
 #=========================DEBUG==============================#
-ASAN_F		:=	-g3 #-fsanitize=address
+ASAN_F		:=	-g3 -fsanitize=address
 
 ENV			:=	env -i
 
@@ -57,6 +63,7 @@ $(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.c $(HEAD_A) $(LIB_H)libft.h
 $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)
 			@mkdir -p $(OBJS_D)parsing
+			@mkdir -p $(OBJS_D)utils
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)
