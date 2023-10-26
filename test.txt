@@ -1,8 +1,9 @@
-NO /usr/bin
-SO /dejded
-WE /deodkedkekd
-
+NO salut.xpm
+                                       WE salut.xpm
+SO salut.xpm
 C 255,255,13
+EA salut.xpm
+
 F 201,101,200
 
 
@@ -11,9 +12,7 @@ F 201,101,200
 
 
 
-
 111111111111111111111
-EA ./deiowhjdew
 100000000000000000001
 100000000000000000001
 100000011111111000001

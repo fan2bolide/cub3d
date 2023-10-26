@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/26 10:36:13 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/26 11:09:58 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,14 @@ static int	get_colors(t_data *data, t_list *file)
 	return (0);
 }
 
+bool are_all_colors_set(t_data *data) {
+	return (data->ceiling_color && data->floor_color);
+}
+
 t_data	*get_data(char **argv)
 {
 	t_list	*file;
+	t_list	*end_of_mdata;
 	t_list	*curr;
 	t_data	*data;
 
@@ -111,16 +116,17 @@ t_data	*get_data(char **argv)
 		return (free(file), NULL);
 	refactor_spaces(file);
 	curr = file;
+	end_of_mdata = skip_metadata_in_file(file);
 	if (parse_textures(data, curr))
 		return (ft_lstclear(&file, free), NULL);
-	while (curr && curr->content)
+	while (curr && curr->content && curr != end_of_mdata)
 	{
 		if (get_colors(data, curr))
-			return (free(data->ceiling_color), free(data->floor_color), free(data), ft_lstclear(&file, free), NULL);
+			return (free_data(data), ft_lstclear(&file, free), NULL);
 		curr = curr->next;
 	}
-	if (!is_all_metadata_set(data))
-		return (perror("ma grosse bite"), NULL); //todo change that shit
+	if (!are_all_colors_set(data))
+		return (ft_putstr_fd(ERR MISS_COL EOL, 2), free_data(data), ft_lstclear(&file, free), NULL); //todo change that shit
 	data->map = get_map_from_file(file);
 	if (!data->map)
 		return (perror("ma grosse bite"), NULL); //todo change that shit
@@ -136,10 +142,6 @@ void print_map(char **map) {
 		printf("%s", map[i]);
 		i++;
 	}
-}
-
-bool is_all_metadata_set(t_data *data) {
-	return (data->ceiling_color && data->floor_color && data->e_texture && data->n_texture && data->s_texture && data->w_texture);
 }
 
 char **get_map_from_file(t_list *file)

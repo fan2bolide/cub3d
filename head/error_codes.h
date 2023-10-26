@@ -27,6 +27,8 @@
 # define CL_CLR			"'Ceiling color'\n"
 # define NO_FILE		"No such file or directory: "
 # define IS_DIR			"Is a directory: "
+# define MISS_COL		"Missings one or several colors in source file."
+# define EOL			"\n"
 # define ESC_KEY 		53
 # define MINUS_KEY 		6
 # define PLUS_KEY		7
