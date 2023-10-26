@@ -1,5 +1,5 @@
 NO salut.xpm
-                                       WE salut.xpm
+                                        WE salut.xpm
 SO salut.xpm
 C 255,255,13
 EA salut.xpm
