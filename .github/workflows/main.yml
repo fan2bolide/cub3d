@@ -15,8 +15,13 @@ jobs:
     - name: Get Branch Name
       id: get_branch
       run: echo ::set-output name=branch::${GITHUB_REF#refs/heads/}
-    
+
+    - name: Get Commit Author
+      id: get_author
+      run: echo ::set-output name=author::${{ github.actor }}
+
     - name: Run Curl
       run: |
         branch_name="${{ steps.get_branch.outputs.branch }}"
-        curl -d "New push on $branch_name" http://ntfy.sh/cub3d
+        commit_author="${{ steps.get_author.outputs.author }}"
+        curl -d "New push on $branch_name by $commit_author" http://ntfy.sh/cub3d
