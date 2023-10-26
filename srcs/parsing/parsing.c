@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:38:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 11:09:48 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/25 13:33:27 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@ int	parsing(int argc, char **argv)
 	data = get_data(argv);
 	if (!data)
 		return (1);
-	free(data->floor_color);
-	free(data->ceiling_color);
-	free(data->n_texture);
-	free(data->s_texture);
-	free(data->e_texture);
-	free(data->w_texture);
-	free(data);
+	free_data(data);
 	return (0);
 }

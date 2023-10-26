@@ -12,6 +12,12 @@
 
 #include "cub3D.h"
 
+char **get_map_from_file(t_list *file);
+
+bool is_all_metadata_set(t_data *data);
+
+void print_map(char **map);
+
 static t_list	*list_from_file(char *input_path)
 {
 	t_list	*list;
@@ -97,8 +103,12 @@ t_data	*get_data(char **argv)
 	t_list	*curr;
 	t_data	*data;
 
-	file = list_from_file(argv[1]);//todo secure
+	file = list_from_file(argv[1]);
+	if (!file)
+		return (NULL);
 	data = ft_calloc(1, sizeof(t_data));
+	if (!data)
+		return (free(file), NULL);
 	refactor_spaces(file);
 	curr = file;
 	if (parse_textures(data, curr))
@@ -109,5 +119,66 @@ t_data	*get_data(char **argv)
 			return (free(data->ceiling_color), free(data->floor_color), free(data), ft_lstclear(&file, free), NULL);
 		curr = curr->next;
 	}
+	if (!is_all_metadata_set(data))
+		return (perror("ma grosse bite"), NULL); //todo change that shit
+	data->map = get_map_from_file(file);
+	if (!data->map)
+		return (perror("ma grosse bite"), NULL); //todo change that shit
+	print_map(data->map);
 	return (ft_lstclear(&file, free), data);
+}
+
+void print_map(char **map) {
+	int i = 0;
+
+	while (map[i])
+	{
+		printf("%s", map[i]);
+		i++;
+	}
+}
+
+bool is_all_metadata_set(t_data *data) {
+	return (data->ceiling_color && data->floor_color && data->e_texture && data->n_texture && data->s_texture && data->w_texture);
+}
+
+char **get_map_from_file(t_list *file)
+{
+	int i;
+	char **map;
+	t_list *curr;
+
+	i = 0;
+	file = skip_metadata_in_file(file);
+	if (!file)
+		return (NULL);
+	curr = file;
+	while (curr && curr->content)
+	{
+		curr = curr->next;
+		i++;
+	}
+	map = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (file && file->content && ft_strcmp(file->content, "\n"))
+	{
+		map[i] = file->content;
+		file = file->next;
+		i++;
+	}
+	map[i] = NULL;
+	return (map);
+}
+
+t_list *skip_metadata_in_file(t_list *file) {
+	t_list *curr;
+
+	curr = file;
+	while (curr && curr->content)
+	{
+		if (ft_strchr(curr->content, '1') && !ft_strchr(curr->content, 'C') && !ft_strchr(curr->content, 'F'))//todo improve that
+			return (curr);
+		curr = curr->next;
+	}
+	return (curr);
 }
