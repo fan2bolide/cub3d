@@ -13,6 +13,16 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+//=================== INCLUDES =====================//
+# include "error_codes.h"
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include "libft.h"
+
 //================== STUCTURES =====================//
 typedef struct s_color{
 	unsigned char	red;
@@ -30,16 +40,6 @@ typedef struct s_data{
 	t_color	*floor_color;
 }		t_data;
 
-
-//=================== INCLUDES =====================//
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include "error_codes.h"
-# include "libft.h"
 
 //==================== PARSING =====================//
 int		parsing(int argc, char **argv);

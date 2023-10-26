@@ -1,11 +1,10 @@
-NO /usr/bin
-SO /dejded
-WE /deodkedkekd
-EA /dejdedjedj
-
+NO salut.xpm
+                                        WE salut.xpm
+SO salut.xpm
 C 255,255,13
-F 201,101,200
+EA salut.xpm
 
+F 201,101,200
 
 
 
@@ -20,3 +19,4 @@ F 201,101,200
 10000001      1000001
 11111111      1000001
               1111111
+

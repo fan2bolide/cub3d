@@ -17,6 +17,7 @@ DEPS		:=	$(SRCS:%.c=$(OBJS_D)%.d)
 
 HEAD		:=	\
 				cub3D.h\
+				error_codes.h\
 
 HEAD_D		:=	head/
 
