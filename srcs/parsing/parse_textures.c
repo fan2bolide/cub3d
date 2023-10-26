@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 11:57:08 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 17:23:35 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/25 17:26:16 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,10 @@ int	check_format(t_data *data)
 
 int	parse_textures(t_data *data, t_list *file)
 {
+	t_list	*end_of_metadata;
 
-	//! rajouter check d'apres map.
-	while (file && file->content)
+	end_of_metadata = skip_metadata_in_file(file);
+	while (file && file->content && file != end_of_metadata)
 	{
 		if (get_textures_paths(data, file))
 			return (free_data(data), 1);

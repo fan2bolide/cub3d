@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:58:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 17:23:35 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/25 17:31:29 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define MULT_DEF		"Multiple definition of: "
 # define AMB_ASS		"Ambiguous assignation for: "
 # define WRONG_FORMAT	"Wrong format (expected .xpm) for: "
-# define NO_DEF			"No definition of: "
+# define NO_DEF			"No or after map definition of: "
 # define NO_TXTR		"'North texture'\n"
 # define SO_TXTR		"'South texture'\n"
 # define EA_TXTR		"'East texture'\n"

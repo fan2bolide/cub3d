@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 17:06:41 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/26 10:36:13 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,8 @@ char **get_map_from_file(t_list *file)
 	return (map);
 }
 
-t_list *skip_metadata_in_file(t_list *file) {
+t_list *skip_metadata_in_file(t_list *file)
+{
 	t_list *curr;
 
 	curr = file;
