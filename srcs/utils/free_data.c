@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_data.c                                        :+:      :+:    :+:   */
+/*   destroy_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-void	free_data(t_data *data)
+void	destroy_data(t_data *data)
 {
 	if (data)
 	{
@@ -26,4 +26,3 @@ void	free_data(t_data *data)
 		free(data);
 	}
 }
-
