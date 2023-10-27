@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/26 20:10:43 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/27 16:01:29 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,10 @@ static t_list	*list_from_file(char *input_path)
 	if (input_fd == -1)
 		return (ft_putstr_fd(ERR, 2), perror(input_path), NULL);
 	line = get_next_line(input_fd);
+	if (!line && errno == ENOMEM)
+		return (close(input_fd), ft_putstr_fd(ERR ALLOC_ERR EOL, 2), NULL);
 	if (!line)
-		return (close(input_fd), ft_putstr_fd(ERR EMPTY_FILE OR ALLOC_ERR EOL, 2), NULL);
+		return (close(input_fd), ft_putstr_fd(ERR EMPTY_FILE EOL, 2), NULL);
 	list = ft_lstnew(line);
 	curr = list;
 	while (line)
@@ -104,23 +106,25 @@ static int	get_colors(t_data *data, t_list *file)
 	{
 		if (!data->floor_color)
 		{
-			fill_color_struct(&(data->floor_color), file->content);
+			if (!fill_color_struct(&(data->floor_color), file->content))
+				return (1);
 			if (!data->floor_color)
 				return (1); //! proteger ca
 		}
 		else
-			return (ft_putstr_fd(ERR MULT_DEF FL_CLR, 2), 1);
+			return (ft_putstr_fd(ERR MULT_DEF FL_CLR EOL, 2), 1);
 	}
 	if (!ft_strncmp(file->content, "C ", 2))
 	{
 		if (!data->ceiling_color)
 		{
-			fill_color_struct(&(data->ceiling_color), file->content);
+			if (!fill_color_struct(&(data->ceiling_color), file->content))
+				return (1);
 			if (!data->ceiling_color)
 				return (1); //! proteger ca
 		}
 		else
-			return (ft_putstr_fd(ERR MULT_DEF CL_CLR, 2), 1);
+			return (ft_putstr_fd(ERR MULT_DEF CL_CLR EOL, 2), 1);
 	}
 	return (0);
 }
@@ -138,26 +142,25 @@ int is_empty(t_list *file)
 
 int check_for_unexpected_char(t_list *line)
 {
+	char	*content;
 	size_t	i;
 
-	i = 0;
-	while (((char *)(line->content))[i])
+	content = (char *)line->content;
+	if (!ft_strncmp(content, "F ", 2) || !ft_strncmp(content, "C ", 2))
 	{
-		if (ft_strchr("CFNOSWEA ", ((char *) (line->content))[i])
-			&& (i < 3 || ((!ft_strncmp((char *)(line->content), "SO ", 3))
-				&& (!ft_strncmp((char *)(line->content), "NO ", 3))
-				&& (!ft_strncmp((char *)(line->content), "WE ", 3))
-				&& (!ft_strncmp((char *)(line->content), "EA ", 3)))))
-			return (0);
-		else if ()
+		i = 2;
+		while (content[i])
 		{
-			ft_putstr_fd(ERR UNEXP_LINE, 2);
-			ft_putstr_fd("'", 2);
-			ft_putstr_fd(line->content, 2);
-			ft_putstr_fd("'.\n", 2);
-			return (1);
+			if (!ft_strchr("0123456789-, ", content[i]))
+			{
+				ft_putstr_fd(ERR UNEXP_LINE, 2);
+				ft_putstr_fd("'", 2);
+				ft_putstr_fd(content, 2);
+				ft_putstr_fd("'.\n", 2);
+				return (1);
+			}
+			i++;
 		}
-		i++;
 	}
 	return (0);
 }
@@ -179,32 +182,23 @@ t_data	*get_data(char **argv)
 	if (is_empty(file))
 		return (destroy_data(data), ft_lstclear(&file, free), NULL);
 	curr = file;
-	if (parse_textures(data, curr))
-		return (ft_lstclear(&file, free), NULL);
 	end_of_mdata = skip_metadata_in_file(file);
+	if (!end_of_mdata)
+		return (destroy_data(data), ft_lstclear(&file, free), NULL);
 	while (curr && curr->content && curr != end_of_mdata)
 	{
 		if (check_for_unexpected_char(curr) || get_colors(data, curr))
 			return (destroy_data(data), ft_lstclear(&file, free), NULL);
 		curr = curr->next;
 	}
+	if (parse_textures(data, file))
+		return (ft_lstclear(&file, free), NULL);
 	if (!(data->ceiling_color && data->floor_color))
 		return (ft_putstr_fd(ERR MISS_COL EOL, 2), destroy_data(data), ft_lstclear(&file, free), NULL);
 	data->map = get_map_from_file(file);
 	if (!data->map)
-		return (perror(MAP_E), NULL);
-	print_map(data->map);
+		return (destroy_data(data), ft_lstclear(&file, free), NULL);
 	return (ft_lstclear(&file, free), data);
-}
-
-void print_map(char **map) {
-	int i = 0;
-
-	while (map[i])
-	{
-		printf("%s", map[i]);
-		i++;
-	}
 }
 
 char **get_map_from_file(t_list *file)
@@ -215,8 +209,8 @@ char **get_map_from_file(t_list *file)
 
 	i = 0;
 	file = skip_metadata_in_file(file);
-	if (!file)
-		return (printf("lol\n"), NULL);
+	if (!file->content)
+		return (ft_putstr_fd(ERR NO_MAP EOL, 2), NULL);
 	curr = file;
 	while (curr && curr->content)
 	{
@@ -237,14 +231,20 @@ char **get_map_from_file(t_list *file)
 
 t_list *skip_metadata_in_file(t_list *file)
 {
-	t_list *curr;
+	t_list	*curr;
+	char	*content;
+	size_t	i;
 
 	curr = file;
-	while (curr && curr->content)
+	i = 0;
+	while (curr && curr->content && i < 6)
 	{
-		if (ft_strchr(curr->content, '1') && !ft_strchr(curr->content, 'C') && !ft_strchr(curr->content, 'F'))//todo improve that
-			return (curr);
+		content = curr->content;
+		if (content[0])
+			i++;
 		curr = curr->next;
 	}
+	while (curr && curr->content && !(((char *)curr->content)[0]))
+		curr = curr->next;
 	return (curr);
 }

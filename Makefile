@@ -89,7 +89,7 @@ fclean		:	clean
 fsan_a		:	CFLAGS += $(ASAN_F)
 fsan_a		:	lib_fsan_a $(NAME)
 
-rfsan_a		: fclean fsan_a $(NAME)
+rfsan_a		: fclean fsan_a
 
 lib_fsan_a:
 			make fsan_a -C $(LIB_D)

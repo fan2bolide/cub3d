@@ -1,13 +1,13 @@
-NO    ./path_to_the_north_texture
+NO    ./txtr_files/path_to_the_north_texture.xpm
 
-      SO      ./path_to_the_south_texture
-
-
-
-    WE     ./path_to_the_west_texture
+      SO      ./txtr_files/path_to_the_south_texture.xpm
 
 
- EA   ./path_to_the_east_texture
+
+    WE     ./txtr_files/path_to_the_west_texture.xpm
+
+
+ EA   ./txtr_files/path_to_the_east_texture.xpm
 
 F    220,   100 ,  0
 

@@ -22,6 +22,7 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include "libft.h"
+# include <errno.h>
 
 //================== STUCTURES =====================//
 typedef struct s_color{
