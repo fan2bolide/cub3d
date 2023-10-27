@@ -2,6 +2,8 @@
 
 double get_orientation(char **map, t_position *pos);
 
+void get_front_distance(t_cub *cub);
+
 t_position *create_position(double i, double j)
 {
 	t_position *pos;
@@ -38,6 +40,17 @@ void ray_casting(t_cub *cub)
 	cub->view_angle = get_orientation(cub->file->map, cub->player_position);
 	printf("position : \t%f, %f\n", cub->player_position->x, cub->player_position->y);
 	printf("orientation : \t%c\n", cub->file->map[(int)cub->player_position->y][(int)cub->player_position->x]);
+	get_front_distance(cub);
+}
+
+void	get_front_distance(t_cub *cub)
+{
+	t_position ray_pos;
+	double ray_direction;
+
+	ray_direction = cub->view_angle;
+	ray_pos.x = cub->player_position->x;
+	ray_pos.y = cub->player_position->y;
 }
 
 double get_orientation(char **map, t_position *pos) {

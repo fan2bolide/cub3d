@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/26 20:36:49 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/10/27 14:37:55 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,7 @@ void cub_update_view_angle(int keycode, t_cub *cub)
 
 void cub_update_player_position(int keycode, t_cub *cub)
 {
-	if (keycode == KEY_W)
-		cub->player_position->y += 0.005;
-	if (keycode == KEY_S)
-		cub->player_position->y -= 0.005;
-	if (keycode == KEY_D)
-		cub->player_position->x += 0.005;
-	if (keycode == KEY_A)
-		cub->player_position->x -= 0.005;
+	//todo redo that shit with trigonometry
 }
 
 int cub_render_frame(t_cub *cub)
@@ -122,7 +115,7 @@ t_file *test_parsing()
 	test->map[0] = ft_strdup("1111111111");
 	test->map[1] = ft_strdup("1000000001");
 	test->map[2] = ft_strdup("1000000001");
-	test->map[3] = ft_strdup("1000000N01");
+	test->map[3] = ft_strdup("10000N0001");
 	test->map[4] = ft_strdup("1111111111");
 	test->map[5] = NULL;
 	return (test);
