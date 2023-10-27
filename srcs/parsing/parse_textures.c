@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 11:57:08 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/27 16:01:12 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/27 16:11:38 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ static int	get_textures_paths(t_data *data, t_list *file)
 	if (!ft_strncmp(file->content, "EA ", 3))
 		return (get_texture_path(&data->e_texture,
 				ERR MULT_DEF EA_TXTR EOL, file->content));
-	if (((char *)(file->content))[0] && ft_strncmp(file->content, "F ", 2) && ft_strncmp(file->content, "C ", 2))
+	if (!ft_strisset(file->content, "10NESW ") && ((char *)(file->content))[0]
+		&& ft_strncmp(file->content, "F ", 2) && ft_strncmp(file->content, "C ", 2))
 	{
 		return (ft_putstr_fd(ERR UNEXP_LINE, 2), ft_putstr_fd(file->content, 2),
 				ft_putstr_fd(EOL, 2), 1);
@@ -45,7 +46,6 @@ static int	get_textures_paths(t_data *data, t_list *file)
 
 int	check_definition(t_data *data)
 {
-	printf("%s\n%s\n%s\n%s\n", data->s_texture, data->n_texture, data->w_texture, data->e_texture);
 	if (!data->s_texture || !data->s_texture[0])
 		return (ft_putstr_fd(ERR NO_DEF SO_TXTR EOL, 2), 1);
 	if (!data->n_texture || !data->n_texture[0])
