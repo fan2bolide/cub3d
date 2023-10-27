@@ -34,6 +34,7 @@ int			ft_tolower(int c);
 int			ft_toupper(int c);
 int			ft_putchar(int c);
 int			ft_isset(char c, char const *set);
+int			ft_strisset(char *str, char const *set);
 
 char		*ft_strcat(char *src, char *dest);
 char		*ft_strncat(char *s1, const char *s2, int n);
