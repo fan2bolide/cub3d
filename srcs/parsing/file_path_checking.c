@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:05:52 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/27 18:24:55 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/28 15:18:07 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	check_file_path(t_data *data)
 		|| is_directory(data->n_texture) || is_directory(data->s_texture))
 		return (1);
 	if (!file_exists(data->e_texture) || !file_exists(data->n_texture)
-		|| !file_exists(data->e_texture) || !file_exists(data->w_texture))
+		|| !file_exists(data->s_texture) || !file_exists(data->w_texture))
 		return (1);
 	return (0);
 }

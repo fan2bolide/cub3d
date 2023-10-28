@@ -17,6 +17,7 @@ if [ ! -d "$dossier" ]; then
 fi
 
 # Boucle à travers les fichiers du dossier
+# Boucle à travers les fichiers du dossier
 for fichier in "$dossier"/*; do
   # Vérifie si le fichier est un fichier régulier
   if [ -f "$fichier" ]; then
@@ -25,16 +26,18 @@ for fichier in "$dossier"/*; do
 
     # Exécute le programme en passant le fichier en tant que paramètre
     if [ "$premiere_lettre" = "b" ]; then
-      "$programme_a_executer" "$fichier" 2>/dev/null
+      "$programme_a_executer" "$fichier"
       if [ $? -eq 0 ]; then
-        echo -e "${ROUGE}✗${RESET} Err0eur : $fichier"
+        echo -e "${ROUGE}✗${RESET} Erreur : $fichier";
+        read -n 1 -s any_key;
       else
-        echo -e "${VERT}✓${RESET} C'est bon : $fichier"
+        echo -e "${VERT}✓${RESET} C'est bon : $fichier";
+        read -n 1 -s any_key;
       fi
     elif [ "$premiere_lettre" = "g" ]; then
       "$programme_a_executer" "$fichier" 2>/dev/null
       if [ $? -eq 1 ]; then
-        echo -e "${ROUGE}✗${RESET} Err0eur : $fichier"
+        echo -e "${ROUGE}✗${RESET} Erreur : $fichier"
       else
         echo -e "${VERT}✓${RESET} C'est bon : $fichier"
       fi
@@ -53,11 +56,13 @@ for fichier in "$dossier"/*; do
 
     # Exécute le programme en passant le fichier en tant que paramètre
     if [ "$premiere_lettre" = "b" ]; then
-      "$programme_a_executer" "$fichier" 2>/dev/null
+      "$programme_a_executer" "$fichier"
       if [ $? -eq 0 ]; then
-        echo -e "${ROUGE}✗${RESET} Erreur : $fichier"
+        echo -e "${ROUGE}✗${RESET} Erreur : $fichier";
+        read -n 1 -s any_key;
       else
-        echo -e "${VERT}✓${RESET} C'est bon : $fichier"
+        echo -e "${VERT}✓${RESET} C'est bon : $fichier";
+        read -n 1 -s any_key;
       fi
     elif [ "$premiere_lettre" = "g" ]; then
       "$programme_a_executer" "$fichier" 2>/dev/null

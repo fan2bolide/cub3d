@@ -51,7 +51,7 @@ ENV			:=	env -i
 VALGRIND	:=	valgrind --leak-check=full --show-leak-kinds=all\
 				--track-fds=yes --show-mismatched-frees=yes --read-var-info=yes -s
 
-PARAMETERS	:=
+PARAMETERS	:= test.cub
 
 #========================EXEC===============================#
 
