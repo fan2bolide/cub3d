@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 11:57:08 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/27 16:11:38 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/28 00:49:27 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int	get_textures_paths(t_data *data, t_list *file)
 	if (!ft_strncmp(file->content, "EA ", 3))
 		return (get_texture_path(&data->e_texture,
 				ERR MULT_DEF EA_TXTR EOL, file->content));
-	if (!ft_strisset(file->content, "10NESW ") && ((char *)(file->content))[0]
+	if (!ft_strisset(file->content, "10NESWOA ") && ((char *)(file->content))[0]
 		&& ft_strncmp(file->content, "F ", 2) && ft_strncmp(file->content, "C ", 2))
 	{
 		return (ft_putstr_fd(ERR UNEXP_LINE, 2), ft_putstr_fd(file->content, 2),
@@ -92,6 +92,17 @@ int check_format(t_data *data)
 		return (ft_putstr_fd(ERR WRONG_FORMAT EA_TXTR EXP_XPM EOL, 2), 1);
 	return (0);
 }
+
+//int	check_access(t_data *data)
+//{
+//	int	test_fd;
+//
+//	test_fd = open(data->e_texture, O_RDONLY);
+//	perror("zizidebasil");
+//	if (test_fd < 0)
+//		return (ft_putstr_fd(ERR, 2), ft_putstr_fd(strerror(errno), 2), ft_putstr_fd(data->e_texture, 2), ft_putstr_fd(EOL, 2), 1);
+//	return (0);
+//}
 
 int		parse_textures(t_data *data, t_list *file)
 {

@@ -2,6 +2,7 @@
 SRCS		:=	cub3D.c\
 				parsing/parsing.c\
 				parsing/get_data.c\
+				parsing/parse_map.c\
 				parsing/parse_textures.c\
 				parsing/file_path_checking.c\
 				utils/free_data.c\

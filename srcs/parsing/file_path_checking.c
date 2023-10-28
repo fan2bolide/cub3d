@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:05:52 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 15:38:54 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/27 18:24:55 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int	file_exists(char *path)
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 	{
-		ft_putstr_fd(ERR NO_FILE, 2);
+		ft_putstr_fd(ERR, 2);
+		ft_putstr_fd(strerror(errno), 2);
+		write(2, ": ", 2);
 		ft_putstr_fd(path, 2);
 		write(2, "\n", 1);
 		return (0);

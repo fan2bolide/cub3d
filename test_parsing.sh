@@ -27,14 +27,14 @@ for fichier in "$dossier"/*; do
     if [ "$premiere_lettre" = "b" ]; then
       "$programme_a_executer" "$fichier" 2>/dev/null
       if [ $? -eq 0 ]; then
-        echo -e "${ROUGE}✗${RESET} Erreur : $fichier"
+        echo -e "${ROUGE}✗${RESET} Err0eur : $fichier"
       else
         echo -e "${VERT}✓${RESET} C'est bon : $fichier"
       fi
     elif [ "$premiere_lettre" = "g" ]; then
       "$programme_a_executer" "$fichier" 2>/dev/null
       if [ $? -eq 1 ]; then
-        echo -e "${ROUGE}✗${RESET} Erreur : $fichier"
+        echo -e "${ROUGE}✗${RESET} Err0eur : $fichier"
       else
         echo -e "${VERT}✓${RESET} C'est bon : $fichier"
       fi

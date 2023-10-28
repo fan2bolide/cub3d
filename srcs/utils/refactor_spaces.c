@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:11:11 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 16:46:56 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/28 00:32:39 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,20 @@ char	*replace_extra_spaces(char *content)
 int	refactor_spaces(t_list *file)
 {
 	char	*new_content;
-	//! add stop on map
+
 	while (file && file->content)
 	{
-		new_content = ft_strtrim(file->content, " \f\n\r\t\v");
-		if (!new_content)
-			return (1);
-		new_content = replace_extra_spaces(new_content);
-		if (!new_content)
-			return (1);
+		if (!ft_strisset(file->content, "10NSEW \n") || ft_strisset(file->content, " \n"))
+		{
+			new_content = ft_strtrim(file->content, " \n");
+			if (!new_content)
+				return (1);
+			new_content = replace_extra_spaces(new_content);
+			if (!new_content)
+				return (1);
+		}
+		else
+			new_content = ft_strtrim(file->content, "\n");
 		free(file->content);
 		file->content = new_content;
 		file = file->next;

@@ -14,7 +14,11 @@
 
 int	main(int argc, char **argv)
 {
-	if (parsing(argc, argv))
+	t_data	*data;
+
+	data = parsing(argc, argv);
+	if (!data)
 		return (1);
+	destroy_data(data);
 	return (0);
 }
