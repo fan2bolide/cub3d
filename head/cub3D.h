@@ -52,6 +52,7 @@ t_list *skip_metadata_in_file(t_list *file);
 int		check_file_path(t_data *data);
 int		parse_map(char **map);
 int 	check_for_illegal_char(t_list *file);
+t_list	*list_from_file(char *file_path);
 
 //===================== UTILS ======================//
 void	destroy_data(t_data *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_data.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/28 17:40:38 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/29 22:23:01 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,52 +17,6 @@ char	**get_map_from_file(t_list *file);
 bool	is_all_metadata_set(t_data *data);
 
 void	print_map(char **map);
-
-static int	check_file_format(char *path)
-{
-	if (ft_strncmp(path + ft_strlen(path) - 4, ".cub", 5))
-	{
-		ft_putstr_fd(ERR WRONG_FORMAT, 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(EXP_CUB EOL, 2);
-		return (1);
-	}
-	return (0);
-}
-
-
-//todo norm
-static t_list	*list_from_file(char *input_path)
-{
-	t_list	*list;
-	t_list	*curr;
-	int		input_fd;
-	char	*line;
-
-	if (check_file_format(input_path) || is_directory(input_path))
-		return (NULL);
-	input_fd = open(input_path, O_RDONLY);
-	if (input_fd == -1)
-		return (ft_putstr_fd(ERR, 2), perror(input_path), NULL);
-	line = get_next_line(input_fd);
-	if (!line && errno == ENOMEM)
-		return (close(input_fd), ft_putstr_fd(ERR ALLOC_ERR EOL, 2), NULL);
-	if (!line)
-		return (close(input_fd), ft_putstr_fd(ERR EMPTY_FILE EOL, 2), NULL);
-	list = ft_lstnew(line);
-	if (!list)
-		return (close(input_fd), ft_putstr_fd(ERR ALLOC_ERR EOL, 2), NULL);
-	curr = list;
-	while (line)
-	{
-		line = get_next_line(input_fd);
-		curr->next = ft_lstnew(line);
-		if (!curr->next || (!line && errno == ENOMEM))
-			return (close(input_fd), ft_lstclear(&list, free), ft_putstr_fd(ERR ALLOC_ERR, 2), NULL);
-		curr = curr->next;
-	}
-	return (close(input_fd), list);
-}
 
 size_t	get_size(char **tab)
 {
