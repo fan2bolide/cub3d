@@ -30,6 +30,8 @@ static int	check_file_format(char *path)
 	return (0);
 }
 
+
+//todo norm
 static t_list	*list_from_file(char *input_path)
 {
 	t_list	*list;
@@ -48,18 +50,17 @@ static t_list	*list_from_file(char *input_path)
 	if (!line)
 		return (close(input_fd), ft_putstr_fd(ERR EMPTY_FILE EOL, 2), NULL);
 	list = ft_lstnew(line);
-	// TODO secure list
+	if (!list)
+		return (close(input_fd), ft_putstr_fd(ERR ALLOC_ERR EOL, 2), NULL);
 	curr = list;
 	while (line)
 	{
 		line = get_next_line(input_fd);
 		curr->next = ft_lstnew(line);
 		if (!curr->next || (!line && errno == ENOMEM))
-			return (close(input_fd), ft_lstclear(&list, free),
-				ft_putstr_fd(ERR ALLOC_ERR EOL, 2), NULL);
+			return (close(input_fd), ft_lstclear(&list, free), ft_putstr_fd(ERR ALLOC_ERR, 2), NULL);
 		curr = curr->next;
 	}
-	curr = NULL;
 	return (close(input_fd), list);
 }
 
@@ -272,6 +273,7 @@ int	refactor_file(t_list *prev)
 	return (0);
 }
 
+//todo norm
 char	**get_map_from_file(t_list *file)
 {
 	int		i;
