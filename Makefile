@@ -6,6 +6,7 @@ SRCS		:=	cub3D.c\
 				parsing/parse_textures.c\
 				parsing/file_path_checking.c\
 				parsing/list_from_file.c\
+				parsing/map_from_list.c\
 				utils/free_data.c\
 				utils/refactor_spaces.c\
 
