@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/27 14:37:55 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/10/25 16:43:43 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ static int	cub_check_args(int argc, char **argv, t_cub *cub)
 
 int	main(int argc, char **argv)
 {
+	t_data	*data;
+
+	data = parsing(argc, argv);
+	if (!data)
 	t_cub *cub;
 
 	cub = malloc(sizeof (t_cub));
@@ -67,6 +71,8 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 		cub_update_view_angle(keycode, cub);
 	else
 		return (1);
+	destroy_data(data);
+	return (0);
 	return (cub_render_frame(cub));
 }
 

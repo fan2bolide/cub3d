@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/25 14:41:23 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/26 10:58:58 by nfaust           ###   ########.fr       */
+/*   Created: 2023/10/30 15:15:18 by nfaust            #+#    #+#             */
+/*   Updated: 2023/10/30 15:15:18 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void	free_data(t_file *data)
+void	destroy_data(t_data *data)
 {
 	if (data)
 	{
@@ -26,4 +26,3 @@ void	free_data(t_file *data)
 		free(data);
 	}
 }
-

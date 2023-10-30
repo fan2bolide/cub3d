@@ -30,12 +30,12 @@ int	ft_atoi(const char *str)
 	{
 		res *= 10;
 		res += str[i] - '0';
+		if (res - 1 > LLONG_MAX && neg < 0)
+			return (0);
+		if (res > LLONG_MAX && neg > 0)
+			return (-1);
 		i++;
 	}
-	if (res - 1 > LLONG_MAX && neg < 0)
-		return (0);
-	if (res > LLONG_MAX && neg > 0)
-		return (-1);
 	return ((int)res * neg);
 }
 

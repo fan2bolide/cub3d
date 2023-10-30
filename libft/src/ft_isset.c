@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 13:42:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2022/11/10 13:53:55 by bajeanno         ###   ########lyon.fr   */
+/*   Updated: 2023/10/30 15:24:50 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,18 @@ int	ft_isset(char c, char const *set)
 		i++;
 	}
 	return (0);
+}
+
+int	ft_strisset(char *str, char const *set)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isset(str[i], set))
+			return (0);
+		i++;
+	}
+	return (1);
 }

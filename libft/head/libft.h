@@ -34,6 +34,7 @@ int			ft_tolower(int c);
 int			ft_toupper(int c);
 int			ft_putchar(int c);
 int			ft_isset(char c, char const *set);
+int			ft_strisset(char *str, char const *set);
 
 char		*ft_strcat(char *src, char *dest);
 char		*ft_strncat(char *s1, const char *s2, int n);
@@ -59,6 +60,7 @@ char		*ft_strchr(const char *s, int c);
 
 char		*ft_strncpy(char *str, char *dest, int n);
 char		*ft_strcpy(char *src, char *dest);
+char		*ft_secure_strcpy(char *src, char *dest);
 size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
 
 int			ft_strcmp(char *s1, char *s2);
@@ -89,6 +91,7 @@ char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*ft_strtrim(char const *s, char const *set);
 
 void		*ft_calloc(size_t count, size_t size);
+void		*ft_calloc_secure(size_t count, size_t size);
 void		*ft_realloc(void *data, size_t size, size_t new_size);
 void		*ft_memalloc(size_t size);
 void		*ft_memset(void *pointer, int value, size_t count);
