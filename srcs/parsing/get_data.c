@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_data.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/29 23:16:43 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/10/30 14:36:56 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-
-char	**get_map_from_file(t_list *file);
 
 size_t	get_size(char **tab)
 {
@@ -160,24 +158,4 @@ t_data	*get_data(char **argv)
 	if (!data->map || parse_map(data->map))
 		return (destroy_data(data), ft_lstclear(&file, free), NULL);
 	return (ft_lstclear(&file, free), data);
-}
-
-t_list	*skip_metadata_in_file(t_list *file)
-{
-	t_list	*curr;
-	char	*content;
-	size_t	i;
-
-	curr = file;
-	i = 0;
-	while (curr && curr->content && i < 6)
-	{
-		content = curr->content;
-		if (content[0])
-			i++;
-		curr = curr->next;
-	}
-	while (curr && curr->content && !(((char *)curr->content)[0]))
-		curr = curr->next;
-	return (curr);
 }

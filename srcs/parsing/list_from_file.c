@@ -50,6 +50,26 @@ static t_list	*create_first_node(int fd, char *str)
 	return (node);
 }
 
+t_list	*skip_metadata_in_file(t_list *file)
+{
+	t_list	*curr;
+	char	*content;
+	size_t	i;
+
+	curr = file;
+	i = 0;
+	while (curr && curr->content && i < 6)
+	{
+		content = curr->content;
+		if (content[0])
+			i++;
+		curr = curr->next;
+	}
+	while (curr && curr->content && !(((char *)curr->content)[0]))
+		curr = curr->next;
+	return (curr);
+}
+
 t_list	*list_from_file(char *file_path)
 {
 	t_list	*list;

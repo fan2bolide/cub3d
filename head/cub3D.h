@@ -30,7 +30,7 @@ typedef struct s_color{
 	unsigned char	blue;
 	unsigned char	green;
 	unsigned char	red;
-	unsigned char	basil;
+	unsigned char	transparency;
 }		t_color;
 
 typedef struct s_data{
@@ -43,21 +43,20 @@ typedef struct s_data{
 	t_color	*floor_color;
 }		t_data;
 
-
 //==================== PARSING =====================//
 t_data	*parsing(int argc, char **argv);
 int		parse_textures(t_data *data, t_list *file);
 t_data	*get_data(char **argv);
-t_list *skip_metadata_in_file(t_list *file);
+t_list	*skip_metadata_in_file(t_list *file);
 int		check_file_path(t_data *data);
 int		parse_map(char **map);
-int 	check_for_illegal_char(t_list *file);
+int		check_for_illegal_char(t_list *file);
+char	**get_map_from_file(t_list *file);
 t_list	*list_from_file(char *file_path);
 
 //===================== UTILS ======================//
 void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
 int		is_directory(char *path);
-
 
 #endif
