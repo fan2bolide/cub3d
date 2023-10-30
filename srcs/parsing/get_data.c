@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 14:36:56 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/30 14:39:37 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	fill_color_struct(t_color **f_c_color, char *line)
 	return (1);
 }
 
-static int	get_colors(t_data *data, t_list *file)
+static int	fill_colors(t_data *data, t_list *file)
 {
 	if (!ft_strncmp(file->content, "F ", 2))
 	{
@@ -124,11 +124,39 @@ int	check_for_unexpected_char(t_list *line)
 	return (0);
 }
 
+int	get_colors(t_data *data, t_list *file)
+{
+	t_list	*end_of_mdata;
+
+	end_of_mdata = skip_metadata_in_file(file);
+	if (!end_of_mdata)
+		return (destroy_data(data), ft_lstclear(&file, free), 1);
+	while (file && file->content && file != end_of_mdata)
+	{
+		if (check_for_unexpected_char(file) || fill_colors(data, file))
+			return (destroy_data(data), ft_lstclear(&file, free), 1);
+		file = file->next;
+	}
+	return (0);
+}
+
+void	print_data(t_data *data)
+{
+	printf("%s\n", data->s_texture);
+	printf("%s\n", data->n_texture);
+	printf("%s\n", data->w_texture);
+	printf("%s\n", data->e_texture);
+	printf("%i\n", data->ceiling_color->red);
+	printf("%i\n", data->ceiling_color->green);
+	printf("%i\n", data->ceiling_color->blue);
+	printf("%i\n", data->floor_color->red);
+	printf("%i\n", data->floor_color->green);
+	printf("%i\n", data->floor_color->blue);
+}
+
 t_data	*get_data(char **argv)
 {
 	t_list	*file;
-	t_list	*end_of_mdata;
-	t_list	*curr;
 	t_data	*data;
 
 	file = list_from_file(argv[1]);
@@ -138,18 +166,8 @@ t_data	*get_data(char **argv)
 	if (!data)
 		return (free(file), NULL);
 	refactor_spaces(file);
-	if (is_empty(file))
+	if (is_empty(file) || get_colors(data, file))
 		return (destroy_data(data), ft_lstclear(&file, free), NULL);
-	curr = file;
-	end_of_mdata = skip_metadata_in_file(file);
-	if (!end_of_mdata)
-		return (destroy_data(data), ft_lstclear(&file, free), NULL);
-	while (curr && curr->content && curr != end_of_mdata)
-	{
-		if (check_for_unexpected_char(curr) || get_colors(data, curr))
-			return (destroy_data(data), ft_lstclear(&file, free), NULL);
-		curr = curr->next;
-	}
 	if (parse_textures(data, file))
 		return (ft_lstclear(&file, free), NULL);
 	if (!(data->ceiling_color && data->floor_color))
@@ -157,5 +175,6 @@ t_data	*get_data(char **argv)
 	data->map = get_map_from_file(file);
 	if (!data->map || parse_map(data->map))
 		return (destroy_data(data), ft_lstclear(&file, free), NULL);
+	print_data(data);
 	return (ft_lstclear(&file, free), data);
 }
