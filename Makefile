@@ -3,12 +3,15 @@ SRCS		:=	cub3D.c\
 				parsing/parsing.c\
 				parsing/get_data.c\
 				parsing/parse_map.c\
+				parsing/parse_colors.c\
 				parsing/parse_textures.c\
 				parsing/file_path_checking.c\
 				parsing/list_from_file.c\
 				parsing/map_from_list.c\
 				utils/free_data.c\
 				utils/refactor_spaces.c\
+				utils/utils.c\
+				utils/texture_utils.c\
 
 SRCS_D		:=	srcs/
 

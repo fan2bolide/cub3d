@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-int check_for_illegal_char(t_list *file)
+int	check_for_illegal_char(t_list *file)
 {
 	char	*content;
 
@@ -26,7 +26,7 @@ int check_for_illegal_char(t_list *file)
 	return (0);
 }
 
-int player_count(char **map)
+int	player_count(char **map)
 {
 	size_t	i;
 	size_t	j;
@@ -45,16 +45,16 @@ int player_count(char **map)
 	return (count);
 }
 
-int check_wall_surroundment(char **map)
+int	check_wall_surroundment(char **map)
 {
-	size_t	x;
-	size_t	y;
+	ssize_t	x;
+	ssize_t	y;
 
-	y = 0;
-	while (map[y])
+	y = -1;
+	while (map[++y])
 	{
-		x = 0;
-		while (map[y][x])
+		x = -1;
+		while (map[y][++x])
 		{
 			if (ft_isset(map[y][x], "0NSEW"))
 			{
@@ -62,14 +62,13 @@ int check_wall_surroundment(char **map)
 					return (ft_putstr_fd(ERR E_WALL_SUR EOL, 2), 1);
 				if (!map[y + 1] || !map[y + 1][x] || map[y + 1][x] == ' ')
 					return (ft_putstr_fd(ERR E_WALL_SUR EOL, 2), 1);
-				if ((x && (!map[y][x - 1] || map[y][x - 1] == ' '))|| !x)
+				if ((x && (!map[y][x - 1] || map[y][x - 1] == ' ')) || !x)
 					return (ft_putstr_fd(ERR E_WALL_SUR EOL, 2), 1);
-				if ((y && (!map[y - 1] || !map[y - 1][x] || map[y - 1][x] == ' ')) || !y)
+				if ((y && (!map[y - 1] || !map[y - 1][x] \
+					|| map[y - 1][x] == ' ')) || !y)
 					return (ft_putstr_fd(ERR E_WALL_SUR EOL, 2), 1);
 			}
-			x++;
 		}
-		y++;
 	}
 	return (0);
 }
@@ -77,7 +76,7 @@ int check_wall_surroundment(char **map)
 int	parse_map(char **map)
 {
 	if (player_count(map) != 1)
-		return (ft_putstr_fd(ERR WRONG_P_N EOL,2), 1);
+		return (ft_putstr_fd(ERR WRONG_P_N EOL, 2), 1);
 	if (check_wall_surroundment(map))
 		return (1);
 	return (0);

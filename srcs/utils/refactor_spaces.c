@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:11:11 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/28 00:32:39 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/30 15:14:15 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ char	*replace_extra_spaces(char *content)
 	i = 0;
 	counter = 0;
 	while (content[i++])
-		if (!ft_isspace(content[i - 1]) || (content[i] && !ft_isspace(content[i])))
+		if (!ft_isspace(content[i - 1])
+			|| (content[i] && !ft_isspace(content[i])))
 			counter++;
 	new_content = malloc(sizeof(char) * counter + 1);
 	if (!new_content)
@@ -44,8 +45,7 @@ char	*replace_extra_spaces(char *content)
 			new_content[j++] = ' ';
 		new_content[j++] = content[i++];
 	}
-	new_content[j] = 0;
-	return (free(content), new_content);
+	return (new_content[j] = 0, free(content), new_content);
 }
 
 int	refactor_spaces(t_list *file)
@@ -54,7 +54,8 @@ int	refactor_spaces(t_list *file)
 
 	while (file && file->content)
 	{
-		if (!ft_strisset(file->content, "10NSEW \n") || ft_strisset(file->content, " \n"))
+		if (!ft_strisset(file->content, "10NSEW \n") \
+			|| ft_strisset(file->content, " \n"))
 		{
 			new_content = ft_strtrim(file->content, " \n");
 			if (!new_content)

@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/28 02:05:04 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/30 15:02:57 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ t_data	*get_data(char **argv);
 t_list	*skip_metadata_in_file(t_list *file);
 int		check_file_path(t_data *data);
 int		parse_map(char **map);
+int		get_colors(t_data *data, t_list *file);
 int		check_for_illegal_char(t_list *file);
 char	**get_map_from_file(t_list *file);
 t_list	*list_from_file(char *file_path);
@@ -58,5 +59,9 @@ t_list	*list_from_file(char *file_path);
 void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
 int		is_directory(char *path);
+size_t	get_size(char **tab);
+int		check_definition(t_data *data);
+int		check_assignation(t_data *data);
+int		check_format(t_data *data);
 
 #endif

@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_data.c                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/30 15:15:18 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 15:15:18 by nfaust           ###   ########.fr       */
+/*   Created: 2023/10/30 15:02:17 by nfaust            #+#    #+#             */
+/*   Updated: 2023/10/30 15:02:57 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void	destroy_data(t_data *data)
+size_t	get_size(char **tab)
 {
-	if (data)
-	{
-		free(data->s_texture);
-		free(data->n_texture);
-		free(data->e_texture);
-		free(data->w_texture);
-		free(data->ceiling_color);
-		free(data->floor_color);
-		free(data->map);
-		free(data);
-	}
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+		i++;
+	return (i);
 }
