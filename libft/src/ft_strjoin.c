@@ -42,7 +42,6 @@ char	*ft_strnjoin(char *s1, const char *s2, int n)
 	return (res);
 }
 
-#include <stdio.h>
 char	*ft_strjoin_secure(char const *s1, char const *s2)
 {
 	char	*res;

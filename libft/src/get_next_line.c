@@ -58,7 +58,6 @@ static char	*ft_read_buffer(int fd, char *buf, char *line, int size)
 	return (line);
 }
 
-#include <errno.h>
 char	*get_next_line(int fd)
 {
 	static char		buffer[BUFFER_SIZE + 1] = {0};
