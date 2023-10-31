@@ -118,9 +118,9 @@ void	mlx_int_xpm_set_pixel(mlx_img_list_t *img, char *data, int opp, int col, in
   while (dec--)
     {
       if (img->image->byte_order)
-	*(file+x*opp+dec) = col&0xFF;
+	*(data+x*opp+dec) = col&0xFF;
       else
-	*(file+x*opp+opp-dec-1) = col&0xFF;
+	*(data+x*opp+opp-dec-1) = col&0xFF;
       col >>= 8;
     }
   */
@@ -251,7 +251,7 @@ void	*mlx_int_parse_xpm(mlx_ptr_t *xvar,void *info,int info_size,char *(*f)())
 	  mlx_int_xpm_set_pixel(img, data, opp, col, x);
 	  x ++;
 	}
-      //      file += img->size_line;
+      //      data += img->size_line;
       data += img->width*4;
     }
   /*

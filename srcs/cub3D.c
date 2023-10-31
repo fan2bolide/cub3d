@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/25 16:43:43 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/31 03:30:50 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-t_file	*test_parsing();
+double get_orientation(char **map, t_position *pos);
+t_data	*test_parsing();
 void	cub_mlx_config(t_cub *cub);
 int		cub_handle_key_press(int keycode, t_cub *cub);
 int		close_window(t_cub *cub);
@@ -34,22 +35,22 @@ static int	cub_check_args(int argc, char **argv, t_cub *cub)
 
 int	main(int argc, char **argv)
 {
-	t_data	*data;
-
-	data = parsing(argc, argv);
-	if (!data)
 	t_cub *cub;
 
 	cub = malloc(sizeof (t_cub));
-	cub->win_size[0] = 900;
+	cub->win_size[0] = 480;
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
-	cub->file = test_parsing(); //todo add real parsing here
+	cub->data = parsing(argc, argv);
+	if (!cub->data)
+		return (1);
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
-	ray_casting(cub);
+	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
+	if (!ray_casting(cub))
+		return (close_window(cub), 1);
 	cub_mlx_config(cub);
 	return (mlx_loop(cub->mlx), 0);
 }
@@ -71,8 +72,6 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 		cub_update_view_angle(keycode, cub);
 	else
 		return (1);
-	destroy_data(data);
-	return (0);
 	return (cub_render_frame(cub));
 }
 
@@ -90,13 +89,15 @@ void cub_update_view_angle(int keycode, t_cub *cub)
 
 void cub_update_player_position(int keycode, t_cub *cub)
 {
+	(void)keycode;
+	(void)cub;
 	//todo redo that shit with trigonometry
 }
 
 int cub_render_frame(t_cub *cub)
 {
 	ray_casting(cub);
-	return 0;
+	return (0);
 }
 
 int close_window(t_cub *cub)
@@ -104,25 +105,4 @@ int close_window(t_cub *cub)
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
 	exit(0);
-}
-
-t_file *test_parsing()
-{
-	t_file *test;
-
-	test = malloc(sizeof(t_file));
-	test->floor_color = malloc(sizeof(t_color));
-	test->ceiling_color = malloc(sizeof(t_color));
-	test->s_texture = ft_strdup("./textures/test_texture1");
-	test->n_texture = ft_strdup("./textures/test_texture2");
-	test->e_texture = ft_strdup("./textures/test_texture3");
-	test->w_texture = ft_strdup("./textures/test_texture4");
-	test->map = malloc(sizeof(char *) * 6);
-	test->map[0] = ft_strdup("1111111111");
-	test->map[1] = ft_strdup("1000000001");
-	test->map[2] = ft_strdup("1000000001");
-	test->map[3] = ft_strdup("10000N0001");
-	test->map[4] = ft_strdup("1111111111");
-	test->map[5] = NULL;
-	return (test);
 }

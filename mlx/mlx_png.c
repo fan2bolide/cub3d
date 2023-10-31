@@ -46,7 +46,7 @@ char *(mipng_err[]) =
   "Non consecutive dat chunks",
   "Missing header/dat/end chunk(s)",
   "Zlib inflate error",
-  "Inflated file size mismatch",
+  "Inflated data size mismatch",
   "Unknown scanline filter"
 };
 
@@ -399,7 +399,7 @@ void	*mlx_png_file_to_image(mlx_ptr_t *xvar, char *file, int *width, int *height
     {
       if (fd >= 0)
         close(fd);
-      warnx("Can't map png file '%s'", file);
+      warnx("Can't map png data '%s'", file);
       return ((void *)0);
     }
   if ((img = mlx_int_parse_png(xvar, ptr, size)))

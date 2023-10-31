@@ -25,7 +25,6 @@ DEPS		:=	$(SRCS:%.c=$(OBJS_D)%.d)
 HEAD		:=	\
 				cub3D.h\
 				error_codes.h\
-				mlx.h\
 
 HEAD_D		:=	head/
 
@@ -40,6 +39,8 @@ LIB_D		:=	libft/
 LIB_H		:=	$(LIB_D)$(HEAD_D)
 
 LIB_A		:=	$(LIB_D)$(LIB)
+
+MLX_D		:=	mlx
 
 UNAME := $(shell uname)
 
@@ -57,7 +58,7 @@ CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra
 
 DFLAGS		:=	-MP -MMD
 
@@ -78,11 +79,11 @@ all			:	$(NAME)
 $(NAME)		:	$(OBJS_D) $(OBJS) $(LIB_A) $(MLX)
 			$(CC) $(CFLAGS) $(ASAN_F) $(MLX_FLAGS) -o $(NAME) $(OBJS) $(LIB_A) $(MLX)
 
-$(MLX)		:
+$(MLX)		: mlx
 			$(MAKE) -C mlx
 
-$(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.c $(HEAD_A) $(LIB_H)libft.h
-			$(CC) $(CFLAGS) $(DFLAGS) -I$(HEAD_D) -I$(LIB_H) -c $< -o $@
+$(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.c $(HEAD_A) $(LIB_H)libft.h $(MLX_D)/mlx.h
+			$(CC) $(CFLAGS) $(DFLAGS) -I$(HEAD_D) -I$(LIB_H) -I$(MLX_D) -c $< -o $@
 
 $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)

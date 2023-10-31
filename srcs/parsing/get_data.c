@@ -45,5 +45,5 @@ t_data	*get_data(char **argv)
 	data->map = get_map_from_file(file);
 	if (!data->map || parse_map(data->map))
 		return (destroy_data(data), ft_lstclear(&file, free), NULL);
-	return (ft_lstclear(&file, free), data);
+	return (ft_lstclear_mais_pas_trop(&file), data);
 }

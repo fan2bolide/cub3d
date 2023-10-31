@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 15:02:57 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/10/30 21:59:20 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ typedef struct s_data{
 	t_color	*floor_color;
 }		t_data;
 
-typedef struct s_data
+typedef struct s_image
 {
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}			t_data;
+}			t_image;
 
 typedef struct s_position
 {
@@ -62,11 +62,11 @@ typedef struct s_position
 
 typedef struct s_cub
 {
-	t_file	*file;
+	t_data	*data;
 	void	*mlx;
 	void	*win;
 	int 	win_size[2];
-	t_data img;
+	t_image img;
 	t_position *player_position;
 	double	view_angle;
 }		t_cub;
@@ -87,7 +87,7 @@ t_list	*list_from_file(char *file_path);
 //===================== UTILS ======================//
 void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
-void	ray_casting(t_cub *cub);
+int		ray_casting(t_cub *cub);
 
 int		is_directory(char *path);
 size_t	get_size(char **tab);
