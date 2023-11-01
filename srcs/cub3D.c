@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/31 03:30:50 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/01 00:00:33 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char **argv)
 	t_cub *cub;
 
 	cub = malloc(sizeof (t_cub));
-	cub->win_size[0] = 480;
+	cub->win_size[0] = 900;
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
@@ -77,10 +77,10 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 
 void cub_update_view_angle(int keycode, t_cub *cub)
 {
-	if (keycode == KEY_RIGHT)
-		cub->view_angle -= 0.005;
+	if (keycode == KEY_LEFT)
+		cub->view_angle -= 0.05;
 	else
-		cub->view_angle += 0.005;
+		cub->view_angle += 0.05;
 	if (cub->view_angle < 0)
 		cub->view_angle += (2 * M_PI);
 	else if (cub->view_angle > (2 * M_PI))

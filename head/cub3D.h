@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 21:59:20 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/10/31 16:25:41 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ t_list	*list_from_file(char *file_path);
 void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
 int		ray_casting(t_cub *cub);
+
+void render_minimap(t_cub *cub, t_position ray_collision);
 
 int		is_directory(char *path);
 size_t	get_size(char **tab);

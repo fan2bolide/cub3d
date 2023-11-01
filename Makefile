@@ -13,6 +13,7 @@ SRCS		:=	cub3D.c\
 				utils/utils.c\
 				utils/texture_utils.c\
 				ray_casting/ray_casting.c\
+				ray_casting/mini_map.c\
 
 SRCS_D		:=	srcs/
 
