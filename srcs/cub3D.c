@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/02 01:57:59 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/01 00:00:33 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,36 @@ static int	cub_check_args(int argc, char **argv, t_cub *cub)
 	return (0);
 }
 
+t_position *create_position(double i, double j)
+{
+	t_position *pos;
+
+	pos = malloc(sizeof(t_position));
+	pos->x = j;
+	pos->y = i;
+	return (pos);
+}
+
+t_position *get_position(char **map)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'N' || map[i][j] == 'E' || map[i][j] == 'S' || map[i][j] == 'W')
+				return (create_position((double)i, (double)j));
+			j++;
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 int	main(int argc, char **argv)
 {
 	t_cub *cub;
@@ -45,29 +75,45 @@ int	main(int argc, char **argv)
 	cub->data = parsing(argc, argv);
 	if (!cub->data)
 		return (1);
+	cub->player_position = get_position(cub->data->map);
+	cub->player_position->x += 0.5;
+	cub->player_position->y += 0.5;
+	printf("%f %f\n", cub->player_position->x, cub->player_position->y);
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
+	cub->fov = M_PI_2;
 	if (!ray_casting(cub))
 		return (close_window(cub), 1);
-	printf("lalalal\n");
 	cub_mlx_config(cub);
 	return (mlx_loop(cub->mlx), 0);
 }
 
 void cub_mlx_config(t_cub *cub)
 {
-	printf("dwodjweoijdoiwejdijwed\n");
 	mlx_key_hook(cub->win, cub_handle_key_press, cub);
 	mlx_hook(cub->win, 17, 0, close_window, cub);
 }
 
+void cub_update_fov(int keycode, t_cub *cub)
+{
+	if (keycode == MINUS_KEY)
+		cub->fov -= 0.05;
+	else
+		cub->fov += 0.05;
+	if (cub->fov > M_PI)
+		cub->fov = M_PI;
+	if (cub->fov < M_PI_4)
+		cub->fov = M_PI_4;
+}
+
 int cub_handle_key_press(int keycode, t_cub *cub)
 {
-	printf("%i\n", keycode);
 	if (keycode == ESC_KEY)
 		return (close_window(cub));
+	else if (keycode == MINUS_KEY || keycode == PLUS_KEY)
+		cub_update_fov(keycode, cub);
 	else if (keycode == KEY_W || keycode == KEY_A
 			 || keycode == KEY_S || keycode == KEY_D)
 		cub_update_player_position(keycode, cub);
@@ -92,9 +138,38 @@ void cub_update_view_angle(int keycode, t_cub *cub)
 
 void cub_update_player_position(int keycode, t_cub *cub)
 {
-	(void)keycode;
-	(void)cub;
-	//todo redo that shit with trigonometry
+	printf("player_position : %fx, %fy\n", cub->player_position->x, cub->player_position->y);
+	if (keycode == KEY_W)
+	{
+		cub->player_position->x += cos(cub->view_angle) / 10;
+		cub->player_position->y += sin(cub->view_angle) / 10;
+	}
+	if (keycode == KEY_S)
+	{
+		cub->player_position->x -= cos(cub->view_angle) / 10;
+		cub->player_position->y -= sin(cub->view_angle) / 10;
+	}
+	if (keycode == KEY_A)
+	{
+		cub->player_position->x += cos(cub->view_angle - M_PI_2) / 10;
+		cub->player_position->y += sin(cub->view_angle - M_PI_2) / 10;
+	}
+	if (keycode == KEY_D)
+	{
+		cub->player_position->x += cos(cub->view_angle + M_PI_2) / 10;
+		cub->player_position->y += sin(cub->view_angle + M_PI_2) / 10;
+	}
+	if (cub->data->map[(int)cub->player_position->y][(int)cub->player_position->x] == '1')
+	{
+		if (keycode == KEY_W)
+			cub_update_player_position(KEY_S, cub);
+		if (keycode == KEY_A)
+			cub_update_player_position(KEY_D, cub);
+		if (keycode == KEY_D)
+			cub_update_player_position(KEY_A, cub);
+		if (keycode == KEY_S)
+			cub_update_player_position(KEY_W, cub);
+	}
 }
 
 int cub_render_frame(t_cub *cub)

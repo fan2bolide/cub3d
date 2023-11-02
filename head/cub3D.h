@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/31 16:25:41 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/01 22:19:08 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_cub
 	t_image img;
 	t_position *player_position;
 	double	view_angle;
+	double	fov;
 }		t_cub;
 
 
@@ -89,7 +90,7 @@ void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
 int		ray_casting(t_cub *cub);
 
-void render_minimap(t_cub *cub, t_position ray_collision);
+void render_minimap(t_cub *cub, t_position ray_collision[1], double angle[1]);
 
 int		is_directory(char *path);
 size_t	get_size(char **tab);
