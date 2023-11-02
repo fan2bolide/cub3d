@@ -1,0 +1,6 @@
+*.o
+*.d
+.idea
+*.a
+cub3D
+/objs/
