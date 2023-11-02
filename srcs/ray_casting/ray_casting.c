@@ -4,19 +4,9 @@
 
 double get_orientation(char **map, t_position *pos);
 
-void get_front_distance(t_cub *cub);
+void shoot_ray(t_position *ray, t_cub *cub, double angle);
 
-void shoot_ray(t_position *position, t_cub *cub, double angle);
-
-int ray_casting(t_cub *cub)
-{
-	if (!cub->data->map)
-		return (0);
-	get_front_distance(cub);
-	return (1);
-}
-
-void	get_front_distance(t_cub *cub)
+int	ray_casting(t_cub *cub)
 {
 	t_position	ray_pos[cub->win_size[1] / 2];
 	double		angle[cub->win_size[1] / 2];
@@ -39,6 +29,7 @@ void	get_front_distance(t_cub *cub)
 		i++;
 	}
 	render_minimap(cub, ray_pos, angle);
+	return (1);
 }
 
 void print_distance(t_position ray, t_cub *cub)

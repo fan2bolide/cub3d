@@ -48,6 +48,7 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], 
 	int j;
 	int scale;
 	t_position player_dupl;
+	t_position ray_dupl;
 
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, &cub->img.line_length, &cub->img.endian);
@@ -69,9 +70,9 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], 
 	i = 0;
 	while (i < cub->win_size[1] / 2)
 	{
-		ray_collision[i].x *= scale;
-		ray_collision[i].y *= scale;
-		fdf_put_line(cub, player_dupl, ray_collision[i], 0xFF0000);
+		ray_dupl.x = ray_collision[i].x * scale;
+		ray_dupl.y = ray_collision[i].y * scale;
+		fdf_put_line(cub, player_dupl, ray_dupl, 0xFF0000);
 		i++;
 	}
 	i = 0;
@@ -83,8 +84,10 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], 
 	{
 		distance = sqrt((ray_collision[i].x - cub->player_position->x) * (ray_collision[i].x - cub->player_position->x) + (ray_collision[i].y - cub->player_position->y) * (ray_collision[i].y - cub->player_position->y));
 		distance *= 200;
-		color_x = ((int)ray_collision[i].y - (ray_collision[i].y == (int)ray_collision[i].y && sin(angle[i]) < 0));
-		color_y = ((int)ray_collision[i].x - (ray_collision[i].x == (int)ray_collision[i].x && cos(angle[i]) < 0));
+		color_y = (int)ray_collision[i].y - (ray_collision[i].y == (int)ray_collision[i].y && sin(angle[i]) < 0);
+		color_x = (int)ray_collision[i].x - (ray_collision[i].x == (int)ray_collision[i].x && cos(angle[i]) < 0);
+//		if (i == cub->win_size[1] / 2)
+			printf("coord x = %d, coord y = %d\n", (int)ray_collision[i].x, (int)ray_collision[i].y);
 		if (color_y % 2) {
 			if (color_x % 2) {
 				color = 0x0000FF00;
@@ -98,7 +101,6 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], 
 				color = 0x0000FF00;
 			}
 		}
-		printf("distance = %f\n", distance);
 		j = 0;
 		while (j < cub->win_size[0])
 		{

@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/01 22:52:04 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/02 02:47:09 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void cub_mlx_config(t_cub *cub)
 
 void cub_update_fov(int keycode, t_cub *cub)
 {
-	if (keycode == MINUS_KEY)
+	if (keycode == KEY_Z)
 		cub->fov -= 0.05;
 	else
 		cub->fov += 0.05;
@@ -110,9 +110,9 @@ void cub_update_fov(int keycode, t_cub *cub)
 
 int cub_handle_key_press(int keycode, t_cub *cub)
 {
-	if (keycode == ESC_KEY)
+	if (keycode == KEY_ESC)
 		return (close_window(cub));
-	else if (keycode == MINUS_KEY || keycode == PLUS_KEY)
+	else if (keycode == KEY_Z || keycode == KEY_X)
 		cub_update_fov(keycode, cub);
 	else if (keycode == KEY_W || keycode == KEY_A
 			 || keycode == KEY_S || keycode == KEY_D)
