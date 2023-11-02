@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/01 22:52:04 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/02 03:44:54 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int argc, char **argv)
 
 void cub_mlx_config(t_cub *cub)
 {
-	mlx_hook(cub->win, 2, 0, cub_handle_key_press, cub);
+	mlx_hook(cub->win, KEY_PRESS, KEY_PRESS_MASK, cub_handle_key_press, cub);
 	mlx_hook(cub->win, 17, 0, close_window, cub);
 }
 
