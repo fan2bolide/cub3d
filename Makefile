@@ -47,7 +47,7 @@ UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
 	MLX_D	=	minilibx-linux
     MLX 	= $(MLX_D)/libmlx_Linux.a
-    MLX_FLAGS = -Lmlx_linux -Lusr/lib -lXext -lX11 -lm -lz
+    MLX_FLAGS = -Lminilibx-linux -Lusr/lib -lXext -lX11 -lm -lz
 else ifeq ($(UNAME), Darwin)
 	MLX_D = mlx
     MLX = $(MLX_D)/libmlx.a
@@ -79,8 +79,8 @@ PARAMETERS	:= test.cub
 
 all			:	$(NAME)
 
-$(NAME)		:	$(OBJS_D) $(OBJS) $(LIB_A) $(MLX)
-			$(CC) $(CFLAGS) $(MLX_FLAGS) -Ofast -o $(NAME) $(OBJS) $(LIB_A) $(MLX)
+$(NAME)		:	$(LIB_A) $(OBJS_D) $(OBJS) $(MLX)
+			$(CC) $(CFLAGS) -Ofast -o $(NAME) $(OBJS) $(LIB_A) $(MLX) $(MLX_FLAGS)
 
 $(MLX)		:
 			$(MAKE) -C $(MLX_D)
@@ -95,6 +95,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)ray_casting
 
 $(LIB_A)	:	$(LIB_D)
+			echo la je fais
 			make -C $(LIB_D)
 
 leaks		:	all

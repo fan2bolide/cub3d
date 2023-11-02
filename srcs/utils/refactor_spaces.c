@@ -34,7 +34,7 @@ char	*replace_extra_spaces(char *content)
 			counter++;
 	new_content = malloc(sizeof(char) * counter + 1);
 	if (!new_content)
-		return (NULL);
+		return (free(content), NULL);
 	i = 0;
 	j = 0;
 	while (j < counter && content[i])

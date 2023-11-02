@@ -215,7 +215,7 @@ enum e_key_codes
 # include "libft.h"
 # include <errno.h>
 
-//================== STUCTURES =====================//
+//=================== STUCTURES ====================//
 typedef struct s_color{
 	unsigned char	blue;
 	unsigned char	green;

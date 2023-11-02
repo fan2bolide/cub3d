@@ -50,6 +50,7 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], 
 	t_position player_dupl;
 	t_position ray_dupl;
 
+	mlx_destroy_image(cub->mlx, cub->img.img);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, &cub->img.line_length, &cub->img.endian);
 	scale = 30;

@@ -133,5 +133,5 @@ double get_orientation(char **map, t_position *pos) {
 //		return (M_PI);
 //	if (orientation == 'S')
 //		return (3 * M_PI_2);
-	return (M_PI_4 + 0.000001);
+	return (-M_PI_4);
 }

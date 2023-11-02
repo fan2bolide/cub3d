@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_from_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 23:17:38 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/10/29 23:18:48 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/02 06:18:16 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,9 @@ static char	**create_map(t_list *curr)
 	while (curr && curr->content && ((char *)curr->content)[0] && ++i)
 		curr = curr->next;
 	map = malloc(sizeof(char *) * (i + 1));
+	if (!map)
+		return (NULL);
+	ft_bzero(map, i + 1);
 	return (map);
 }
 
