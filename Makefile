@@ -47,7 +47,7 @@ UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
 	MLX_D	=	minilibx-linux
     MLX 	= $(MLX_D)/libmlx_Linux.a
-    MLX_FLAGS = -Lmlx_linux -Lusr/lib -lXext -lX11 -lm -lz
+    MLX_FLAGS = -Lminilibx-linux -Lusr/lib -lXext -lX11 -lm -lz
 else ifeq ($(UNAME), Darwin)
 	MLX_D = mlx
     MLX = $(MLX_D)/libmlx.a
