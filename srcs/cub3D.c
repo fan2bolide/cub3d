@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/01 00:00:33 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/02 01:57:59 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,21 @@ int	main(int argc, char **argv)
 	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	if (!ray_casting(cub))
 		return (close_window(cub), 1);
+	printf("lalalal\n");
 	cub_mlx_config(cub);
 	return (mlx_loop(cub->mlx), 0);
 }
 
 void cub_mlx_config(t_cub *cub)
 {
-	mlx_hook(cub->win, 2, 0, cub_handle_key_press, cub);
+	printf("dwodjweoijdoiwejdijwed\n");
+	mlx_key_hook(cub->win, cub_handle_key_press, cub);
 	mlx_hook(cub->win, 17, 0, close_window, cub);
 }
 
 int cub_handle_key_press(int keycode, t_cub *cub)
 {
+	printf("%i\n", keycode);
 	if (keycode == ESC_KEY)
 		return (close_window(cub));
 	else if (keycode == KEY_W || keycode == KEY_A

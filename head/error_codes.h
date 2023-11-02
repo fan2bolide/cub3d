@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_codes.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:58:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 21:34:30 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/02 01:29:26 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,18 @@ before map."
 # define OR				" or "
 # define ALLOC_ERR 		"Allocation error occured"
 # define EOL			"\n"
-# define ESC_KEY 		53
 # define MINUS_KEY 		6
 # define PLUS_KEY		7
 # define UP_KEY 		126
 # define DOWN_KEY 		125
-# define KEY_LEFT		123
-# define KEY_RIGHT		124
+
+# define ESC_KEY 65307
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+
+//# define KEY_LEFT		123
+//# define KEY_RIGHT		124
+//# define ESC_KEY 		53
 # define KEY_W 			13
 # define KEY_A 			0
 # define KEY_S 			1
