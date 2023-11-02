@@ -8,7 +8,7 @@ void put_wall(t_cub *cub, int i, int j, int scale)
 	int 			pixel_x;
 	int 			pixel_y;
 	int 			savej;
-	unsigned int	color;
+	int	color;
 
 	pixel_y = 0;
 	if (j % 2) {
@@ -42,7 +42,7 @@ void put_wall(t_cub *cub, int i, int j, int scale)
 	}
 }
 
-void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], double angle[cub->win_size[1] / 2])
+void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], double angle[cub->win_size[1] / 2], int wall_height[cub->win_size[1] / 2])
 {
 	int i;
 	int j;
@@ -79,15 +79,10 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], 
 	int color_x;
 	int color_y;
 	int color;
-	double distance;
 	while (i + i < cub->win_size[1])
 	{
-		distance = sqrt((ray_collision[i].x - cub->player_position->x) * (ray_collision[i].x - cub->player_position->x) + (ray_collision[i].y - cub->player_position->y) * (ray_collision[i].y - cub->player_position->y));
-		distance *= 200;
 		color_y = (int)ray_collision[i].y - (ray_collision[i].y == (int)ray_collision[i].y && sin(angle[i]) < 0);
 		color_x = (int)ray_collision[i].x - (ray_collision[i].x == (int)ray_collision[i].x && cos(angle[i]) < 0);
-//		if (i == cub->win_size[1] / 2)
-			printf("coord x = %d, coord y = %d\n", (int)ray_collision[i].x, (int)ray_collision[i].y);
 		if (color_y % 2) {
 			if (color_x % 2) {
 				color = 0x0000FF00;
@@ -102,11 +97,17 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], 
 			}
 		}
 		j = 0;
-		while (j < cub->win_size[0])
+		while (j < (cub->win_size[0] - wall_height[i]) / 2)
+		{
+			j++;
+		}
+		while (j < (cub->win_size[0] - wall_height[i]) / 2 + wall_height[i])
 		{
 			fdf_pixel_put(&cub->img, i + (cub->win_size[1] / 2), j, color);
 			j++;
 		}
+		while (j < cub->win_size[0])
+			j++;
 		i++;
 	}
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
@@ -117,7 +118,7 @@ void	fdf_pixel_put(t_image *data, int x, int y, int color)
 	char	*dst;
 
 	if (y >= 900 || x >= 1440)
-		return printf("out_of_range\n"), (void)0;
+		return ;
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }

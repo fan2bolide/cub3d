@@ -6,14 +6,13 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/02 03:44:54 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/02 17:54:06 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
 double get_orientation(char **map, t_position *pos);
-t_data	*test_parsing();
 void	cub_mlx_config(t_cub *cub);
 int		cub_handle_key_press(int keycode, t_cub *cub);
 int		close_window(t_cub *cub);
@@ -78,7 +77,7 @@ int	main(int argc, char **argv)
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position->x += 0.5;
 	cub->player_position->y += 0.5;
-	printf("%f %f\n", cub->player_position->x, cub->player_position->y);
+	printf("%.2f %.2f\n", cub->player_position->x, cub->player_position->y);
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
@@ -93,7 +92,7 @@ int	main(int argc, char **argv)
 void cub_mlx_config(t_cub *cub)
 {
 	mlx_hook(cub->win, KEY_PRESS, KEY_PRESS_MASK, cub_handle_key_press, cub);
-	mlx_hook(cub->win, 17, 0, close_window, cub);
+	mlx_hook(cub->win, DESTROY_NOTIFY, NO_EVENT_MASK, close_window, cub);
 }
 
 void cub_update_fov(int keycode, t_cub *cub)
@@ -138,7 +137,6 @@ void cub_update_view_angle(int keycode, t_cub *cub)
 
 void cub_update_player_position(int keycode, t_cub *cub)
 {
-	printf("player_position : %fx, %fy\n", cub->player_position->x, cub->player_position->y);
 	if (keycode == KEY_W)
 	{
 		cub->player_position->x += cos(cub->view_angle) / 10;

@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/02 02:43:22 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/02 18:29:08 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,10 @@ enum e_key_codes
 #  error "Unsuported OS"
 # endif
 
+# define H_SCREEN	900
+# define D_SCREEN	0.2
+
+
 //=================== INCLUDES =====================//
 # include "error_codes.h"
 # include <unistd.h>
@@ -274,7 +278,7 @@ void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
 int		ray_casting(t_cub *cub);
 
-void render_minimap(t_cub *cub, t_position ray_collision[1], double angle[1]);
+void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], double angle[cub->win_size[1] / 2], int wall_height[cub->win_size[1] / 2]);
 
 int		is_directory(char *path);
 size_t	get_size(char **tab);
