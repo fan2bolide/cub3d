@@ -80,7 +80,7 @@ PARAMETERS	:= test.cub
 all			:	$(NAME)
 
 $(NAME)		:	$(LIB_A) $(OBJS_D) $(OBJS) $(MLX)
-			$(CC) $(CFLAGS) $(MLX_FLAGS) -Ofast -o $(NAME) $(OBJS) $(LIB_A) $(MLX)
+			$(CC) $(CFLAGS) -Ofast -o $(NAME) $(OBJS) $(LIB_A) $(MLX) $(MLX_FLAGS)
 
 $(MLX)		:
 			$(MAKE) -C $(MLX_D)
