@@ -41,14 +41,16 @@ LIB_H		:=	$(LIB_D)$(HEAD_D)
 
 LIB_A		:=	$(LIB_D)$(LIB)
 
-MLX_D		:=	mlx
 
 UNAME := $(shell uname)
 
 ifeq ($(UNAME), Linux)
-    MLX = lib/libmlx_macos.a
+	MLX_D	=	minilibx-linux
+    MLX 	= $(MLX_D)/libmlx_Linux.a
+    MLX_FLAGS = -Lmlx_linux -Lusr/lib -lXext -lX11 -lm -lz
 else ifeq ($(UNAME), Darwin)
-    MLX = mlx/libmlx.a
+	MLX_D = mlx
+    MLX = $(MLX_D)/libmlx.a
     MLX_LIB		=	${DIR_LIB}${MLX}.a
     MLX_FLAGS		=	-framework OpenGL -framework AppKit
     DEFINE_OS		=	-D OS_DARWIN=1
@@ -80,8 +82,8 @@ all			:	$(NAME)
 $(NAME)		:	$(OBJS_D) $(OBJS) $(LIB_A) $(MLX)
 			$(CC) $(CFLAGS) $(MLX_FLAGS) -Ofast -o $(NAME) $(OBJS) $(LIB_A) $(MLX)
 
-$(MLX)		: mlx
-			$(MAKE) -C mlx
+$(MLX)		:
+			$(MAKE) -C $(MLX_D)
 
 $(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.c $(HEAD_A) $(LIB_H)libft.h $(MLX_D)/mlx.h
 			$(CC) $(CFLAGS) $(DFLAGS) -Ofast -I$(HEAD_D) -I$(LIB_H) -I$(MLX_D) -c $< -o $@
