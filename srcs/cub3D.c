@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/02 03:44:54 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/02 06:08:19 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,40 +136,60 @@ void cub_update_view_angle(int keycode, t_cub *cub)
 		cub->view_angle -= (2 * M_PI);
 }
 
+void	report_movement(double new_y, double new_x, t_cub *cub)
+{
+	double	old_x;
+	double	old_y;
+
+	old_x = cub->player_position->x;
+	old_y = cub->player_position->y;
+
+	if (cub->data->map[(int)new_y][(int)old_x] == '1' \
+	&& cub->data->map[(int)old_y][(int)new_x] == '1')
+		return ;
+	if ((int)old_x != (int)new_x)
+	{
+		if ((int)old_y != (int)new_y)
+			if (cub->data->map[(int)new_y][(int)old_x] == '1')
+				return (cub->player_position->x = new_x, (void) 0);
+		cub->player_position->y = new_y;
+		return ;
+	}
+	if ((int)old_y != (int)new_y)
+	{
+		cub->player_position->x = new_x;
+	}
+}
+
+void	move_player(double x_change, double y_change, t_cub *cub)
+{
+	double	new_y;
+	double	new_x;
+
+	new_y = cub->player_position->y + y_change;
+	new_x = cub->player_position->x + x_change;
+	if (cub->data->map[(int)new_y][(int) cub->player_position->x] == '1' \
+	&& cub->data->map[(int)cub->player_position->y][(int)new_x] == '1')
+		return ;
+	if (cub->data->map[(int)new_y][(int)new_x] == '1')
+		return (report_movement(new_y, new_x, cub));
+	cub->player_position->y = new_y;
+	cub->player_position->x = new_x;
+}
+
 void cub_update_player_position(int keycode, t_cub *cub)
 {
-	printf("player_position : %fx, %fy\n", cub->player_position->x, cub->player_position->y);
 	if (keycode == KEY_W)
-	{
-		cub->player_position->x += cos(cub->view_angle) / 10;
-		cub->player_position->y += sin(cub->view_angle) / 10;
-	}
+		move_player(cos(cub->view_angle) / 10, sin(cub->view_angle) / 10, cub);
 	if (keycode == KEY_S)
-	{
-		cub->player_position->x -= cos(cub->view_angle) / 10;
-		cub->player_position->y -= sin(cub->view_angle) / 10;
-	}
+		move_player(-cos(cub->view_angle) / 10, \
+		-sin(cub->view_angle) / 10, cub);
 	if (keycode == KEY_A)
-	{
-		cub->player_position->x += cos(cub->view_angle - M_PI_2) / 10;
-		cub->player_position->y += sin(cub->view_angle - M_PI_2) / 10;
-	}
+		move_player(cos(cub->view_angle - M_PI_2) / 10, \
+		sin(cub->view_angle - M_PI_2) / 10, cub);
 	if (keycode == KEY_D)
-	{
-		cub->player_position->x += cos(cub->view_angle + M_PI_2) / 10;
-		cub->player_position->y += sin(cub->view_angle + M_PI_2) / 10;
-	}
-	if (cub->data->map[(int)cub->player_position->y][(int)cub->player_position->x] == '1')
-	{
-		if (keycode == KEY_W)
-			cub_update_player_position(KEY_S, cub);
-		if (keycode == KEY_A)
-			cub_update_player_position(KEY_D, cub);
-		if (keycode == KEY_D)
-			cub_update_player_position(KEY_A, cub);
-		if (keycode == KEY_S)
-			cub_update_player_position(KEY_W, cub);
-	}
+		move_player(cos(cub->view_angle + M_PI_2) / 10, \
+		sin(cub->view_angle + M_PI_2) / 10, cub);
 }
 
 int cub_render_frame(t_cub *cub)
@@ -182,5 +202,10 @@ int close_window(t_cub *cub)
 {
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
+	mlx_destroy_display(cub->mlx);
+	free(cub->mlx);
+	destroy_data(cub->data);
+	free(cub->player_position);
+	free(cub);
 	exit(0);
 }

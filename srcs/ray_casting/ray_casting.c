@@ -61,32 +61,11 @@ void get_delta_to_next_column(t_position ray, double ray_direction, t_position *
 	{
 		delta->x = 1.0 - (ray.x - (int)ray.x); //a droite
 		delta->y = tan(ray_direction) * delta->x;
-//		if (sin(ray_direction) < 0)
-//			delta->y = -delta->y;
 		return ;
 	}
 
 	delta->x = -(ray.x - (int)ray.x) - (ray.x == (int)ray.x); //a gauche
 	delta->y = tan(ray_direction) * delta->x;
-//	if (sin(ray_direction) < 0)
-//		delta->y = -delta->y;
-//	printf("je fais ça2\n");
-//	return ;
-
-//	if (ray_direction < M_PI_2)
-//	{
-//	}
-//	if (ray_direction < M_PI)
-//	{
-//	}
-//	if (ray_direction < 3 * M_PI_2)
-//	{
-//		delta->x = (int)ray.x;
-//		delta->y = ((int)ray.x - ray.x) / cos(ray_direction) * -1;
-//		return ;
-//	}
-//	delta->x = (int)ray.x + 1;
-//	delta->y = ((int)ray.x - ray.x) / cos(ray_direction);
 }
 
 void get_delta_to_next_line(t_position ray, double ray_direction, t_position *delta)
@@ -95,28 +74,10 @@ void get_delta_to_next_line(t_position ray, double ray_direction, t_position *de
 	{
 		delta->y = 1 - (ray.y - (int)ray.y); // en haut
 		delta->x = delta->y / tan(ray_direction);
-//		if (cos(ray_direction) < 0)
-//			delta->x = -delta->x;
 		return ;
 	}
 	delta->y = -(ray.y - (int)ray.y + ((int)ray.y == ray.y)); // en bas
 	delta->x = delta->y / tan(ray_direction);
-//	printf("%f\n", delta->x);
-//	if (cos(ray_direction) < 0)
-//		delta->x = -delta->x;
-//	printf("je fais ça1, rayy\n", ray.y, (int)ray.y);
-//	return ;
-//	if (ray_direction < M_PI)
-//	{
-//	}
-//	if (ray_direction < 3 * M_PI_2)
-//	{
-//		new->x = ;
-//		new->y = ;
-//		return ;
-//	}
-//	new->x = ;
-//	new->y = ;
 }
 
 double v_norm(t_position ray) {
@@ -129,14 +90,10 @@ void apply_minimal_distance(t_position *ray, t_position delta_x, t_position delt
 	{
 		ray->x += delta_x.x;
 		ray->y += delta_x.y;
-//		printf("deltax = %f, deltay = %f\n", v_norm(delta_x), v_norm(delta_y));
-//		printf("ray.x = %f \tray.y = %f\tapplying x\n", ray->x, ray->y);
 		return ;
 	}
 	ray->x += delta_y.x;
 	ray->y += delta_y.y;
-//	printf("deltax = %f, deltay = %f\n", v_norm(delta_x), v_norm(delta_y));
-//	printf("ray.x = %f \tray.y = %f\tapplying y\n", ray->x, ray->y);
 }
 
 void shoot_ray(t_position *ray, t_cub *cub, double angle)
@@ -144,8 +101,6 @@ void shoot_ray(t_position *ray, t_cub *cub, double angle)
 	t_position		new_x;
 	t_position		new_y;
 
-//	if (ray_direction == M_PI || ray_direction == M_PI_2 || ray_direction == 3 * M_PI_2 || ray_direction == 2 * M_PI)
-//		return (jesaispasencore(&ray, ray_direction, &new_x, cub), render_minimap(cub, ray), (void)0);
 	while (1)
 	{
 		get_delta_to_next_column(*ray, angle, &new_x);
@@ -187,7 +142,7 @@ double get_orientation(char **map, t_position *pos) {
 //		return (M_PI);
 //	if (orientation == 'S')
 //		return (3 * M_PI_2);
-	return (M_PI_4 + 0.000001);
+	return (-M_PI_4);
 }
 
 /*

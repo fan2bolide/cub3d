@@ -79,7 +79,7 @@ PARAMETERS	:= test.cub
 
 all			:	$(NAME)
 
-$(NAME)		:	$(OBJS_D) $(OBJS) $(LIB_A) $(MLX)
+$(NAME)		:	$(LIB_A) $(OBJS_D) $(OBJS) $(MLX)
 			$(CC) $(CFLAGS) $(MLX_FLAGS) -Ofast -o $(NAME) $(OBJS) $(LIB_A) $(MLX)
 
 $(MLX)		:
@@ -95,6 +95,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)ray_casting
 
 $(LIB_A)	:	$(LIB_D)
+			echo la je fais
 			make -C $(LIB_D)
 
 leaks		:	all
