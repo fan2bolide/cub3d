@@ -195,6 +195,7 @@ enum e_key_codes
 	KEY_SEMI_COLON = 59,
 	KEY_COMMAND = 65507,
 	KEY_BACKSPACE = 65288,
+	KEY_F11 = 65480
 };
 # else
 #  error "Unsuported OS"
@@ -251,17 +252,17 @@ typedef struct s_position
 
 typedef struct s_cub
 {
-	t_data	*data;
-	void	*mlx;
-	void	*win;
-    int     keys_states[65509];
-	int 	win_size[2];
-	t_image img;
-	t_position *player_position;
-	double	view_angle;
-	double	fov;
+	t_data		*data;
+	bool		is_fullscreen;
+	void		*mlx;
+	void		*win;
+	int			keys_states[65509];
+	int			win_size[2];
+	t_image		img;
+	t_position	*player_position;
+	double		view_angle;
+	double		fov;
 }		t_cub;
-
 
 //==================== PARSING =====================//
 t_data	*parsing(int argc, char **argv);
@@ -280,6 +281,8 @@ void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
 int		ray_casting(t_cub *cub);
 
+void	render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
+double angle[cub->win_size[1]], int wall_height[cub->win_size[1]]);
 int		render_frame(t_cub *cub);
 
 int		is_directory(char *path);

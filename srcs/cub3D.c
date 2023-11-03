@@ -68,6 +68,7 @@ int	main(int argc, char **argv)
 
 	cub = malloc(sizeof (t_cub));
 	ft_bzero(cub->keys_states, 65509);
+	cub->is_fullscreen = false;
 	cub->win_size[0] = 900;
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
@@ -101,6 +102,31 @@ void	cub_update_fov(int keycode, t_cub *cub)
 		cub->fov = M_PI_4;
 }
 
+void	cub_full_screen(t_cub *cub)
+{
+	cub->keys_states[KEY_F11] = RELEASED;
+	if (cub->is_fullscreen == false)
+	{
+		cub->is_fullscreen = true;
+		mlx_get_screen_size(cub->mlx, &(cub->win_size[1]), &(cub->win_size[0]));
+	}
+	else
+	{
+		cub->is_fullscreen = false;
+		cub->win_size[0] = 900;
+		cub->win_size[1] = cub->win_size[0] * 16 / 10;
+	}
+	mlx_destroy_image(cub->mlx, cub->img.img);
+	mlx_clear_window(cub->mlx, cub->win);
+	mlx_destroy_window(cub->mlx, cub->win);
+	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
+	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
+	if (!ray_casting(cub))
+		return (close_window(cub), (void) 0);
+	cub_mlx_config(cub);
+	mlx_loop(cub->mlx);
+}
+
 int	perform_actions(t_cub *cub)
 {
 	if (cub->keys_states[KEY_ESC])
@@ -121,6 +147,8 @@ int	perform_actions(t_cub *cub)
 		cub_update_view_angle(KEY_LEFT, cub);
 	if (cub->keys_states[KEY_RIGHT] == 1)
 		cub_update_view_angle(KEY_RIGHT, cub);
+	if (cub->keys_states[KEY_F11] == 1)
+		cub_full_screen(cub);
 	return (render_frame(cub));
 }
 
@@ -132,20 +160,21 @@ int	cub_handle_key_release(int keycode, t_cub *cub)
 	return (1);
 }
 
-void	cub_mlx_config(t_cub *cub)
+int cub_handle_key_press(int keycode, t_cub *cub)
+{
+	printf("key is pressed\n");
+	if (keycode && keycode > 65508)
+		return (1);
+	cub->keys_states[keycode] = PRESSED;
+	return (1);
+}
+
+void cub_mlx_config(t_cub *cub)
 {
 	mlx_hook(cub->win, KEY_PRESS, KEY_PRESS_MASK, cub_handle_key_press, cub);
 	mlx_hook(cub->win, KEY_RELEASE, KEY_RELEASE_MASK, cub_handle_key_release, cub);
 	mlx_hook(cub->win, DESTROY_NOTIFY, NO_EVENT_MASK, close_window, cub);
 	mlx_loop_hook(cub->mlx, (int (*)())perform_actions, cub);
-}
-
-int	cub_handle_key_press(int keycode, t_cub *cub)
-{
-	if (keycode && keycode > 65508)
-		return (1);
-	cub->keys_states[keycode] = PRESSED;
-	return (1);
 }
 
 void	cub_update_view_angle(int keycode, t_cub *cub)

@@ -101,6 +101,7 @@ $(OBJS_D)	:
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)
 
+leaks		:	CFLAGS += -g3
 leaks		:	all
 			$(VALGRIND) ./$(NAME) $(PARAMETERS)
 
