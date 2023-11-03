@@ -201,8 +201,7 @@ enum e_key_codes
 #  error "Unsuported OS"
 # endif
 
-# define H_SCREEN	900
-# define D_SCREEN	0.2
+# define SCREEN_DISTANCE	1
 
 
 //=================== INCLUDES =====================//
@@ -258,8 +257,8 @@ typedef struct s_cub
 	bool	is_fullscreen;
 	void	*mlx;
 	void	*win;
-    int     keys_states[65509];
-	int 	win_size[2];
+    int		keys_states[65509];
+	int 	[2];
 	t_image img;
 	t_position *player_position;
 	double	view_angle;

@@ -42,45 +42,22 @@ void put_wall(t_cub *cub, int i, int j, int scale)
 	}
 }
 
-void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], double angle[cub->win_size[1] / 2], int wall_height[cub->win_size[1] / 2])
+void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], double angle[cub->win_size[1]], int wall_height[cub->win_size[1]])
 {
-	int i;
-	int j;
-	int scale;
-	t_position player_dupl;
-	t_position ray_dupl;
+	int			i;
+	int			j;
+	int			scale;
+	t_position	player_dupl;
+	t_position	ray_dupl;
+	int			color_x;
+	int			color_y;
+	int			color;
 
+	i = 0;
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, &cub->img.line_length, &cub->img.endian);
-	scale = 30;
-	i = 0;
-	while (cub->data->map[i])
-	{
-		j = 0;
-		while (cub->data->map[i][j])
-		{
-			if (cub->data->map[i][j] == '1')
-				put_wall(cub, i, j, scale);
-			j++;
-		}
-		i++;
-	}
-	player_dupl.x = cub->player_position->x * scale;
-	player_dupl.y = cub->player_position->y * scale;
-	i = 0;
-	while (i < cub->win_size[1] / 2)
-	{
-		ray_dupl.x = ray_collision[i].x * scale;
-		ray_dupl.y = ray_collision[i].y * scale;
-		fdf_put_line(cub, player_dupl, ray_dupl, 0xFF0000);
-		i++;
-	}
-	i = 0;
-	int color_x;
-	int color_y;
-	int color;
-	while (i + i < cub->win_size[1])
+	while (i < cub->win_size[1])
 	{
 		color_y = (int)ray_collision[i].y - (ray_collision[i].y == (int)ray_collision[i].y && sin(angle[i]) < 0);
 		color_x = (int)ray_collision[i].x - (ray_collision[i].x == (int)ray_collision[i].x && cos(angle[i]) < 0);
@@ -104,11 +81,34 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], 
 		}
 		while (j < (cub->win_size[0] - wall_height[i]) / 2 + wall_height[i])
 		{
-			fdf_pixel_put(&cub->img, i + (cub->win_size[1] / 2), j, color);
+			fdf_pixel_put(&cub->img, i, j, color);
 			j++;
 		}
 		while (j < cub->win_size[0])
 			j++;
+		i++;
+	}
+	scale = 10;
+	i = 0;
+	while (cub->data->map[i])
+	{
+		j = 0;
+		while (cub->data->map[i][j])
+		{
+			if (cub->data->map[i][j] == '1')
+				put_wall(cub, i, j, scale);
+			j++;
+		}
+		i++;
+	}
+	player_dupl.x = cub->player_position->x * scale;
+	player_dupl.y = cub->player_position->y * scale;
+	i = 0;
+	while (i < cub->win_size[1])
+	{
+		ray_dupl.x = ray_collision[i].x * scale;
+		ray_dupl.y = ray_collision[i].y * scale;
+		fdf_put_line(cub, player_dupl, ray_dupl, 0xFF0000);
 		i++;
 	}
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
