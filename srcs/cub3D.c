@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/03 02:50:28 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/03 05:19:25 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void cub_update_fov(int keycode, t_cub *cub)
 	else
 		cub->fov += 0.05;
 	if (cub->fov > M_PI)
-		cub->fov = M_PI;
+		cub->fov = M_PI - 0.001;
 	if (cub->fov < M_PI_4)
 		cub->fov = M_PI_4;
 }
@@ -154,7 +154,6 @@ int perform_actions(t_cub *cub)
 
 int	cub_handle_key_release(int keycode, t_cub *cub)
 {
-	printf("key is released\n");
 	if (keycode && keycode > 65508)
 		return (1);
 	cub->keys_states[keycode] = RELEASED;
@@ -163,7 +162,6 @@ int	cub_handle_key_release(int keycode, t_cub *cub)
 
 int cub_handle_key_press(int keycode, t_cub *cub)
 {
-	printf("key is pressed\n");
 	if (keycode && keycode > 65508)
 		return (1);
 	cub->keys_states[keycode] = PRESSED;
@@ -181,9 +179,9 @@ void cub_mlx_config(t_cub *cub)
 void	cub_update_view_angle(int keycode, t_cub *cub)
 {
 	if (keycode == KEY_LEFT)
-		cub->view_angle -= 0.05;
+		cub->view_angle -= 0.01;
 	else
-		cub->view_angle += 0.05;
+		cub->view_angle += 0.01;
 	if (cub->view_angle < 0)
 		cub->view_angle += (2 * M_PI);
 	else if (cub->view_angle > (2 * M_PI))
@@ -197,9 +195,6 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 
 	old_x = cub->player_position->x;
 	old_y = cub->player_position->y;
-	if (cub->data->map[(int)new_y][(int)old_x] == '1' \
-	&& cub->data->map[(int)old_y][(int)new_x] == '1')
-		return ;
 	if ((int)old_x != (int)new_x)
 	{
 		if ((int)old_y != (int)new_y)
@@ -209,9 +204,7 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 		return ;
 	}
 	if ((int)old_y != (int)new_y)
-	{
 		cub->player_position->x = new_x;
-	}
 }
 
 void	move_player(double x_change, double y_change, t_cub *cub)
@@ -230,19 +223,19 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 	cub->player_position->x = new_x;
 }
 
-void cub_update_player_position(int keycode, t_cub *cub)
+void	cub_update_player_position(int keycode, t_cub *cub)
 {
 	if (keycode == KEY_W)
-		move_player(cos(cub->view_angle) / 10, sin(cub->view_angle) / 10, cub);
+		move_player(cos(cub->view_angle) / 20, sin(cub->view_angle) / 20, cub);
 	if (keycode == KEY_S)
-		move_player(-cos(cub->view_angle) / 10, \
-		-sin(cub->view_angle) / 10, cub);
+		move_player(-cos(cub->view_angle) / 20, \
+		-sin(cub->view_angle) / 20, cub);
 	if (keycode == KEY_A)
-		move_player(cos(cub->view_angle - M_PI_2) / 10, \
-		sin(cub->view_angle - M_PI_2) / 10, cub);
+		move_player(cos(cub->view_angle - M_PI_2) / 20, \
+		sin(cub->view_angle - M_PI_2) / 20, cub);
 	if (keycode == KEY_D)
-		move_player(cos(cub->view_angle + M_PI_2) / 10, \
-		sin(cub->view_angle + M_PI_2) / 10, cub);
+		move_player(cos(cub->view_angle + M_PI_2) / 20, \
+		sin(cub->view_angle + M_PI_2) / 20, cub);
 }
 
 int cub_render_frame(t_cub *cub)

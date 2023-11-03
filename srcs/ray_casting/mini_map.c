@@ -1,6 +1,6 @@
 #include "cub3D.h"
 
-void	fdf_pixel_put(t_image *data, int x, int y, int color);
+void	fdf_pixel_put(t_cub *cub, int x, int y, int color);
 static void	fdf_put_line(t_cub *cub, t_position a, t_position b, int color);
 
 void put_wall(t_cub *cub, int i, int j, int scale)
@@ -33,7 +33,7 @@ void put_wall(t_cub *cub, int i, int j, int scale)
 		j = savej;
 		while (pixel_x < scale)
 		{
-			fdf_pixel_put(&cub->img, j, i, color);
+			fdf_pixel_put(cub, j, i, color);
 			pixel_x++;
 			j++;
 		}
@@ -81,7 +81,7 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], doub
 		}
 		while (j < (cub->win_size[0] - wall_height[i]) / 2 + wall_height[i])
 		{
-			fdf_pixel_put(&cub->img, i, j, color);
+			fdf_pixel_put(cub, i, j, color);
 			j++;
 		}
 		while (j < cub->win_size[0])
@@ -114,13 +114,13 @@ void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], doub
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 }
 
-void	fdf_pixel_put(t_image *data, int x, int y, int color)
+void	fdf_pixel_put(t_cub *cub, int x, int y, int color)
 {
 	char	*dst;
 
-	if (y >= 900 || x >= 1440)
+	if (y >= cub->win_size[0] || x >= cub->win_size[1] || x <= 0 || y <= 0)
 		return ;
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	dst = cub->img.addr + (y * cub->img.line_length + x * (cub->img.bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
 
@@ -139,7 +139,7 @@ static void	fdf_put_line(t_cub *cub, t_position a, t_position b, int color)
 	{
 		if (round(x) >= 0 && round(x) < cub->win_size[1] && round(y) >= 0
 			&& round(y) < cub->win_size[0])
-			fdf_pixel_put(&cub->img, (int)round(x), (int)round(y), color);
+			fdf_pixel_put(cub, (int)round(x), (int)round(y), color);
 		x += (b.x - a.x) / (double)steps;
 		y += (b.y - a.y) / (double)steps;
 		i++;
