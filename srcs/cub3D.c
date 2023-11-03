@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/02 19:37:52 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/03 01:17:23 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	main(int argc, char **argv)
 	t_cub *cub;
 
 	cub = malloc(sizeof (t_cub));
+	ft_bzero(cub->keys_states, 65509);
 	cub->win_size[0] = 900;
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
@@ -77,7 +78,6 @@ int	main(int argc, char **argv)
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position->x += 0.5;
 	cub->player_position->y += 0.5;
-	printf("%.2f %.2f\n", cub->player_position->x, cub->player_position->y);
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
@@ -87,12 +87,6 @@ int	main(int argc, char **argv)
 		return (close_window(cub), 1);
 	cub_mlx_config(cub);
 	return (mlx_loop(cub->mlx), 0);
-}
-
-void cub_mlx_config(t_cub *cub)
-{
-	mlx_hook(cub->win, KEY_PRESS, KEY_PRESS_MASK, cub_handle_key_press, cub);
-	mlx_hook(cub->win, DESTROY_NOTIFY, NO_EVENT_MASK, close_window, cub);
 }
 
 void cub_update_fov(int keycode, t_cub *cub)
@@ -107,23 +101,54 @@ void cub_update_fov(int keycode, t_cub *cub)
 		cub->fov = M_PI_4;
 }
 
-int cub_handle_key_press(int keycode, t_cub *cub)
+int perform_actions(t_cub *cub)
 {
-	if (keycode == KEY_ESC)
+	if (cub->keys_states[KEY_ESC])
 		return (close_window(cub));
-	else if (keycode == KEY_Z || keycode == KEY_X)
-		cub_update_fov(keycode, cub);
-	else if (keycode == KEY_W || keycode == KEY_A
-			 || keycode == KEY_S || keycode == KEY_D)
-		cub_update_player_position(keycode, cub);
-	else if (keycode == KEY_LEFT || keycode == KEY_RIGHT)
-		cub_update_view_angle(keycode, cub);
-	else
-		return (1);
+	if (cub->keys_states[KEY_Z])
+		cub_update_fov(KEY_Z, cub);
+	if (cub->keys_states[KEY_X])
+		cub_update_fov(KEY_X, cub);
+	if (cub->keys_states[KEY_W])
+		cub_update_player_position(KEY_W, cub);
+	if (cub->keys_states[KEY_A])
+		cub_update_player_position(KEY_A, cub);
+	if (cub->keys_states[KEY_S])
+		cub_update_player_position(KEY_S, cub);
+	if (cub->keys_states[KEY_D])
+		cub_update_player_position(KEY_D, cub);
+	if (cub->keys_states[KEY_LEFT] == 1)
+		cub_update_view_angle(KEY_LEFT, cub);
+	if (cub->keys_states[KEY_RIGHT] == 1)
+		cub_update_view_angle(KEY_RIGHT, cub);
 	return (cub_render_frame(cub));
 }
 
-void cub_update_view_angle(int keycode, t_cub *cub)
+int	cub_handle_key_release(int keycode, t_cub *cub)
+{
+	if (keycode && keycode > 65508)
+		return (1);
+	cub->keys_states[keycode] = RELEASED;
+	return (1);
+}
+
+void cub_mlx_config(t_cub *cub)
+{
+	mlx_hook(cub->win, KEY_PRESS, KEY_PRESS_MASK, cub_handle_key_press, cub);
+	mlx_hook(cub->win, KEY_RELEASE, KEY_RELEASE_MASK, cub_handle_key_release, cub);
+	mlx_hook(cub->win, DESTROY_NOTIFY, NO_EVENT_MASK, close_window, cub);
+	mlx_loop_hook(cub->mlx, (int (*)())perform_actions, cub);
+}
+
+int cub_handle_key_press(int keycode, t_cub *cub)
+{
+	if (keycode && keycode > 65508)
+		return (1);
+	cub->keys_states[keycode] = PRESSED;
+	return (1);
+}
+
+void	cub_update_view_angle(int keycode, t_cub *cub)
 {
 	if (keycode == KEY_LEFT)
 		cub->view_angle -= 0.05;
@@ -142,7 +167,6 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 
 	old_x = cub->player_position->x;
 	old_y = cub->player_position->y;
-
 	if (cub->data->map[(int)new_y][(int)old_x] == '1' \
 	&& cub->data->map[(int)old_y][(int)new_x] == '1')
 		return ;
