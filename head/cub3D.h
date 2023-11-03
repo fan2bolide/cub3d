@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/03 01:33:17 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/03 03:00:56 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,18 +253,17 @@ typedef struct s_position
 
 typedef struct s_cub
 {
-	t_data	*data;
-	bool	is_fullscreen;
-	void	*mlx;
-	void	*win;
-    int		keys_states[65509];
-	int 	[2];
-	t_image img;
-	t_position *player_position;
-	double	view_angle;
-	double	fov;
+	t_data		*data;
+	bool		is_fullscreen;
+	void		*mlx;
+	void		*win;
+	int			keys_states[65509];
+	int			win_size[2];
+	t_image		img;
+	t_position	*player_position;
+	double		view_angle;
+	double		fov;
 }		t_cub;
-
 
 //==================== PARSING =====================//
 t_data	*parsing(int argc, char **argv);
@@ -283,7 +282,8 @@ void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
 int		ray_casting(t_cub *cub);
 
-void render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1] / 2], double angle[cub->win_size[1] / 2], int wall_height[cub->win_size[1] / 2]);
+void	render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
+double angle[cub->win_size[1]], int wall_height[cub->win_size[1]]);
 
 int		is_directory(char *path);
 size_t	get_size(char **tab);
