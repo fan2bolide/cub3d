@@ -98,6 +98,7 @@ $(LIB_A)	:	$(LIB_D)
 			echo la je fais
 			make -C $(LIB_D)
 
+leaks		:	CFLAGS += -g3
 leaks		:	all
 			$(VALGRIND) ./$(NAME) $(PARAMETERS)
 

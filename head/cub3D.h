@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/02 18:29:08 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/03 01:33:17 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,7 @@ enum e_key_codes
 	KEY_SEMI_COLON = 59,
 	KEY_COMMAND = 65507,
 	KEY_BACKSPACE = 65288,
+	KEY_F11 = 65480
 };
 # else
 #  error "Unsuported OS"
@@ -254,6 +255,7 @@ typedef struct s_position
 typedef struct s_cub
 {
 	t_data	*data;
+	bool	is_fullscreen;
 	void	*mlx;
 	void	*win;
     int     keys_states[65509];
