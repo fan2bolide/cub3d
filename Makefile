@@ -13,7 +13,10 @@ SRCS		:=	cub3D.c\
 				utils/utils.c\
 				utils/texture_utils.c\
 				ray_casting/ray_casting.c\
-				ray_casting/mini_map.c\
+				rendering/render_view.c\
+				rendering/render_mini_map.c\
+				rendering/graphic_utils.c\
+
 
 SRCS_D		:=	srcs/
 
@@ -93,9 +96,9 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)parsing
 			@mkdir -p $(OBJS_D)utils
 			@mkdir -p $(OBJS_D)ray_casting
+			@mkdir -p $(OBJS_D)rendering
 
 $(LIB_A)	:	$(LIB_D)
-			echo la je fais
 			make -C $(LIB_D)
 
 leaks		:	all
