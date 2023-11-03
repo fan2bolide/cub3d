@@ -135,17 +135,13 @@ void shoot_ray(t_position *ray, t_cub *cub, double angle)
 double get_orientation(char **map, t_position *pos) {
 	char	orientation;
 
-	(void)orientation;
-	(void)map;
-	(void)pos;
-//	orientation = map[(int)pos->y][(int)pos->x];
-//	if (orientation == 'N')
-//		return (M_PI_2);
-//	if (orientation == 'E')
-//		return (0);
-//	if (orientation == 'W')
-//		return (M_PI);
-//	if (orientation == 'S')
-//		return (3 * M_PI_2);
-	return (-M_PI_4);
+	orientation = map[(int)pos->y][(int)pos->x];
+	if (orientation == 'N')
+		return (3 * M_PI_2);
+	if (orientation == 'E')
+		return (0);
+	if (orientation == 'W')
+		return (M_PI);
+	if (orientation == 'S')
+		return (M_PI_2);
 }

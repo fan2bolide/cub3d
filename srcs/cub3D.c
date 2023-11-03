@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/03 00:16:50 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/03 01:17:23 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-double	get_orientation(char **map, t_position *pos);
+double get_orientation(char **map, t_position *pos);
 void	cub_mlx_config(t_cub *cub);
 int		cub_handle_key_press(int keycode, t_cub *cub);
 int		close_window(t_cub *cub);
 int		cub_render_frame(t_cub *cub);
 
-void	cub_update_player_position(int keycode, t_cub *cub);
+void cub_update_player_position(int keycode, t_cub *cub);
 
-void	cub_update_view_angle(int keycode, t_cub *cub);
+void cub_update_view_angle(int keycode, t_cub *cub);
 
 static int	cub_check_args(int argc, char **argv, t_cub *cub)
 {
@@ -32,9 +32,9 @@ static int	cub_check_args(int argc, char **argv, t_cub *cub)
 	return (0);
 }
 
-t_position	*create_position(double i, double j)
+t_position *create_position(double i, double j)
 {
-	t_position	*pos;
+	t_position *pos;
 
 	pos = malloc(sizeof(t_position));
 	pos->x = j;
@@ -42,10 +42,10 @@ t_position	*create_position(double i, double j)
 	return (pos);
 }
 
-t_position	*get_position(char **map)
+t_position *get_position(char **map)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	i = 0;
 	while (map[i])
@@ -53,8 +53,7 @@ t_position	*get_position(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'N' || map[i][j] == 'E' || map[i][j] == 'S' \
-														|| map[i][j] == 'W')
+			if (map[i][j] == 'N' || map[i][j] == 'E' || map[i][j] == 'S' || map[i][j] == 'W')
 				return (create_position((double)i, (double)j));
 			j++;
 		}
@@ -65,9 +64,10 @@ t_position	*get_position(char **map)
 
 int	main(int argc, char **argv)
 {
-	t_cub	*cub;
+	t_cub *cub;
 
 	cub = malloc(sizeof (t_cub));
+	ft_bzero(cub->keys_states, 65509);
 	cub->win_size[0] = 900;
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
@@ -78,12 +78,9 @@ int	main(int argc, char **argv)
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position->x += 0.5;
 	cub->player_position->y += 0.5;
-	printf("%.2f %.2f\n", cub->player_position->x, cub->player_position->y);
 	cub->mlx = mlx_init();
-	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], \
-								cub->win_size[0], "cub3D");
-	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], \
-								cub->win_size[0]);
+	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
+	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	cub->fov = M_PI_2;
 	if (!ray_casting(cub))
@@ -92,13 +89,7 @@ int	main(int argc, char **argv)
 	return (mlx_loop(cub->mlx), 0);
 }
 
-void	cub_mlx_config(t_cub *cub)
-{
-	mlx_hook(cub->win, KEY_PRESS, KEY_PRESS_MASK, cub_handle_key_press, cub);
-	mlx_hook(cub->win, DESTROY_NOTIFY, NO_EVENT_MASK, close_window, cub);
-}
-
-void	cub_update_fov(int keycode, t_cub *cub)
+void cub_update_fov(int keycode, t_cub *cub)
 {
 	if (keycode == KEY_Z)
 		cub->fov -= 0.05;
@@ -110,23 +101,54 @@ void	cub_update_fov(int keycode, t_cub *cub)
 		cub->fov = M_PI_4;
 }
 
-int	cub_handle_key_press(int keycode, t_cub *cub)
+int perform_actions(t_cub *cub)
 {
-	if (keycode == KEY_ESC)
+	if (cub->keys_states[KEY_ESC])
 		return (close_window(cub));
-	else if (keycode == KEY_Z || keycode == KEY_X)
-		cub_update_fov(keycode, cub);
-	else if (keycode == KEY_W || keycode == KEY_A
-			|| keycode == KEY_S || keycode == KEY_D)
-		cub_update_player_position(keycode, cub);
-	else if (keycode == KEY_LEFT || keycode == KEY_RIGHT)
-		cub_update_view_angle(keycode, cub);
-	else
-		return (1);
+	if (cub->keys_states[KEY_Z])
+		cub_update_fov(KEY_Z, cub);
+	if (cub->keys_states[KEY_X])
+		cub_update_fov(KEY_X, cub);
+	if (cub->keys_states[KEY_W])
+		cub_update_player_position(KEY_W, cub);
+	if (cub->keys_states[KEY_A])
+		cub_update_player_position(KEY_A, cub);
+	if (cub->keys_states[KEY_S])
+		cub_update_player_position(KEY_S, cub);
+	if (cub->keys_states[KEY_D])
+		cub_update_player_position(KEY_D, cub);
+	if (cub->keys_states[KEY_LEFT] == 1)
+		cub_update_view_angle(KEY_LEFT, cub);
+	if (cub->keys_states[KEY_RIGHT] == 1)
+		cub_update_view_angle(KEY_RIGHT, cub);
 	return (cub_render_frame(cub));
 }
 
-void cub_update_view_angle(int keycode, t_cub *cub)
+int	cub_handle_key_release(int keycode, t_cub *cub)
+{
+	if (keycode && keycode > 65508)
+		return (1);
+	cub->keys_states[keycode] = RELEASED;
+	return (1);
+}
+
+void cub_mlx_config(t_cub *cub)
+{
+	mlx_hook(cub->win, KEY_PRESS, KEY_PRESS_MASK, cub_handle_key_press, cub);
+	mlx_hook(cub->win, KEY_RELEASE, KEY_RELEASE_MASK, cub_handle_key_release, cub);
+	mlx_hook(cub->win, DESTROY_NOTIFY, NO_EVENT_MASK, close_window, cub);
+	mlx_loop_hook(cub->mlx, (int (*)())perform_actions, cub);
+}
+
+int cub_handle_key_press(int keycode, t_cub *cub)
+{
+	if (keycode && keycode > 65508)
+		return (1);
+	cub->keys_states[keycode] = PRESSED;
+	return (1);
+}
+
+void	cub_update_view_angle(int keycode, t_cub *cub)
 {
 	if (keycode == KEY_LEFT)
 		cub->view_angle -= 0.05;
@@ -178,7 +200,7 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 	cub->player_position->x = new_x;
 }
 
-void	cub_update_player_position(int keycode, t_cub *cub)
+void cub_update_player_position(int keycode, t_cub *cub)
 {
 	if (keycode == KEY_W)
 		move_player(cos(cub->view_angle) / 10, sin(cub->view_angle) / 10, cub);
@@ -193,15 +215,13 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 		sin(cub->view_angle + M_PI_2) / 10, cub);
 }
 
-int	cub_render_frame(t_cub *cub)
+int cub_render_frame(t_cub *cub)
 {
 	ray_casting(cub);
 	return (0);
 }
 
-#if defined(__linux__)
-
-int	close_window(t_cub *cub)
+int close_window(t_cub *cub)
 {
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
@@ -212,16 +232,3 @@ int	close_window(t_cub *cub)
 	free(cub);
 	exit(0);
 }
-#elif defined(__APPLE__)
-
-int	close_window(t_cub *cub)
-{
-	mlx_destroy_image(cub->mlx, cub->img.img);
-	mlx_destroy_window(cub->mlx, cub->win);
-	free(cub->mlx);
-	destroy_data(cub->data);
-	free(cub->player_position);
-	free(cub);
-	exit(0);
-}
-#endif

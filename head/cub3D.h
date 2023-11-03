@@ -42,6 +42,9 @@
 # define COLOR_MAP_CHANGE_MASK		8388608
 # define OWNER_GRAB_BUTTON_MASK		16777216
 
+# define PRESSED    1
+# define RELEASED   0
+
 // X11 events
 # define KEY_PRESS			2
 # define KEY_RELEASE		3
@@ -252,6 +255,7 @@ typedef struct s_cub
 	t_data	*data;
 	void	*mlx;
 	void	*win;
+    int     keys_states[65509];
 	int 	win_size[2];
 	t_image img;
 	t_position *player_position;
