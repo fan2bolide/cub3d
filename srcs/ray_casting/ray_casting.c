@@ -1,29 +1,40 @@
-//#include <tclDecls.h>
-#include <float.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray_casting.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
+/*   Updated: 2023/11/03 01:39:57 by bajeanno         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3D.h"
 
 double get_orientation(char **map, t_position *pos);
 
 void shoot_ray(t_position *ray, t_cub *cub, double angle);
 
-int get_wall_height(t_cub *cub, t_position ray) {
+int get_wall_height(t_cub *cub, t_position ray, double angle) {
 	double	wall_distance;
 
 	wall_distance = sqrt((ray.x - cub->player_position->x) * (ray.x - cub->player_position->x) + (ray.y - cub->player_position->y) * (ray.y - cub->player_position->y));
-	return ((int)(D_SCREEN * H_SCREEN / wall_distance));
+	wall_distance *= cos(cub->view_angle - angle);
+	return ((int)(SCREEN_DISTANCE * cub->win_size[0] / wall_distance));
 }
 
 int	ray_casting(t_cub *cub)
 {
-	t_position	ray_pos[cub->win_size[1] / 2];
-	double		angle[cub->win_size[1] / 2];
-	int			wall_height[cub->win_size[1] / 2];
+	t_position	ray_pos[cub->win_size[1]];
+	double		angle[cub->win_size[1]];
+	int			wall_height[cub->win_size[1]];
 	double		ray_spacing;
 	int			i;
 
 	i = 0;
-	ray_spacing = cub->fov / (cub->win_size[1] - 1) * 2;
-	while (i < cub->win_size[1] / 2)
+	ray_spacing = cub->fov / (cub->win_size[1] - 1);
+	while (i < cub->win_size[1])
 	{
 		ray_pos[i].x = cub->player_position->x;
 		ray_pos[i].y = cub->player_position->y;
@@ -31,10 +42,10 @@ int	ray_casting(t_cub *cub)
 		i++;
 	}
 	i = 0;
-	while (i < cub->win_size[1] / 2)
+	while (i < cub->win_size[1])
 	{
 		shoot_ray(ray_pos + i, cub, angle[i]);
-		wall_height[i] = get_wall_height(cub, ray_pos[i]);
+		wall_height[i] = get_wall_height(cub, ray_pos[i], angle[i]);
 		i++;
 	}
 	render_minimap(cub, ray_pos, angle, wall_height);
@@ -124,6 +135,9 @@ void shoot_ray(t_position *ray, t_cub *cub, double angle)
 double get_orientation(char **map, t_position *pos) {
 	char	orientation;
 
+	(void)orientation;
+	(void)map;
+	(void)pos;
 //	orientation = map[(int)pos->y][(int)pos->x];
 //	if (orientation == 'N')
 //		return (M_PI_2);

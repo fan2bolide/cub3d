@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/02 18:29:08 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/03 01:43:22 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,8 +197,7 @@ enum e_key_codes
 #  error "Unsuported OS"
 # endif
 
-# define H_SCREEN	900
-# define D_SCREEN	0.2
+# define SCREEN_DISTANCE	1
 
 
 //=================== INCLUDES =====================//
