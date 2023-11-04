@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/04 01:47:55 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/03 03:00:56 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ enum e_key_codes
 	KEY_BACKSPACE = 51,
 	KEY_F11 = 321
 };
-#  define CUB_ON_LINUX	0
 # elif defined(__linux__)
 
 enum e_key_codes
@@ -199,7 +198,6 @@ enum e_key_codes
 	KEY_BACKSPACE = 65288,
 	KEY_F11 = 65480
 };
-#  define CUB_ON_LINUX	1
 # else
 #  error "Unsuported OS"
 # endif

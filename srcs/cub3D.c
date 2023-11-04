@@ -106,7 +106,7 @@ void	cub_update_fov(int keycode, t_cub *cub)
 void	cub_full_screen(t_cub *cub)
 {
 	cub->keys_states[KEY_F11] = RELEASED;
-	if (cub->is_fullscreen == false && CUB_ON_LINUX)
+	if (cub->is_fullscreen == false)
 	{
 		cub->is_fullscreen = true;
 		mlx_get_screen_size(cub->mlx, &(cub->win_size[1]), &(cub->win_size[0]));
@@ -122,7 +122,7 @@ void	cub_full_screen(t_cub *cub)
 	mlx_destroy_window(cub->mlx, cub->win);
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
-	if (!ray_casting(cub))
+	if (!render_frame(cub))
 		return (close_window(cub), (void) 0);
 	cub_mlx_config(cub);
 	mlx_loop(cub->mlx);
@@ -170,7 +170,6 @@ int	cub_handle_key_release(int keycode, t_cub *cub)
 
 int cub_handle_key_press(int keycode, t_cub *cub)
 {
-	printf("key is pressed\n");
 	if (keycode && keycode > 65508)
 		return (1);
 	cub->keys_states[keycode] = PRESSED;
@@ -204,9 +203,6 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 
 	old_x = cub->player_position->x;
 	old_y = cub->player_position->y;
-	if (cub->data->map[(int)new_y][(int)old_x] == '1' \
-	&& cub->data->map[(int)old_y][(int)new_x] == '1')
-		return ;
 	if ((int)old_x != (int)new_x)
 	{
 		if ((int)old_y != (int)new_y)
@@ -216,9 +212,7 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 		return ;
 	}
 	if ((int)old_y != (int)new_y)
-	{
 		cub->player_position->x = new_x;
-	}
 }
 
 void	move_player(double x_change, double y_change, t_cub *cub)
