@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 04:06:32 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/03 04:35:18 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/04 06:13:12 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,16 @@ int	get_color_of_wall(int x, int y)
 	if (x % 2)
 	{
 		if (y % 2)
-			color = 0xff4500;
+			color = 0xCC7075;
 		else
-			color = 0x80;
+			color = 0xCC9970;
 	}
 	else
 	{
 		if (y % 2)
-			color = 0x80;
+			color = 0xCC9970;
 		else
-			color = 0xff4500;
+			color = 0xCC7075;
 	}
 	return (color);
 }
