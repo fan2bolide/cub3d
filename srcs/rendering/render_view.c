@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/04 05:43:27 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/04 05:58:19 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,18 @@ void	render_view(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
 int	get_wall_height(t_cub *cub, t_position ray, double angle)
 {
 	double	wall_distance;
+	double	wall_height;
 
 	wall_distance = sqrt((ray.x - cub->player_position->x) * \
 	(ray.x - cub->player_position->x) + (ray.y - cub->player_position->y) * \
 	(ray.y - cub->player_position->y));
 	wall_distance *= cos(angle - cub->view_angle);
-	return ((int)(SCREEN_DISTANCE * cub->win_size[0] / wall_distance));
+	if (wall_distance < 0.5)
+		wall_distance = 0.5;
+	wall_height = (SCREEN_DISTANCE * cub->win_size[0] / wall_distance);
+	if (wall_height > cub->win_size[0])
+		wall_height = cub->win_size[0];
+	return ((int)wall_height);
 }
 
 int	render_frame(t_cub *cub)

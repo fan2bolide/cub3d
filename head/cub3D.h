@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/03 03:00:56 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/04 06:03:14 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ enum e_key_codes
 #  error "Unsuported OS"
 # endif
 
-# define SCREEN_DISTANCE	1
+# define SCREEN_DISTANCE	0.8
 
 //=================== INCLUDES =====================//
 # include "error_codes.h"

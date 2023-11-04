@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/03 05:30:00 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/04 06:01:25 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,9 +187,9 @@ void cub_mlx_config(t_cub *cub)
 void	cub_update_view_angle(int keycode, t_cub *cub)
 {
 	if (keycode == KEY_LEFT)
-		cub->view_angle -= 0.01;
+		cub->view_angle -= 0.017;
 	else
-		cub->view_angle += 0.01;
+		cub->view_angle += 0.017;
 	if (cub->view_angle < 0)
 		cub->view_angle += (2 * M_PI);
 	else if (cub->view_angle > (2 * M_PI))
