@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/04 06:01:25 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/04 12:23:59 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,18 @@ t_position	*get_position(char **map)
 	return (NULL);
 }
 
+void	convert_path_to_mlx_img(t_cub *cub)
+{
+	int i;
+
+	i = -1;
+	while (++i < 4)
+	{
+		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
+		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -81,14 +93,17 @@ int	main(int argc, char **argv)
 	cub->player_position->y += 0.5;
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
+	convert_path_to_mlx_img(cub);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
-	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
+	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
+	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	cub->fov = M_PI_2;
 	if (!render_frame(cub))
 		return (close_window(cub), 1);
 	cub_mlx_config(cub);
 	return (mlx_loop(cub->mlx), 0);
 }
+
 
 void	cub_update_fov(int keycode, t_cub *cub)
 {
@@ -122,6 +137,8 @@ void	cub_full_screen(t_cub *cub)
 	mlx_destroy_window(cub->mlx, cub->win);
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
+	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
+	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	if (!render_frame(cub))
 		return (close_window(cub), (void) 0);
 	cub_mlx_config(cub);
@@ -250,6 +267,11 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 
 int close_window(t_cub *cub)
 {
+	int	i;
+
+	i = 0;
+	while (i < 4)
+		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
 	mlx_destroy_display(cub->mlx);

@@ -1,9 +1,9 @@
-EA                                                                                                  truc.xpm
-NO truc.xpm
+EA                                                                 textures/simonkraft/basalt_top.xpm
+NO textures/simonkraft/basalt_top.xpm
 C -0,222,	0
 F 255,5,000
-WE      truc.xpm
-SO    truc.xpm
+WE textures/simonkraft/basalt_top.xpm
+SO    textures/simonkraft/basalt_top.xpm
 
  1111111111111111111
 100001111111101010111

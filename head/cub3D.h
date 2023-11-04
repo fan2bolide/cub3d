@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/04 06:03:14 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/04 11:43:55 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,10 +228,7 @@ typedef struct s_color{
 
 typedef struct s_data{
 	char	**map;
-	char	*n_texture;
-	char	*s_texture;
-	char	*w_texture;
-	char	*e_texture;
+	char	*texture[4];
 	t_color	*ceiling_color;
 	t_color	*floor_color;
 }		t_data;
@@ -243,6 +240,8 @@ typedef struct s_image
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int 	width;
+	int		height;
 }			t_image;
 
 typedef struct s_position
@@ -250,6 +249,12 @@ typedef struct s_position
 	double	x;
 	double	y;
 }			t_position;
+
+typedef struct s_iposition
+{
+	int	x;
+	int	y;
+}			t_iposition;
 
 typedef struct s_cub
 {
@@ -260,6 +265,7 @@ typedef struct s_cub
 	int			keys_states[65509];
 	int			win_size[2];
 	t_image		img;
+	t_image		textures[4];
 	t_position	*player_position;
 	double		view_angle;
 	double		fov;
