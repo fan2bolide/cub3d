@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/03 04:48:29 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/04 05:43:27 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,33 @@ int	render_frame(t_cub *cub)
 	t_position	ray_pos[cub->win_size[1]];
 	double		angle[cub->win_size[1]];
 	int			wall_height[cub->win_size[1]];
-	double		ray_spacing;
+	int			nb_segments;
+	int			win_size_2;
+	double		segments_size;
 	int			i;
 
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
 	&cub->img.line_length, &cub->img.endian);
+	win_size_2 = cub->win_size[1] / 2;
 	i = 0;
-	ray_spacing = cub->fov / (cub->win_size[1] - 1);
+	segments_size = 2 * tan(cub->fov / 2) / (cub->win_size[1] - 1);
 	while (i < cub->win_size[1])
 	{
 		ray_pos[i].x = cub->player_position->x;
 		ray_pos[i].y = cub->player_position->y;
-		angle[i] = cub->view_angle - (cub->fov / 2) + (i * ray_spacing);
+		if (i <= win_size_2)
+			nb_segments = win_size_2 - i;
+		else
+			nb_segments = (cub->win_size[1] - i) - win_size_2;
+		angle[i] = (cub->view_angle * (i <= (win_size_2))) + (cub->view_angle * (i > (win_size_2))) - atan(nb_segments * segments_size);
+		if (angle[i] < 0)
+			angle[i] += M_PI * 2;
+		if (angle[i] > M_PI * 2)
+			angle[i] -= M_PI * 2;
+//		if (i == win_size_2 * 2 - 1)
+//			printf("%f\n", atan(nb_segments * segments_size));
 		shoot_ray(ray_pos + i, cub, angle[i]);
 		wall_height[i] = get_wall_height(cub, ray_pos[i], angle[i]);
 		i++;
@@ -81,3 +94,5 @@ int	render_frame(t_cub *cub)
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	return (1);
 }
+
+//ratio horizontal = 2tan(a) / win_size->x

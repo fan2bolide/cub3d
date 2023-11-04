@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/03 03:59:23 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/03 05:30:00 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,12 @@ void	cub_update_fov(int keycode, t_cub *cub)
 	if (cub->fov < M_PI_4)
 		cub->fov = M_PI_4;
 }
+#if defined(__linux__)
 
 void	cub_full_screen(t_cub *cub)
 {
 	cub->keys_states[KEY_F11] = RELEASED;
-	if (cub->is_fullscreen == false)
+	if (cub->is_fullscreen == false && CUB_ON_LINUX)
 	{
 		cub->is_fullscreen = true;
 		mlx_get_screen_size(cub->mlx, &(cub->win_size[1]), &(cub->win_size[0]));
@@ -126,6 +127,13 @@ void	cub_full_screen(t_cub *cub)
 	cub_mlx_config(cub);
 	mlx_loop(cub->mlx);
 }
+#elif defined(__APPLE__)
+
+void	cub_full_screen(t_cub *cub)
+{
+	(void)cub;
+}
+#endif
 
 int	perform_actions(t_cub *cub)
 {
