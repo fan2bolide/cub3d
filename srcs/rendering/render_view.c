@@ -6,11 +6,20 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/04 14:30:25 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/05 20:30:10 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
+
+void swap(int *a, int *b)
+{
+	int c;
+
+	c = *a;
+	*a = *b;
+	*b = c;
+}
 
 int	cub_textures_put(t_cub *cub, const int wall_height, int x,t_position ray_collision)
 {
@@ -25,6 +34,8 @@ int	cub_textures_put(t_cub *cub, const int wall_height, int x,t_position ray_col
 		screen_wall_height = cub->win_size[0];
 	texture.x = (int)((ray_collision.x - (int)(ray_collision.x)) * cub->textures[0].width);
 	y = cub->win_size[0] / 2 - screen_wall_height / 2;
+//	if ((int)x == x)
+//		swap(&x, &y);
 	// TODO faire un truc si la ligne est plus grande que la taille de la fenetre
 	i = 0;
 //	if (x== cub->win_size[1] / 2)
@@ -36,7 +47,7 @@ int	cub_textures_put(t_cub *cub, const int wall_height, int x,t_position ray_col
 		y++;
 		i++;
 	}
-	printf("%i %d %d\n", screen_wall_height, x, y);
+//	printf("%i %d %d\n", screen_wall_height, x, y);
 
 	return (y);
 }
@@ -51,7 +62,6 @@ void	render_view(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
 //	int			color;
 
 	i = 0;
-	printf("render\n");
 	while (i < cub->win_size[1])
 	{
 //		color = get_color_of_wall((int)ray_collision[i].x -

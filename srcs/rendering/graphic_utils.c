@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   graphic_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 04:06:32 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/03 04:35:18 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/05 20:32:19 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	cub_pixel_put(t_image *data, int x, int y, int color)
 {
 	char	*dst;
 
+//	if (y < 0 || x < 0 || x > data->width || y > data->height)
+//		return ;
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
