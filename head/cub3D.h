@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/04 11:43:55 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/06 00:39:06 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,7 @@ enum e_key_codes
 # include "mlx.h"
 # include "libft.h"
 # include <errno.h>
+# include <sys/time.h>
 
 //=================== STUCTURES ====================//
 typedef struct s_color{
@@ -252,9 +253,15 @@ typedef struct s_position
 
 typedef struct s_iposition
 {
-	int	x;
-	int	y;
+	size_t	x;
+	size_t	y;
 }			t_iposition;
+
+typedef struct s_bajeanno
+{
+	bool		is_activated;
+	t_iposition	coords;
+}			t_bajeanno;
 
 typedef struct s_cub
 {
@@ -269,6 +276,7 @@ typedef struct s_cub
 	t_position	*player_position;
 	double		view_angle;
 	double		fov;
+	size_t		last_frame_time;
 }		t_cub;
 
 //==================== PARSING =====================//

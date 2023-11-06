@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/03 04:28:51 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/06 01:31:50 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void shoot_ray(t_position *ray, t_cub *cub, double angle)
 		get_delta_to_next_column(*ray, angle, &new_x);
 		get_delta_to_next_line(*ray, angle, &new_y);
 		apply_minimal_distance(ray, new_x, new_y);
-		if (ray->y < 0 || ray->x < 0 || cub->data->map[(int)ray->y - (ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x - (ray->x == (int)ray->x &&(cos(angle) < 0))] == '1')
+		if (ray->y < 0 || ray->x < 0 || cub->data->map[(int)ray->y - ((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x - ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == '1')
 			return ;
 	}
 }
@@ -69,6 +69,7 @@ double get_orientation(char **map, t_position *pos) {
 	char	orientation;
 
 	orientation = map[(int)pos->y][(int)pos->x];
+	return (M_PI_2);
 	if (orientation == 'N')
 		return (3 * M_PI_2);
 	if (orientation == 'E')

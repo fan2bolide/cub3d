@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/04 12:23:59 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/06 01:35:24 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,21 @@ void	convert_path_to_mlx_img(t_cub *cub)
 	}
 }
 
+size_t	get_time(void)
+{
+	struct timeval	time;
+	size_t			seconds;
+	size_t			u_seconds;
+	size_t			m_seconds;
+
+	gettimeofday(&time, NULL);
+	seconds = time.tv_sec;
+	u_seconds = time.tv_usec;
+	m_seconds = u_seconds / 1000;
+	m_seconds += seconds * 1000;
+	return (m_seconds);
+}
+
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -81,6 +96,7 @@ int	main(int argc, char **argv)
 	cub = malloc(sizeof (t_cub));
 	ft_bzero(cub->keys_states, 65509);
 	cub->is_fullscreen = false;
+	cub->last_frame_time = get_time();
 	cub->win_size[0] = 900;
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
@@ -168,12 +184,16 @@ int	perform_actions(t_cub *cub)
 		cub_update_player_position(KEY_S, cub);
 	if (cub->keys_states[KEY_D])
 		cub_update_player_position(KEY_D, cub);
+	if (cub->keys_states[KEY_F])
+		cub->fov = M_PI_2;
 	if (cub->keys_states[KEY_LEFT] == 1)
 		cub_update_view_angle(KEY_LEFT, cub);
 	if (cub->keys_states[KEY_RIGHT] == 1)
 		cub_update_view_angle(KEY_RIGHT, cub);
 	if (cub->keys_states[KEY_F11] == 1)
 		cub_full_screen(cub);
+	printf("%li\n", get_time() - cub->last_frame_time);
+	cub->last_frame_time = get_time();
 	return (render_frame(cub));
 }
 
@@ -220,6 +240,7 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 
 	old_x = cub->player_position->x;
 	old_y = cub->player_position->y;
+	printf("je report\n");
 	if ((int)old_x != (int)new_x)
 	{
 		if ((int)old_y != (int)new_y)
@@ -244,6 +265,7 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		return ;
 	if (cub->data->map[(int)new_y][(int)new_x] == '1')
 		return (report_movement(new_y, new_x, cub));
+	printf("je moove normal\n");
 	cub->player_position->y = new_y;
 	cub->player_position->x = new_x;
 }
@@ -261,6 +283,10 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 	if (keycode == KEY_D)
 		move_player(cos(cub->view_angle + M_PI_2) / 20, \
 		sin(cub->view_angle + M_PI_2) / 20, cub);
+	if (cub->player_position->x - (int)cub->player_position->x < 0.0005)
+		cub->player_position->x += 0.0005;
+	if (cub->player_position->y - (int)cub->player_position->y < 0.0005)
+		cub->player_position->y += 0.0005;
 }
 
 #if defined(__linux__)

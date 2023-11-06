@@ -1,9 +1,9 @@
-EA                                                                 textures/simonkraft/basalt_top.xpm
-NO textures/simonkraft/basalt_top.xpm
-C -0,222,	0
-F 255,5,000
-WE textures/simonkraft/basalt_top.xpm
-SO    textures/simonkraft/basalt_top.xpm
+EA                                                                 textures/bajeanno.xpm
+NO textures/bajeanno.xpm
+C 133, 185, 230
+F 48, 31, 61
+WE textures/bajeanno.xpm
+SO   textures/bajeanno.xpm
 
  1111111111111111111
 100001111111101010111
@@ -11,10 +11,10 @@ SO    textures/simonkraft/basalt_top.xpm
 110000000000000101001111111111111111111111
 100000000000000000000000000000000000000001
 100000000000000101001111111111111111111111
-1100000000N000000001
+11000000000000000001
 10000000000000000001
 11000000000000000001
 10000000000000000001
-11111111111111110111
+1111111111111111S111
 10000000000000000001
 11111111111111111111
