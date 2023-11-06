@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 04:06:32 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/04 06:13:18 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/05 20:33:01 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ void	cub_pixel_put(t_image *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (y >= 900 || x >= 1440)
-		return ;
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
@@ -51,16 +49,16 @@ int	get_color_of_wall(int x, int y)
 	if (x % 2)
 	{
 		if (y % 2)
-			color = 0xCC7075;
+			color = 0xff4500;
 		else
-			color = 0xCC9970;
+			color = 0x80;
 	}
 	else
 	{
 		if (y % 2)
-			color = 0xCC9970;
+			color = 0x80;
 		else
-			color = 0xCC7075;
+			color = 0xff4500;
 	}
 	return (color);
 }

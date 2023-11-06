@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/04 06:01:25 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/06 04:42:05 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,35 @@ t_position	*get_position(char **map)
 	return (NULL);
 }
 
+void	convert_path_to_mlx_img(t_cub *cub)
+{
+	int i;
+
+	i = -1;
+	while (++i < 4)
+	{
+		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
+		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
+	}
+	cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, BJ_PATH, &cub->textures[i].width, &cub->textures[i].height);
+	cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
+}
+
+size_t	get_time(void)
+{
+	struct timeval	time;
+	size_t			seconds;
+	size_t			u_seconds;
+	size_t			m_seconds;
+
+	gettimeofday(&time, NULL);
+	seconds = time.tv_sec;
+	u_seconds = time.tv_usec;
+	m_seconds = u_seconds / 1000;
+	m_seconds += seconds * 1000;
+	return (m_seconds);
+}
+
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -69,6 +98,7 @@ int	main(int argc, char **argv)
 	cub = malloc(sizeof (t_cub));
 	ft_bzero(cub->keys_states, 65509);
 	cub->is_fullscreen = false;
+	cub->last_frame_time = get_time();
 	cub->win_size[0] = 900;
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
@@ -81,14 +111,17 @@ int	main(int argc, char **argv)
 	cub->player_position->y += 0.5;
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
+	convert_path_to_mlx_img(cub);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
-	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
+	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
+	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	cub->fov = M_PI_2;
 	if (!render_frame(cub))
 		return (close_window(cub), 1);
 	cub_mlx_config(cub);
 	return (mlx_loop(cub->mlx), 0);
 }
+
 
 void	cub_update_fov(int keycode, t_cub *cub)
 {
@@ -122,6 +155,8 @@ void	cub_full_screen(t_cub *cub)
 	mlx_destroy_window(cub->mlx, cub->win);
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
+	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
+	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	if (!render_frame(cub))
 		return (close_window(cub), (void) 0);
 	cub_mlx_config(cub);
@@ -151,12 +186,16 @@ int	perform_actions(t_cub *cub)
 		cub_update_player_position(KEY_S, cub);
 	if (cub->keys_states[KEY_D])
 		cub_update_player_position(KEY_D, cub);
+	if (cub->keys_states[KEY_F])
+		cub->fov = M_PI_2;
 	if (cub->keys_states[KEY_LEFT] == 1)
 		cub_update_view_angle(KEY_LEFT, cub);
 	if (cub->keys_states[KEY_RIGHT] == 1)
 		cub_update_view_angle(KEY_RIGHT, cub);
 	if (cub->keys_states[KEY_F11] == 1)
 		cub_full_screen(cub);
+//	printf("%li\n", get_time() - cub->last_frame_time);
+//	cub->last_frame_time = get_time();
 	return (render_frame(cub));
 }
 
@@ -203,6 +242,7 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 
 	old_x = cub->player_position->x;
 	old_y = cub->player_position->y;
+	printf("je report\n");
 	if ((int)old_x != (int)new_x)
 	{
 		if ((int)old_y != (int)new_y)
@@ -227,6 +267,7 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		return ;
 	if (cub->data->map[(int)new_y][(int)new_x] == '1')
 		return (report_movement(new_y, new_x, cub));
+	printf("je moove normal\n");
 	cub->player_position->y = new_y;
 	cub->player_position->x = new_x;
 }
@@ -244,12 +285,21 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 	if (keycode == KEY_D)
 		move_player(cos(cub->view_angle + M_PI_2) / 20, \
 		sin(cub->view_angle + M_PI_2) / 20, cub);
+	if (cub->player_position->x - (int)cub->player_position->x < 0.0005)
+		cub->player_position->x += 0.0005;
+	if (cub->player_position->y - (int)cub->player_position->y < 0.0005)
+		cub->player_position->y += 0.0005;
 }
 
 #if defined(__linux__)
 
 int close_window(t_cub *cub)
 {
+	int	i;
+
+	i = 0;
+	while (i < 4)
+		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
 	mlx_destroy_display(cub->mlx);

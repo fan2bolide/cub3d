@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/04 06:03:14 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/06 03:38:05 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 
 # define PRESSED    1
 # define RELEASED   0
+# define BJ_PATH	"textures/bajeanno.xpm"
 
 // X11 events
 # define KEY_PRESS			2
@@ -217,6 +218,7 @@ enum e_key_codes
 # include "mlx.h"
 # include "libft.h"
 # include <errno.h>
+# include <sys/time.h>
 
 //=================== STUCTURES ====================//
 typedef struct s_color{
@@ -226,12 +228,24 @@ typedef struct s_color{
 	unsigned char	transparency;
 }		t_color;
 
+typedef struct s_iposition
+{
+	size_t	x;
+	size_t	y;
+}			t_iposition;
+
+typedef struct s_bajeanno
+{
+	bool		is_activated;
+	t_iposition	coords;
+	struct s_bajeanno	*next;
+	struct s_bajeanno	*prev;
+}			t_bajeanno;
+
 typedef struct s_data{
 	char	**map;
-	char	*n_texture;
-	char	*s_texture;
-	char	*w_texture;
-	char	*e_texture;
+	t_bajeanno	*baj;
+	char	*texture[4];
 	t_color	*ceiling_color;
 	t_color	*floor_color;
 }		t_data;
@@ -243,6 +257,8 @@ typedef struct s_image
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int 	width;
+	int		height;
 }			t_image;
 
 typedef struct s_position
@@ -250,6 +266,7 @@ typedef struct s_position
 	double	x;
 	double	y;
 }			t_position;
+
 
 typedef struct s_cub
 {
@@ -260,9 +277,12 @@ typedef struct s_cub
 	int			keys_states[65509];
 	int			win_size[2];
 	t_image		img;
+	t_image		textures[5];
 	t_position	*player_position;
 	double		view_angle;
 	double		fov;
+	size_t		last_frame_time;
+	t_bajeanno	bajeanno;
 }		t_cub;
 
 //==================== PARSING =====================//
@@ -291,5 +311,6 @@ size_t	get_size(char **tab);
 int		check_definition(t_data *data);
 int		check_assignation(t_data *data);
 int		check_format(t_data *data);
+t_position	*get_position(char **map);
 
 #endif
