@@ -1,9 +1,9 @@
-EA                                                                 textures/bajeanno.xpm
-NO textures/bajeanno.xpm
+EA                                                                 textures/simonkraft/bookshelf_01.xpm
+NO textures/simonkraft/bookshelf.xpm
 C 133, 185, 230
 F 48, 31, 61
-WE textures/bajeanno.xpm
-SO   textures/bajeanno.xpm
+WE textures/simonkraft/bookshelf_01.xpm
+SO   textures/simonkraft/bookshelf_01.xpm
 
  1111111111111111111
 100001111111101010111

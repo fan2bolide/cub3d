@@ -6,13 +6,11 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/06 21:04:50 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/06 21:23:38 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
-
-void modulo_2_pi(double *angle);
 
 void swap(int *a, int *b)
 {
@@ -126,7 +124,7 @@ int	cub_textures_put(t_cub *cub, int wall_height, int x,t_position ray_collision
 }
 
 void	render_view(t_cub *cub, t_position *ray_collision, \
-		double *angle, const int *wall_height)
+								const int *wall_height)
 {
 	int	i;
 	int	j;

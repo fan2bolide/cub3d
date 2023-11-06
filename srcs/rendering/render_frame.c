@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/06 21:06:32 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/06 22:13:15 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	get_wall_height(t_cub *cub, t_position ray, double angle)
 	(ray.x - cub->player_position->x) + (ray.y - cub->player_position->y) * \
 	(ray.y - cub->player_position->y));
 	wall_distance *= cos(angle - cub->view_angle);
-
 	wall_height = (SCREEN_DISTANCE * cub->win_size[0] / wall_distance);
 	return ((int)wall_height);
 }
@@ -53,7 +52,9 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 			nb_segments = win_size_2 - i;
 		else
 			nb_segments = (cub->win_size[1] - i) - win_size_2;
-		angle[i] = (cub->view_angle * (i <= (win_size_2))) + (cub->view_angle * (i > (win_size_2))) - atan(nb_segments * segments_size);
+		angle[i] = (cub->view_angle * (i <= (win_size_2))) \
+		+ (cub->view_angle * (i > (win_size_2))) \
+		- atan(nb_segments * segments_size);
 		modulo_2_pi(angle + i);
 		shoot_ray(ray_pos + i, cub, angle[i]);
 		wall_height[i] = get_wall_height(cub, ray_pos[i], angle[i]);
@@ -73,8 +74,11 @@ int	render_frame(t_cub *cub)
 	if (!ray_pos || !angle || !wall_height)
 		return (free(ray_pos), free(angle), free(wall_height), 0);
 	compute_arrays(cub, ray_pos, angle, wall_height);
-	render_view(cub, ray_pos, angle, wall_height);
+	free(angle);
+	render_view(cub, ray_pos, wall_height);
 	render_mini_map(cub, ray_pos);
+	free(ray_pos);
+	free(wall_height);
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	return (1);
 }

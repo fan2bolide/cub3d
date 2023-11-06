@@ -179,6 +179,6 @@ t_data	*parsing(int argc, char **argv)
 	if (argc != 2)
 		return (ft_putstr_fd(ERR WRONG_ARG_N EOL, 2), NULL);
 	data = get_data(argv);
-	get_wall_surroundment(data);
+//	get_wall_surroundment(data);
 	return (data);
 }
