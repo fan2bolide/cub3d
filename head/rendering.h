@@ -19,5 +19,7 @@ void	shoot_ray(t_position *ray, t_cub *cub, double angle);
 void	cub_put_line(t_cub *cub, t_position a, t_position b, int color);
 void	cub_pixel_put(t_image *data, int x, int y, int color);
 int		get_color_of_wall(int x, int y);
+void	render_view(t_cub *cub, t_position *ray_collision, \
+		double *angle, const int *wall_height);
 
 #endif

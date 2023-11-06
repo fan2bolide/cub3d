@@ -6,11 +6,13 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/06 03:08:29 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/06 21:04:50 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
+
+void modulo_2_pi(double *angle);
 
 void swap(int *a, int *b)
 {
@@ -123,11 +125,11 @@ int	cub_textures_put(t_cub *cub, int wall_height, int x,t_position ray_collision
 	return (y);
 }
 
-void	render_view(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
-		double angle[cub->win_size[1]], const int wall_height[cub->win_size[1]])
+void	render_view(t_cub *cub, t_position *ray_collision, \
+		double *angle, const int *wall_height)
 {
-	int			i;
-	int			j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (i < cub->win_size[1])
@@ -149,54 +151,4 @@ void	render_view(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
 		j = cub_textures_put(cub, wall_height[i], i, ray_collision[i]);
 		i++;
 	}
-}
-
-int	get_wall_height(t_cub *cub, t_position ray, double angle)
-{
-	double	wall_distance;
-	double	wall_height;
-
-	wall_distance = sqrt((ray.x - cub->player_position->x) * \
-	(ray.x - cub->player_position->x) + (ray.y - cub->player_position->y) * \
-	(ray.y - cub->player_position->y));
-	wall_distance *= cos(angle - cub->view_angle);
-
-	wall_height = (SCREEN_DISTANCE * cub->win_size[0] / wall_distance);
-	return ((int)wall_height);
-}
-
-int	render_frame(t_cub *cub)
-{
-	t_position	ray_pos[cub->win_size[1]];
-	double		angle[cub->win_size[1]];
-	int			wall_height[cub->win_size[1]];
-	int			nb_segments;
-	int			win_size_2;
-	double		segments_size;
-	int			i;
-
-	win_size_2 = cub->win_size[1] / 2;
-	i = 0;
-	segments_size = 2 * tan(cub->fov / 2) / (cub->win_size[1] - 1);
-	while (i < cub->win_size[1])
-	{
-		ray_pos[i].x = cub->player_position->x;
-		ray_pos[i].y = cub->player_position->y;
-		if (i <= win_size_2)
-			nb_segments = win_size_2 - i;
-		else
-			nb_segments = (cub->win_size[1] - i) - win_size_2;
-		angle[i] = (cub->view_angle * (i <= (win_size_2))) + (cub->view_angle * (i > (win_size_2))) - atan(nb_segments * segments_size);
-		if (angle[i] < 0)
-			angle[i] += M_PI * 2;
-		if (angle[i] > M_PI * 2)
-			angle[i] -= M_PI * 2;
-		shoot_ray(ray_pos + i, cub, angle[i]);
-		wall_height[i] = get_wall_height(cub, ray_pos[i], angle[i]);
-		i++;
-	}
-	render_view(cub, ray_pos, angle, wall_height);
-	render_mini_map(cub, ray_pos);
-	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
-	return (1);
 }
