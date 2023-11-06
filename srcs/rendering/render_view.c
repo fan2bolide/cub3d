@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/06 21:23:38 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/06 23:14:51 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,17 @@ void	set_texture_id_and_x(int *texture_id, size_t *texture_x, t_position ray_col
 			*texture_id = 3;
 			*texture_x = (int) ((ray_collision.y - (int) (ray_collision.y)) * cub->textures[*texture_id].width);
 		}
+		return ;
+	}
+	if (cub->player_position->y > ray_collision.y)
+	{
+		*texture_id = 0;
+		*texture_x = (int) ((ray_collision.x - ((int) ray_collision.x)) * cub->textures[*texture_id].width);
 	}
 	else
 	{
-		if (cub->player_position->y > ray_collision.y)
-		{
-			*texture_id = 0;
-			*texture_x = (int) ((ray_collision.x - ((int) ray_collision.x)) * cub->textures[*texture_id].width);
-		}
-		else
-		{
-			*texture_id = 1;
-			*texture_x = (int) ((((int)ray_collision.x) + 1 - ray_collision.x) * cub->textures[*texture_id].width);
-		}
+		*texture_id = 1;
+		*texture_x = (int) ((((int)ray_collision.x) + 1 - ray_collision.x) * cub->textures[*texture_id].width);
 	}
 }
 
@@ -128,25 +126,26 @@ void	render_view(t_cub *cub, t_position *ray_collision, \
 {
 	int	i;
 	int	j;
+	int screen_height;
 
+	screen_height = cub->win_size[0] / 2;
 	i = 0;
 	while (i < cub->win_size[1])
 	{
 		j = 0;
-		if (wall_height[i] < cub->win_size[0])
 		{
-			while (j < (cub->win_size[0] - wall_height[i]) / 2)
-			{
-				cub_pixel_put(&cub->img, i, j, *((int *)cub->data->ceiling_color));
-				j++;
-			}
+			while (j < screen_height)
+				cub_pixel_put(&cub->img, i, j++, *((int *)cub->data->ceiling_color));
 			while (j < cub->win_size[0])
-			{
-				cub_pixel_put(&cub->img, i, j, *((int *)cub->data->floor_color));
-				j++;
-			}
+				cub_pixel_put(&cub->img, i, j++, *((int *)cub->data->floor_color));
 		}
-		j = cub_textures_put(cub, wall_height[i], i, ray_collision[i]);
+		i++;
+	}
+	i = 0;
+	while (i < cub->win_size[1])
+	{
+//		if (wall_height[i] < cub->win_size[0])
+		cub_textures_put(cub, wall_height[i], i, ray_collision[i]);
 		i++;
 	}
 }

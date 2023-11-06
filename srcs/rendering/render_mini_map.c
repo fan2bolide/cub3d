@@ -6,20 +6,18 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 02:50:04 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/03 05:00:53 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/06 23:35:35 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-void	put_wall(t_cub *cub, int i, int j, int scale)
+void	put_wall(t_cub *cub, int i, int j, int scale, int color)
 {
 	int	pixel_x;
 	int	pixel_y;
 	int	j_save;
-	int	color;
 
-	color = get_color_of_wall(i, j);
 	i *= scale;
 	j *= scale;
 	j_save = j;
@@ -69,7 +67,9 @@ void	render_mini_map(t_cub *cub, t_position ray_collision[cub->win_size[1]])
 		while (cub->data->map[i][j])
 		{
 			if (cub->data->map[i][j] == '1')
-				put_wall(cub, i, j, scale);
+				put_wall(cub, i, j, scale, 0x000000);
+			else
+				put_wall(cub, i, j, scale, 0xFFFFFF);
 			j++;
 		}
 		i++;
