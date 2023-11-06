@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:38:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/06 14:46:50 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/06 14:49:48 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,11 +128,11 @@ t_iposition get_next_baj(char **w_surr, t_iposition *next_one, t_iposition *cur_
 	if (w_surr[y][x] == '-')
 		return (cur_pos->x += 1, get_next_baj(w_surr, next_one, cur_pos));
 	else if (w_surr[y][x] == 'X')
-		return (cur_pos->x += 1, get_next_baj(w_surr, next_one, cur_pos));
-	else if (w_surr[y][x] == 'V')
 		return (cur_pos->y += 1, get_next_baj(w_surr, next_one, cur_pos));
-	else if (w_surr[y][x] == '0')
+	else if (w_surr[y][x] == 'V')
 		return (cur_pos->x -= 1, get_next_baj(w_surr, next_one, cur_pos));
+	else if (w_surr[y][x] == '0')
+		return (cur_pos->y -= 1, get_next_baj(w_surr, next_one, cur_pos));
 
 
 	printf("pas normal\n");
@@ -179,6 +179,6 @@ t_data	*parsing(int argc, char **argv)
 	if (argc != 2)
 		return (ft_putstr_fd(ERR WRONG_ARG_N EOL, 2), NULL);
 	data = get_data(argv);
-//	get_wall_surroundment(data);
+	get_wall_surroundment(data);
 	return (data);
 }
