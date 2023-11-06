@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/06 01:35:24 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/06 04:42:05 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
+	cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, BJ_PATH, &cub->textures[i].width, &cub->textures[i].height);
+	cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 }
 
 size_t	get_time(void)
@@ -192,8 +194,8 @@ int	perform_actions(t_cub *cub)
 		cub_update_view_angle(KEY_RIGHT, cub);
 	if (cub->keys_states[KEY_F11] == 1)
 		cub_full_screen(cub);
-	printf("%li\n", get_time() - cub->last_frame_time);
-	cub->last_frame_time = get_time();
+//	printf("%li\n", get_time() - cub->last_frame_time);
+//	cub->last_frame_time = get_time();
 	return (render_frame(cub));
 }
 
