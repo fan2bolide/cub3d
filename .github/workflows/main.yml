@@ -2,32 +2,24 @@ name: Run Curl on Push
 
 on:
   push:
-    # This workflow will be triggered on every push event
+    branches:
+      - main
+      - feature/*  # Replace with your branch pattern
 
 jobs:
   curl:
     runs-on: ubuntu-latest
 
+    env:
+      BRANCH_NAME: ${{ github.ref }}
+      COMMIT_AUTHOR: ${{ github.actor }}
+      COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+
     steps:
     - name: Check out code
       uses: actions/checkout@v2
 
-    - name: Get Branch Name
-      id: get_branch
-      run: echo name=branch::${GITHUB_REF#refs/heads/} >> $GITHUB_OUTPUT
-
-    - name: Get Commit Author
-      id: get_author
-      run: echo name=author::${{ github.actor }} >> $GITHUB_OUTPUT
-
-    - name: Get Commit Message
-      id: get_commit_message
-      run: echo name=message::${{ github.event.head_commit.message }} >> $GITHUB_OUTPUT
-
     - name: Run Curl
       run: |
-        branch_name="${{ steps.get_branch.outputs.branch }}"
-        commit_author="${{ steps.get_author.outputs.author }}"
-        commit_message="${{ steps.get_commit_message.outputs.message }}"
-        curl -d "New push on $branch_name by $commit_author
-        $commit_message" http://ntfy.sh/cub3d
+        curl -d "New push on $BRANCH_NAME by $COMMIT_AUTHOR
+        $COMMIT_MESSAGE" http://ntfy.sh/cub3d
