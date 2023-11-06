@@ -14,15 +14,15 @@ jobs:
 
     - name: Get Branch Name
       id: get_branch
-      run: echo ::set-output name=branch::${GITHUB_REF#refs/heads/}
+      run: echo name=branch::${GITHUB_REF#refs/heads/} >> $GITHUB_OUTPUT
 
     - name: Get Commit Author
       id: get_author
-      run: echo ::set-output name=author::${{ github.actor }}
+      run: echo name=author::${{ github.actor }} >> $GITHUB_OUTPUT
 
     - name: Get Commit Message
       id: get_commit_message
-      run: echo ::set-output name=message::${{ github.event.head_commit.message }}
+      run: echo name=message::${{ github.event.head_commit.message }} >> $GITHUB_OUTPUT
 
     - name: Run Curl
       run: |
