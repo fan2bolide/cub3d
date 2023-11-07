@@ -267,7 +267,6 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		return ;
 	if (cub->data->map[(int)new_y][(int)new_x] == '1')
 		return (report_movement(new_y, new_x, cub));
-	printf("je moove normal\n");
 	cub->player_position->y = new_y;
 	cub->player_position->x = new_x;
 }

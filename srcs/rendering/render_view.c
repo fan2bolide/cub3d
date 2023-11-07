@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/06 03:08:29 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/07 02:40:17 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,57 +23,29 @@ void swap(int *a, int *b)
 
 void	set_texture_id_and_x(int *texture_id, size_t *texture_x, t_position ray_collision, t_cub *cub)
 {
-	if (ray_collision.x == (int)ray_collision.x)
+	if (ray_collision.x == (int) ray_collision.x)
 	{
 		if (cub->player_position->x > ray_collision.x)
 		{
 			*texture_id = 2;
 			*texture_x = (int) (((int) (ray_collision.y) + 1 - ray_collision.y) * cub->textures[*texture_id].width);
-		}
-		else
+		} else
 		{
 			*texture_id = 3;
 			*texture_x = (int) ((ray_collision.y - (int) (ray_collision.y)) * cub->textures[*texture_id].width);
 		}
-	}
-	else
+	} else
 	{
 		if (cub->player_position->y > ray_collision.y)
 		{
 			*texture_id = 0;
 			*texture_x = (int) ((ray_collision.x - ((int) ray_collision.x)) * cub->textures[*texture_id].width);
-		}
-		else
+		} else
 		{
 			*texture_id = 1;
-			*texture_x = (int) ((((int)ray_collision.x) + 1 - ray_collision.x) * cub->textures[*texture_id].width);
+			*texture_x = (int) ((((int) ray_collision.x) + 1 - ray_collision.x) * cub->textures[*texture_id].width);
 		}
 	}
-}
-
-void	set_next_bajeanno_pos(t_cub *cub, int bj_x, int bj_y)
-{
-	if (!cub->data->map[bj_y][bj_x + 1] || cub->data->map[bj_y][bj_x + 1] == 0)
-	{
-		if (bj_y - 1 >= 0 && (!cub->data->map[bj_y - 1][bj_x] || cub->data->map[bj_y - 1][bj_x] == 0))
-		{
-			if (cub->data->map[bj_y + 1] && (!cub->data->map[bj_y + 1][bj_x] || cub->data->map[bj_y + 1][bj_x] == 0))
-			{
-				if (bj_x - 1 >= 0 && (!cub->data->map[bj_y][bj_x - 1] || cub->data->map[bj_y][bj_x - 1] == 0))
-				{
-
-				}
-				else if (cub->data->map[bj_y][bj_x - 1] == 1)
-					return (cub->bajeanno.coords.x -= 1, (void) 0);
-			}
-			else if (cub->data->map[bj_y - 1][bj_x] == 1)
-				return (cub->bajeanno.coords.y -= 1, (void) 0);
-		}
-		else if (cub->data->map[bj_y - 1][bj_x] == 1)
-			return (cub->bajeanno.coords.y -= 1, (void) 0);
-	}
-	else if (cub->data->map[bj_y][bj_x + 1] == 1)
-		return (cub->bajeanno.coords.x += 1, (void) 0);
 }
 
 void	set_bajenno_texture(int *texture_id, size_t *texture_x, t_position ray_collision, t_cub *cub)
@@ -93,7 +65,7 @@ void	set_bajenno_texture(int *texture_id, size_t *texture_x, t_position ray_coll
 		else
 			*texture_x = (int) ((((int)ray_collision.x) + 1 - ray_collision.x) * cub->textures[*texture_id].width);
 	}
-	set_next_bajeanno_pos(cub, cub->bajeanno.coords.x, cub->bajeanno.coords.y);
+//	set_next_bajeanno_pos(cub, cub->bajeanno.coords.x, cub->bajeanno.coords.y);
 }
 
 int	cub_textures_put(t_cub *cub, int wall_height, int x,t_position ray_collision)
@@ -108,8 +80,8 @@ int	cub_textures_put(t_cub *cub, int wall_height, int x,t_position ray_collision
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];
 	y = cub->win_size[0] / 2 - screen_wall_height / 2;
-	if (cub->bajeanno.is_activated && (ray_collision.x == (double)cub->bajeanno.coords.x || ray_collision.y == (double)cub->bajeanno.coords.y))
-		set_bajenno_texture(&texture_id, &texture.x, ray_collision, cub);
+//	if (cub->bajeanno.is_activated && (ray_collision.x == (double)cub->bajeanno.coords.x || ray_collision.y == (double)cub->bajeanno.coords.y))
+//		set_bajenno_texture(&texture_id, &texture.x, ray_collision, cub);
 	set_texture_id_and_x(&texture_id, &texture.x, ray_collision, cub);
 	i = 0;
 	while (i < screen_wall_height)

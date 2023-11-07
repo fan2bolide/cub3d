@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 11:57:08 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/04 11:59:44 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/07 03:27:48 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ static int	get_texture_path(char **texture_ptr, char *err_code, char *content)
 static int	get_textures_paths(t_data *data, t_list *file)
 {
 	static char	id[4][4] = {"NO ", "SO ", "WE ", "EA "};
-	static char	msg[4][100] = {ERR MULT_DEF NO_TXTR EOL, ERR MULT_DEF SO_TXTR EOL, ERR MULT_DEF WE_TXTR EOL , ERR MULT_DEF EA_TXTR EOL};
-	int	i;
+	static char	msg[4][100] = {ERR MULT_DEF NO_TXTR EOL, \
+ERR MULT_DEF SO_TXTR EOL, ERR MULT_DEF WE_TXTR EOL, ERR MULT_DEF EA_TXTR EOL};
+	int			i;
 
 	i = 0;
 	while (i < 4)

@@ -237,9 +237,9 @@ typedef struct s_iposition
 typedef struct s_bajeanno
 {
 	bool		is_activated;
-	t_iposition	coords;
-	struct s_bajeanno	*next;
-	struct s_bajeanno	*prev;
+	int 		x;
+	int 		y;
+	char		orientation;
 }			t_bajeanno;
 
 typedef struct s_data{
