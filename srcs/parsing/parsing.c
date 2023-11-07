@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:38:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/07 16:54:00 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/07 18:16:42 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_not_alone(char **map, int x, int y)
 		return (1);
 	if (!map[y][x + 1])
 		return (1);
-	if (map[y][x + 1] == '0' && map[y][x - 1] && map[y - 1][x] == '0' && map[y + 1][x])
+	if (map[y][x + 1] == '0' && map[y][x - 1] == '0' && map[y - 1][x] == '0' && map[y + 1][x] == '0')
 		return (0);
 	return (1);
 }
@@ -33,8 +33,10 @@ void	fill_wall_surr_map(char **map, char **wall_surr, int x, int y)
 		return ;
 	if (wall_surr[y][x] == '-')
 		return ;
-	if (map[y][x] == '1' && !check_not_alone(map, x, y))
+	if (map[y][x] == '1' && check_not_alone(map, x, y))
 		return (wall_surr[y][x] = '1', (void) 0);
+	else if (map[y][x] == '1')
+		return (wall_surr[y][x] = '-', (void) 0);
 	wall_surr[y][x] = '-';
 	fill_wall_surr_map(map, wall_surr, x + 1, y);
 	fill_wall_surr_map(map, wall_surr, x - 1, y);
@@ -69,23 +71,23 @@ size_t get_ind_start(t_iposition *cur_pos, char **w_surr)
 	{
 		if (w_surr[y][x + 1] == '-')
 			return (cur_pos->x += 1, 0);
+		if (w_surr[y + 1][x] == '-')
+			return (cur_pos->y += 1, 1);
 		if (w_surr[y][x - 1] == '-')
 			return (cur_pos->x -= 1, 2);
 		if (w_surr[y - 1][x] == '-')
 			return (cur_pos->y -= 1, 3);
-		if (w_surr[y + 1][x] == '-')
-			return (cur_pos->y += 1, 1);
 	}
 	if (ft_isset(w_surr[y][x - 1], "-X") && w_surr[y - 1][x] == '1')
 		return (0);
+	if (ft_isset(w_surr[y + 1][x], "-T") && w_surr[y][x - 1] == '1')
+		return (3);
 	if (ft_isset(w_surr[y - 1][x], "-V") && w_surr[y][x + 1] == '1')
 		return (1);
 	if ((ft_isset(w_surr[y][x + 1], "-O") && w_surr[y + 1][x] == '1'))
 		return (2);
-	if (ft_isset(w_surr[y + 1][x], "-T") && w_surr[y][x - 1] == '1')
-		return (3);
-	if (w_surr[y][x] == 'O')
-		return (2);
+//	if (w_surr[y][x] == 'O')
+//		return (2);
 	return (4);
 }
 
@@ -111,19 +113,28 @@ void clear_line(char **w_surr, t_iposition *cur_pos)
 		i = x + 1;
 		while (w_surr[y][i] != '1' && w_surr[y + 1][i] == '1' && w_surr[y - 1][i] == '1')
 			w_surr[y][i--] = '+';
+		if (w_surr[y][i] != '1' && i != x + 1)
+			w_surr[y][i] = '+';
 	}
-	if (w_surr[y + 1][x] == '1' && w_surr[y][x] == 'V' && w_surr[y][x + 1] == '1' && w_surr[y][x - 1] == '1')
+	if (w_surr[y - 1][x] == '1' && w_surr[y][x] == 'V' && w_surr[y][x + 1] == '1' && w_surr[y][x - 1] == '1')
 	{
-		i = y - 1;
-		while (w_surr[y][i] != '1' && w_surr[y + 1][i] == '1' && w_surr[y - 1][i] == '1')
-			w_surr[y][i--] = '+';
+		i = y + 1;
+		while (w_surr[i][x] != '1' && w_surr[i][x + 1] == '1' && w_surr[i][x - 1] == '1')
+			w_surr[i++][x] = '+';
+		if (w_surr[i][x] != '1' && i != y + 1)
+			w_surr[i][x] = '+';
 	}
 	if (w_surr[y - 1][x] == '1' && w_surr[y][x] == 'T' && w_surr[y][x + 1] == '1' && w_surr[y][x - 1] == '1')
 	{
 		i = y + 1;
 		while (w_surr[y][i] != '1' && w_surr[y + 1][i] == '1' && w_surr[y - 1][i] == '1')
 			w_surr[y][i--] = '+';
+		if (w_surr[y][i] != '1' && i != y + 1)
+			w_surr[y][i] = '+';
 	}
+//	i = 0;
+//	while (w_surr[i])
+//		printf("%s\n", w_surr[i++]);
 }
 
 t_iposition get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos)
@@ -187,9 +198,9 @@ int	get_wall_surroundment(t_data *data)
 	t_iposition test;
 	t_bajeanno next_one;
 	test.x = 1;
-	test.y = 1;
+	test.y = 7;
 	next_one.x = 1;
-	next_one.y = 1;
+	next_one.y = 7;
 	while (1)
 	{
 		test = get_next_baj(wall_surroundment, &next_one, &test);
