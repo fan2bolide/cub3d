@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 02:50:04 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/06 23:35:35 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/09 04:51:50 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position ray[], int
 {
 	t_position	ray_dupl;
 	int			i;
+	int			j;
+	int			radius;
 
 	i = 0;
 	while (i < cub->win_size[1])
@@ -50,6 +52,23 @@ void cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position ray[], int
 		cub_put_line(cub, player, ray_dupl, 0xFF0000);
 		i++;
 	}
+	radius = scale / 2;
+	i = (int)player.x - radius - 1;
+	j = (int)player.y - radius - 1;
+	printf("-------------\n");
+	printf("%d, %d\n", i, j);
+	while (i < (int)player.x + radius + 1)
+	{
+		j = (int)player.y - radius - 1;
+		while (j < (int)player.y + radius + 1)
+		{
+			if (pow(player.x - i, 2) + pow(player.y - j, 2) < pow(radius, 2))
+				cub_pixel_put(&cub->img, i, j, 0x0000FF);
+			j++;
+		}
+		i++;
+	}
+	printf("%d, %d\n", i, j);
 }
 
 void	render_mini_map(t_cub *cub, t_position ray_collision[cub->win_size[1]])
