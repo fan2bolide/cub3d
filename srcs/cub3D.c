@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/06 18:19:57 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/08 21:18:47 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,11 @@ int	main(int argc, char **argv)
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
+	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
+	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
+	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
+	if (!cub->rays || !cub->angles || !cub->wall_heights)
+		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), 0);
 	cub->data = parsing(argc, argv);
 	if (!cub->data)
 		return (1);
@@ -150,6 +155,14 @@ void	cub_full_screen(t_cub *cub)
 		cub->win_size[0] = 900;
 		cub->win_size[1] = cub->win_size[0] * 16 / 10;
 	}
+	free(cub->rays);
+	free(cub->angles);
+	free(wall_heights);
+	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
+	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
+	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
+	if (!cub->rays || !cub->angles || !cub->wall_heights)
+		return (close_window(cub), (void)0);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_clear_window(cub->mlx, cub->win);
 	mlx_destroy_window(cub->mlx, cub->win);
@@ -167,6 +180,7 @@ void	cub_full_screen(t_cub *cub)
 void	cub_full_screen(t_cub *cub)
 {
 	(void)cub;
+
 }
 #endif
 
@@ -194,8 +208,6 @@ int	perform_actions(t_cub *cub)
 		cub_update_view_angle(KEY_RIGHT, cub);
 	if (cub->keys_states[KEY_F11] == 1)
 		cub_full_screen(cub);
-//	printf("%li\n", get_time() - cub->last_frame_time);
-//	cub->last_frame_time = get_time();
 	return (render_frame(cub));
 }
 
@@ -242,7 +254,6 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 
 	old_x = cub->player_position->x;
 	old_y = cub->player_position->y;
-//	printf("je report\n");
 	if ((int)old_x != (int)new_x)
 	{
 		if ((int)old_y != (int)new_y)
@@ -267,7 +278,6 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		return ;
 	if (cub->data->map[(int)new_y][(int)new_x] == '1')
 		return (report_movement(new_y, new_x, cub));
-//	printf("je moove normal\n");
 	cub->player_position->y = new_y;
 	cub->player_position->x = new_x;
 }
@@ -315,6 +325,9 @@ int	close_window(t_cub *cub)
 {
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
+	free(cub->angles);
+	free(cub->rays);
+	free(cub->wall_heights);
 	free(cub->mlx);
 	destroy_data(cub->data);
 	free(cub->player_position);

@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/06 22:13:15 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/09 02:12:05 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,21 +64,9 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 
 int	render_frame(t_cub *cub)
 {
-	t_position	*ray_pos;
-	double		*angle;
-	int			*wall_height;
-
-	ray_pos = malloc(sizeof(t_position) * cub->win_size[1]);
-	angle = malloc(sizeof(double) * cub->win_size[1]);
-	wall_height = malloc(sizeof(int) * cub->win_size[1]);
-	if (!ray_pos || !angle || !wall_height)
-		return (free(ray_pos), free(angle), free(wall_height), 0);
-	compute_arrays(cub, ray_pos, angle, wall_height);
-	free(angle);
-	render_view(cub, ray_pos, wall_height);
-	render_mini_map(cub, ray_pos);
-	free(ray_pos);
-	free(wall_height);
+	compute_arrays(cub, cub->rays, cub->angles, cub->wall_heights);
+	render_view(cub, cub->rays, cub->wall_heights);
+	render_mini_map(cub, cub->rays);
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	return (1);
 }
