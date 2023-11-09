@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/06 03:38:05 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/08 13:33:39 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,7 @@ typedef struct s_iposition
 typedef struct s_bajeanno
 {
 	bool		is_activated;
+	t_iposition *cur_pos;
 	int 		x;
 	int 		y;
 	char		orientation;
@@ -244,6 +245,7 @@ typedef struct s_bajeanno
 
 typedef struct s_data{
 	char	**map;
+	char 	**wall_sur;
 	t_bajeanno	*baj;
 	char	*texture[4];
 	t_color	*ceiling_color;
@@ -282,7 +284,6 @@ typedef struct s_cub
 	double		view_angle;
 	double		fov;
 	size_t		last_frame_time;
-	t_bajeanno	bajeanno;
 }		t_cub;
 
 //==================== PARSING =====================//
@@ -312,5 +313,6 @@ int		check_definition(t_data *data);
 int		check_assignation(t_data *data);
 int		check_format(t_data *data);
 t_position	*get_position(char **map);
+t_iposition get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos);
 
 #endif

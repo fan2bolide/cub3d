@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/06 04:42:05 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/08 13:34:47 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,17 @@ int	perform_actions(t_cub *cub)
 		cub_update_view_angle(KEY_RIGHT, cub);
 	if (cub->keys_states[KEY_F11] == 1)
 		cub_full_screen(cub);
+	if (cub->keys_states[KEY_B] == 1)
+	{
+		if (cub->data->baj->is_activated)
+			cub->data->baj->is_activated = 0;
+		else
+		{
+			get_next_baj(cub->data->wall_sur, cub->data->baj, cub->data->baj->cur_pos);
+			printf("cur x :%li cur y :%li baj x:%i baje y:%i\n", cub->data->baj->cur_pos->x, cub->data->baj->cur_pos->y, cub->data->baj->x, cub->data->baj->y);
+			cub->data->baj->is_activated = 1;
+		}
+	}
 //	printf("%li\n", get_time() - cub->last_frame_time);
 //	cub->last_frame_time = get_time();
 	return (render_frame(cub));

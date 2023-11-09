@@ -69,7 +69,6 @@ double get_orientation(char **map, t_position *pos) {
 	char	orientation;
 
 	orientation = map[(int)pos->y][(int)pos->x];
-	return (M_PI_2);
 	if (orientation == 'N')
 		return (3 * M_PI_2);
 	if (orientation == 'E')
