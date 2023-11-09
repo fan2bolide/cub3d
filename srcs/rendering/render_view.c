@@ -126,15 +126,15 @@ void	render_view(t_cub *cub, t_position *ray_collision, \
 {
 	int	i;
 	int	j;
-	int screen_height;
+	int screen_height_2;
 
-	screen_height = cub->win_size[0] / 2;
+	screen_height_2 = cub->win_size[0] / 2;
 	i = 0;
 	while (i < cub->win_size[1])
 	{
 		j = 0;
 		{
-			while (j < screen_height)
+			while (j < screen_height_2)
 				cub_pixel_put(&cub->img, i, j++, *((int *)cub->data->ceiling_color));
 			while (j < cub->win_size[0])
 				cub_pixel_put(&cub->img, i, j++, *((int *)cub->data->floor_color));
