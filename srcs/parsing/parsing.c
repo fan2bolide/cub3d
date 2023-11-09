@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:38:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/08 13:52:01 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/09 19:54:57 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,23 +107,14 @@ void clear_line(char **w_surr, t_iposition *cur_pos)
 
 	x = cur_pos->x;
 	y = cur_pos->y;
-	printf("[%li %li]\n", x, y);
 	if (w_surr[y][x + 1] == '1' && w_surr[y][x] == 'O' && w_surr[y + 1][x] == '1' && w_surr[y - 1][x] == '1')
-	{
 		clear_map(x, y, w_surr);
-	}
 	if (w_surr[y][x - 1] == '1' && w_surr[y][x] == 'X' && w_surr[y + 1][x] == '1' && w_surr[y - 1][x] == '1')
-	{
 		clear_map(x, y, w_surr);
-	}
 	if (w_surr[y - 1][x] == '1' && w_surr[y][x] == 'V' && w_surr[y][x + 1] == '1' && w_surr[y][x - 1] == '1')
-	{
 		clear_map(x, y, w_surr);
-	}
 	if (w_surr[y - 1][x] == '1' && w_surr[y][x] == 'T' && w_surr[y][x + 1] == '1' && w_surr[y][x - 1] == '1')
-	{
 		clear_map(x, y, w_surr);
-	}
 }
 
 t_iposition get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos)
@@ -149,7 +140,6 @@ t_iposition get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_p
 			return (cur_pos->y += 1, get_next_baj(w_surr, next_one, cur_pos));
 	}
 	save_start = get_ind_start(cur_pos, w_surr);
-//	printf("%li\n", save_start);
 	i = save_start;
 	while (i != 4)
 	{
@@ -169,7 +159,6 @@ t_iposition get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_p
 		return (cur_pos->x -= 1, get_next_baj(w_surr, next_one, cur_pos));
 	if (w_surr[y][x] == 'T' && w_surr[y - 1][x] != '1')
 		return (cur_pos->y -= 1, get_next_baj(w_surr, next_one, cur_pos));
-
 	return (get_next_baj(w_surr, next_one, cur_pos));
 }
 
@@ -186,19 +175,17 @@ int	get_wall_surroundment(t_data *data)
 	data->baj = ft_calloc(1, sizeof(t_bajeanno));
 	data->baj->cur_pos = ft_calloc(1, sizeof(t_iposition));
 	if (!player_pos || !data->baj || !data->baj->cur_pos)
-		return (ft_putstr_fd(ERR ALLOC_ERR EOL, 2), 0);
+		return (free(player_pos), ft_putstr_fd(ERR ALLOC_ERR EOL, 2), 0);
 	fill_wall_surr_map(data->map, data->wall_sur, (int)player_pos->x, (int)player_pos->y);
 	free(player_pos);
+	data->baj->speed = 2000;
 	i = 0;
 	while (data->wall_sur[i])
 	{
 		j = 0;
 		while (data->wall_sur[i][j])
-		{
-			if (data->wall_sur[i][j] == '-')
-				return (data->baj->cur_pos->x = (int)j, data->baj->cur_pos->y = (int)i, data->baj->orientation = '/', 1);
-			j++;
-		}
+			if (data->wall_sur[i][j++] == '-')
+				return (data->baj->cur_pos->x = (int)j - 1, data->baj->cur_pos->y = (int)i, data->baj->orientation = '/', 1);
 		i++;
 	}
 	return (1);
@@ -211,10 +198,7 @@ t_data	*parsing(int argc, char **argv)
 	if (argc != 2)
 		return (ft_putstr_fd(ERR WRONG_ARG_N EOL, 2), NULL);
 	data = get_data(argv);
-	if (data)
-		if (!get_wall_surroundment(data))
-			return (NULL);
-	printf("cur x :%li cur y :%li baj x:%i baje y:%i\n", data->baj->cur_pos->x, data->baj->cur_pos->y, data->baj->x, data->baj->y);
-	sleep(1);
+	if (!data || !get_wall_surroundment(data))
+		return (destroy_data(data), NULL);
 	return (data);
 }

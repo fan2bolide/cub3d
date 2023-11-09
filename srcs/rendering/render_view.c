@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/09 10:15:47 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/09 19:31:12 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	set_texture_id_and_x(int *texture_id, size_t *texture_x, t_position ray_col
 void	set_bajenno_texture(int *texture_id, size_t *texture_x, t_position ray_collision, t_cub *cub)
 {
 	*texture_id = 4;
-//	char orientations[4] = {'N', 'S', 'W', 'E'};
-//	int	i;
 
 	if (ray_collision.x == (int)ray_collision.x)
 	{
@@ -68,35 +66,28 @@ void	set_bajenno_texture(int *texture_id, size_t *texture_x, t_position ray_coll
 		else
 			*texture_x = (int) ((((int)ray_collision.x) + 1 - ray_collision.x) * cub->textures[*texture_id].width);
 	}
-
-//	i = 0;
-//	while (i < 4)
-//	{
-//		if (cub->data->baj->orientation == orientations[i++])
-//		{
-//			printf("new curr pos : %li %li\n", cub->data->baj->cur_pos->x, cub->data->baj->cur_pos->y);
-////			sleep(1);
-////			get_next_baj(cub->data->wall_sur, cub->data->baj, cub->data->baj->cur_pos);
-//			int i = 0;
-//			while (cub->data->wall_sur[i])
-//				printf("%s\n", cub->data->wall_sur[i++]);
-//			sleep(1);
-//		}
-//	}
 }
 
 bool is_bajeanno_tile(t_position ray_collision, t_cub *cub)
 {
 	size_t	i;
 	char orientations[4] = {'N', 'S', 'W', 'E'};
+	int ray_x_match[4] = {ray_collision.x != (int)ray_collision.x, ray_collision.x == (int)ray_collision.x};
+	int	ray_y_match[4] = {ray_collision.y == (int)ray_collision.y, ray_collision.y != (int)ray_collision.y};
+	int	ray_glob_cond[4] = {(int)ray_collision.y - 1 == cub->data->baj->y, (int)ray_collision.y == cub->data->baj->y, (int)ray_collision.x == cub->data->baj->x + 1, (int)ray_collision.x == cub->data->baj->x};
 
 	if (!cub->data->baj->is_activated)
 		return (false);
 	i = 0;
-//	while (i < 4)
-//		if (cub->data->baj->orientation == orientations[i++])
-//			if ((int)ray_collision.x == (int)cub->data->baj->x)
-	return (true);
+	while (i < 4)
+	{
+		if (cub->data->baj->orientation == orientations[i])
+			if ((ft_isset(orientations[i], "NS") && (int)ray_collision.x == cub->data->baj->x) || (ft_isset(orientations[i], "WE") && (int)ray_collision.y == cub->data->baj->y))
+				if (ray_x_match[i > 1] && ray_y_match[i > 1] && ray_glob_cond[i])
+					return (true);
+		i++;
+	}
+	return (false);
 }
 
 int	cub_textures_put(t_cub *cub, int wall_height, int x, t_position ray_collision)
@@ -108,10 +99,14 @@ int	cub_textures_put(t_cub *cub, int wall_height, int x, t_position ray_collisio
 	int 	texture_id;
 
 	screen_wall_height = wall_height;
+	if (cub->data->baj->is_activated && get_time() - cub->data->baj->last_moove > cub->data->baj->speed)
+	{
+		get_next_baj(cub->data->wall_sur, cub->data->baj, cub->data->baj->cur_pos);
+		cub->data->baj->last_moove = get_time();
+	}
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];
 	y = cub->win_size[0] / 2 - screen_wall_height / 2;
-//	printf("%i %i\n", (int)ray_collision.x, (int) cub->data->baj->cur_pos->x);
 	if (is_bajeanno_tile(ray_collision, cub))
 		set_bajenno_texture(&texture_id, &texture.x, ray_collision, cub);
 	else

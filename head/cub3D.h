@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/08 13:33:39 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/09 12:20:07 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,6 +241,9 @@ typedef struct s_bajeanno
 	int 		x;
 	int 		y;
 	char		orientation;
+	size_t		last_activation;
+	size_t		last_moove;
+	size_t		speed;
 }			t_bajeanno;
 
 typedef struct s_data{
@@ -306,7 +309,7 @@ int		ray_casting(t_cub *cub);
 void	render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
 double angle[cub->win_size[1]], int wall_height[cub->win_size[1]]);
 int		render_frame(t_cub *cub);
-
+size_t	get_time(void);
 int		is_directory(char *path);
 size_t	get_size(char **tab);
 int		check_definition(t_data *data);
