@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 04:06:32 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/05 20:33:01 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/09 08:35:49 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	cub_put_line(t_cub *cub, t_position a, t_position b, int color)
 	double	x;
 	double	y;
 
-	steps = ft_max(fabs(b.x - a.x), fabs(b.y - a.y));
+	steps = ft_max(fabs(b.x - a.x), fabs(b.y - a.y)) * 2;
 	x = a.x;
 	y = a.y;
 	i = 0;
@@ -40,25 +40,4 @@ void	cub_put_line(t_cub *cub, t_position a, t_position b, int color)
 		y += (b.y - a.y) / (double)steps;
 		i++;
 	}
-}
-
-int	get_color_of_wall(int x, int y)
-{
-	int	color;
-
-	if (x % 2)
-	{
-		if (y % 2)
-			color = 0xff4500;
-		else
-			color = 0x80;
-	}
-	else
-	{
-		if (y % 2)
-			color = 0x80;
-		else
-			color = 0xff4500;
-	}
-	return (color);
 }
