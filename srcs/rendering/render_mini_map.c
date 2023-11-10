@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 02:50:04 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/09 04:51:50 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/09 09:14:12 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ void cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position ray[], int
 	radius = scale / 2;
 	i = (int)player.x - radius - 1;
 	j = (int)player.y - radius - 1;
-	printf("-------------\n");
-	printf("%d, %d\n", i, j);
 	while (i < (int)player.x + radius + 1)
 	{
 		j = (int)player.y - radius - 1;
@@ -68,7 +66,6 @@ void cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position ray[], int
 		}
 		i++;
 	}
-	printf("%d, %d\n", i, j);
 }
 
 void	render_mini_map(t_cub *cub, t_position ray_collision[cub->win_size[1]])
@@ -87,7 +84,7 @@ void	render_mini_map(t_cub *cub, t_position ray_collision[cub->win_size[1]])
 		{
 			if (cub->data->map[i][j] == '1')
 				put_wall(cub, i, j, scale, 0x000000);
-			else
+			if (cub->data->map[i][j] == '0')
 				put_wall(cub, i, j, scale, 0xFFFFFF);
 			j++;
 		}
