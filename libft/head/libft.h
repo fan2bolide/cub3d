@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 13:56:05 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/10/25 09:13:28 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/06 02:53:34 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ char		*ft_strjoin_free_s1(char *s1, char *s2);
 char		*ft_strnjoin_free_s1(char *s1, char *s2, int n);
 char		*ft_strjoin_secure(char const *s1, char const *s2);
 char		**ft_split(const char *s, char c);
+char		**tab_dup_empty(char **src);
 void		ft_split_destroy(char **split);
 char		**ft_old_split(const char *s, char c);
 void		ft_old_split_destroy(char **split);

@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 15:15:18 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 15:15:18 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/04 12:16:44 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,20 @@
 
 void	destroy_data(t_data *data)
 {
+	int	i;
+
 	if (data)
 	{
-		free(data->s_texture);
-		free(data->n_texture);
-		free(data->e_texture);
-		free(data->w_texture);
+		i = 0;
+		while (i < 4)
+		{
+			free(data->texture[i]);
+			i++;
+		}
 		free(data->ceiling_color);
 		free(data->floor_color);
-		free(data->map);
+		if (data->map)
+			ft_old_split_destroy(data->map);
 		free(data);
 	}
 }

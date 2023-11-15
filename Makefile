@@ -12,6 +12,12 @@ SRCS		:=	cub3D.c\
 				utils/refactor_spaces.c\
 				utils/utils.c\
 				utils/texture_utils.c\
+				ray_casting/ray_casting.c\
+				rendering/render_view.c\
+				rendering/render_mini_map.c\
+				rendering/graphic_utils.c\
+				rendering/render_frame.c\
+
 
 SRCS_D		:=	srcs/
 
@@ -39,12 +45,27 @@ LIB_H		:=	$(LIB_D)$(HEAD_D)
 
 LIB_A		:=	$(LIB_D)$(LIB)
 
+
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Linux)
+	MLX_D	=	minilibx-linux
+    MLX 	= $(MLX_D)/libmlx_Linux.a
+    MLX_FLAGS = -Lminilibx-linux -Lusr/lib -lXext -lX11 -lm -lz
+else ifeq ($(UNAME), Darwin)
+	MLX_D = mlx
+    MLX = $(MLX_D)/libmlx.a
+    MLX_LIB		=	${DIR_LIB}${MLX}.a
+    MLX_FLAGS		=	-framework OpenGL -framework AppKit
+    DEFINE_OS		=	-D OS_DARWIN=1
+endif
+
 #=========================FLAG===============================#
 CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra
 
 DFLAGS		:=	-MP -MMD
 
@@ -62,26 +83,31 @@ PARAMETERS	:= test.cub
 
 all			:	$(NAME)
 
-$(NAME)		:	$(OBJS_D) $(OBJS) $(LIB_A)
-			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB_A)
+$(NAME)		:	$(LIB_A) $(OBJS_D) $(OBJS) $(MLX)
+			$(CC) $(CFLAGS) -Ofast -o $(NAME) $(OBJS) $(LIB_A) $(MLX) $(MLX_FLAGS)
 
-$(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.c $(HEAD_A) $(LIB_H)libft.h
-			$(CC) $(CFLAGS) $(DFLAGS) -I$(HEAD_D) -I$(LIB_H) -c $< -o $@
+$(MLX)		:
+			$(MAKE) -C $(MLX_D)
+
+$(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.c $(HEAD_A) $(LIB_H)libft.h $(MLX_D)/mlx.h
+			$(CC) $(CFLAGS) $(DFLAGS) -Ofast -I$(HEAD_D) -I$(LIB_H) -I$(MLX_D) -c $< -o $@
 
 $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)
 			@mkdir -p $(OBJS_D)parsing
 			@mkdir -p $(OBJS_D)utils
+			@mkdir -p $(OBJS_D)ray_casting
+			@mkdir -p $(OBJS_D)rendering
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)
 
+leaks		:	CFLAGS += -g3
 leaks		:	all
 			$(VALGRIND) ./$(NAME) $(PARAMETERS)
 
 env_leaks	:	all
 			 $(ENV) $(LEAKS) ./$(NAME)
-
 
 clean		:
 			$(RM) $(OBJS) $(OBJS_D) $(OBJSB_D)

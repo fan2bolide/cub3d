@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 11:57:08 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 15:10:59 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/04 11:59:44 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,17 @@ static int	get_texture_path(char **texture_ptr, char *err_code, char *content)
 
 static int	get_textures_paths(t_data *data, t_list *file)
 {
-	if (!ft_strncmp(file->content, "NO ", 3))
-		return (get_texture_path(&data->n_texture,
-				ERR MULT_DEF NO_TXTR EOL, file->content));
-	if (!ft_strncmp(file->content, "SO ", 3))
-		return (get_texture_path(&data->s_texture,
-				ERR MULT_DEF SO_TXTR EOL, file->content));
-	if (!ft_strncmp(file->content, "WE ", 3))
-		return (get_texture_path(&data->w_texture,
-				ERR MULT_DEF WE_TXTR EOL, file->content));
-	if (!ft_strncmp(file->content, "EA ", 3))
-		return (get_texture_path(&data->e_texture,
-				ERR MULT_DEF EA_TXTR EOL, file->content));
+	static char	id[4][4] = {"NO ", "SO ", "WE ", "EA "};
+	static char	msg[4][100] = {ERR MULT_DEF NO_TXTR EOL, ERR MULT_DEF SO_TXTR EOL, ERR MULT_DEF WE_TXTR EOL , ERR MULT_DEF EA_TXTR EOL};
+	int	i;
+
+	i = 0;
+	while (i < 4)
+	{
+		if (!ft_strncmp(file->content, id[i], 3))
+			return (get_texture_path(&data->texture[i], msg[i], file->content));
+		i++;
+	}
 	if (!ft_strisset(file->content, "10NESWOA ") && ((char *)(file->content))[0]
 		&& ft_strncmp(file->content, "F ", 2) && ft_strncmp(file->content, "C "
 															, 2))

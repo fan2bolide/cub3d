@@ -84,6 +84,7 @@ SRC			=	ft_atoi.c			\
 				str_contains_digits_only.c \
 				can_be_converted_to_long.c \
 				ft_free_arr.c \
+				tab_dup_empty.c \
 
 OBJ = $(addprefix obj/,$(SRC:.c=.o))
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_codes.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:58:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 15:24:05 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/01 20:51:17 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,21 @@
 # define WE_TXTR		"'West texture'"
 # define FL_CLR			"'Floor color'"
 # define CL_CLR			"'Ceiling color'"
-# define NO_FILE		"No such file or directory: "
-# define NO_MAP			"No map in file."
+# define NO_FILE		"No such data or directory: "
+# define NO_MAP			"No map in data."
 # define IS_DIR			"Is a directory: "
-# define MISS_COL		"Missings one or several colors in source file\
+# define MISS_COL		"Missings one or several colors in source data\
 before map."
 # define WRONG_COL_ASS	"Wrong color assignation format! expected\
 (0-255,0-255,0-255)"
 # define UNEXP_LINE		"Unexpected character(s) in line: "
 # define MAP_E			"Could not load map"
-# define EMPTY_FILE 	"Empty file"
+# define EMPTY_FILE 	"Empty data"
 # define EMPTY_LINE_M	"Empty line(s) in map"
 # define OR				" or "
 # define ALLOC_ERR 		"Allocation error occured"
 # define EOL			"\n"
-# define ESC_KEY 		53
-# define MINUS_KEY 		6
-# define PLUS_KEY		7
-# define UP_KEY 		126
-# define DOWN_KEY 		125
-# define KEY_W 			13
-# define KEY_A 			0
-# define KEY_S 			1
-# define KEY_D 			2
 # define DEFLT_WIN_SIZE 1080
+# define USAGE			"cub3D: usage: ./cub3D ./path_to_map.cub [-s window_height]"
 
 #endif
