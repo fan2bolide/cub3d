@@ -6,44 +6,50 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/09 19:31:12 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/15 14:53:50 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-void swap(int *a, int *b)
+void	swap(int *a, int *b)
 {
-	int c;
+	int	c;
 
 	c = *a;
 	*a = *b;
 	*b = c;
 }
 
-void	set_texture_id_and_x(int *texture_id, size_t *texture_x, t_position ray_collision, t_cub *cub)
+void	set_texture_id_and_x(int *texture_id, size_t *texture_x, \
+							t_position ray_collision, t_cub *cub)
 {
 	if (ray_collision.x == (int) ray_collision.x)
 	{
 		if (cub->player_position->x > ray_collision.x)
 		{
 			*texture_id = 2;
-			*texture_x = (int) (((int) (ray_collision.y) + 1 - ray_collision.y) * cub->textures[*texture_id].width);
-		} else
+			*texture_x = (int)(((int)(ray_collision.y) + 1 - ray_collision.y) \
+								* cub->textures[*texture_id].width);
+		}
+		else
 		{
 			*texture_id = 3;
-			*texture_x = (int) ((ray_collision.y - (int) (ray_collision.y)) * cub->textures[*texture_id].width);
+			*texture_x = (int)((ray_collision.y - (int)(ray_collision.y)) \
+								* cub->textures[*texture_id].width);
 		}
-	} else
+	}
+	else
 	{
 		if (cub->player_position->y > ray_collision.y)
 		{
 			*texture_id = 0;
-			*texture_x = (int) ((ray_collision.x - ((int) ray_collision.x)) * cub->textures[*texture_id].width);
-		} else
+			*texture_x = (int)((ray_collision.x - ((int) ray_collision.x)) * cub->textures[*texture_id].width);
+		}
+		else
 		{
 			*texture_id = 1;
-			*texture_x = (int) ((((int) ray_collision.x) + 1 - ray_collision.x) * cub->textures[*texture_id].width);
+			*texture_x = (int)((((int) ray_collision.x) + 1 - ray_collision.x) * cub->textures[*texture_id].width);
 		}
 	}
 }
@@ -51,7 +57,6 @@ void	set_texture_id_and_x(int *texture_id, size_t *texture_x, t_position ray_col
 void	set_bajenno_texture(int *texture_id, size_t *texture_x, t_position ray_collision, t_cub *cub)
 {
 	*texture_id = 4;
-
 	if (ray_collision.x == (int)ray_collision.x)
 	{
 		if (cub->player_position->x > ray_collision.x)
@@ -68,11 +73,11 @@ void	set_bajenno_texture(int *texture_id, size_t *texture_x, t_position ray_coll
 	}
 }
 
-bool is_bajeanno_tile(t_position ray_collision, t_cub *cub)
+bool	is_bajeanno_tile(t_position ray_collision, t_cub *cub)
 {
 	size_t	i;
-	char orientations[4] = {'N', 'S', 'W', 'E'};
-	int ray_x_match[4] = {ray_collision.x != (int)ray_collision.x, ray_collision.x == (int)ray_collision.x};
+	static char	orientations[4] = {'N', 'S', 'W', 'E'};
+	int	ray_x_match[4] = {ray_collision.x != (int)ray_collision.x, ray_collision.x == (int)ray_collision.x};
 	int	ray_y_match[4] = {ray_collision.y == (int)ray_collision.y, ray_collision.y != (int)ray_collision.y};
 	int	ray_glob_cond[4] = {(int)ray_collision.y - 1 == cub->data->baj->y, (int)ray_collision.y == cub->data->baj->y, (int)ray_collision.x == cub->data->baj->x + 1, (int)ray_collision.x == cub->data->baj->x};
 
@@ -93,10 +98,10 @@ bool is_bajeanno_tile(t_position ray_collision, t_cub *cub)
 int	cub_textures_put(t_cub *cub, int wall_height, int x, t_position ray_collision)
 {
 	t_iposition	texture;
-	int		screen_wall_height;
-	int 	y;
-	int 	i;
-	int 	texture_id;
+	int			screen_wall_height;
+	int			y;
+	int			i;
+	int			texture_id;
 
 	screen_wall_height = wall_height;
 	if (cub->data->baj->is_activated && get_time() - cub->data->baj->last_moove > cub->data->baj->speed)
