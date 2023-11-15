@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/09 12:20:07 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/14 13:21:25 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,14 +308,18 @@ int		ray_casting(t_cub *cub);
 
 void	render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
 double angle[cub->win_size[1]], int wall_height[cub->win_size[1]]);
-int		render_frame(t_cub *cub);
-size_t	get_time(void);
-int		is_directory(char *path);
-size_t	get_size(char **tab);
-int		check_definition(t_data *data);
-int		check_assignation(t_data *data);
-int		check_format(t_data *data);
+int			render_frame(t_cub *cub);
+size_t		get_time(void);
+int			is_directory(char *path);
+size_t		get_size(char **tab);
+int			check_definition(t_data *data);
+int			check_assignation(t_data *data);
+int			check_format(t_data *data);
 t_position	*get_position(char **map);
+int			get_wall_surroundment(t_data *data);
+void 		clear_line(char **w_surr, t_iposition *cur_pos);
+int			paint_w_surr(size_t i, t_bajeanno *next_one, t_iposition *cur_pos, char **w_surr);
+void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
 t_iposition get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos);
 
 #endif
