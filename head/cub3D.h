@@ -287,6 +287,9 @@ typedef struct s_cub
 	double		view_angle;
 	double		fov;
 	size_t		last_frame_time;
+	t_position	*rays;
+	double		*angles;
+	int			*wall_heights;
 }		t_cub;
 
 //==================== PARSING =====================//

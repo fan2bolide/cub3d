@@ -1,0 +1,23 @@
+name: Run Curl on Push
+
+on:
+  push:
+
+jobs:
+  curl:
+    runs-on: ubuntu-latest
+
+    env:
+      BRANCH_NAME: ${{ github.ref }}
+      COMMIT_AUTHOR: ${{ github.actor }}
+      COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Run Curl
+      run: |
+        branch_name=$(echo 'refs/heads/main' | awk -F'/' '{print $3}')
+        curl -d "New push on $branch_name by $COMMIT_AUTHOR
+        $COMMIT_MESSAGE" http://ntfy.sh/cub3d

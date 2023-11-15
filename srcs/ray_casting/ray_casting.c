@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/06 01:31:50 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/09 09:18:40 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,22 +60,26 @@ void shoot_ray(t_position *ray, t_cub *cub, double angle)
 		get_delta_to_next_column(*ray, angle, &new_x);
 		get_delta_to_next_line(*ray, angle, &new_y);
 		apply_minimal_distance(ray, new_x, new_y);
-		if (ray->y < 0 || ray->x < 0 || cub->data->map[(int)ray->y - ((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x - ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == '1')
+		if (ray->y < 0 || ray->x < 0 || cub->data->map[(int)ray->y - \
+		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
+		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == '1')
 			return ;
 	}
 }
 
 double get_orientation(char **map, t_position *pos) {
-	char	orientation;
+	char	orientation_char;
+	double	orientation_angle;
 
-	orientation = map[(int)pos->y][(int)pos->x];
-	if (orientation == 'N')
-		return (3 * M_PI_2);
-	if (orientation == 'E')
-		return (0);
-	if (orientation == 'W')
-		return (M_PI);
-	if (orientation == 'S')
-		return (M_PI_2);
-	return (0);
+	orientation_char = map[(int)pos->y][(int)pos->x];
+	if (orientation_char == 'N')
+		orientation_angle = 3 * M_PI_2;
+	if (orientation_char == 'E')
+		orientation_angle = 0;
+	if (orientation_char == 'W')
+		orientation_angle = M_PI;
+	if (orientation_char == 'S')
+		orientation_angle = M_PI_2;
+	map[(int)pos->y][(int)pos->x] = '0';
+	return (orientation_angle);
 }
