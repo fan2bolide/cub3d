@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/06 04:42:05 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/15 18:37:24 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void	cub_full_screen(t_cub *cub)
 	}
 	free(cub->rays);
 	free(cub->angles);
-	free(wall_heights);
+	free(cub->wall_heights);
 	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
 	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
 	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
