@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 04:06:32 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/09 08:35:49 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/17 18:20:47 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ void	cub_put_line(t_cub *cub, t_position a, t_position b, int color)
 	i = 0;
 	while (i <= steps)
 	{
-		if (round(x) >= 0 && round(x) < cub->win_size[1] && round(y) >= 0
-			&& round(y) < cub->win_size[0])
-			cub_pixel_put(&cub->img, (int)round(x), (int)round(y), color);
+		if (round(x) >= 0 && round(x) < cub->win_size[WIDTH] && round(y) >= 0
+			&& round(y) < cub->win_size[HEIGHT])
+			if ((int)round(y) > a.y - MINIMAP_SIZE && (int)round(y) < a.y + MINIMAP_SIZE && (int)round(x) > a.x - MINIMAP_SIZE && (int)round(x) < a.x + MINIMAP_SIZE)
+				cub_pixel_put(&cub->img, (int)round(x), (int)round(y), color);
 		x += (b.x - a.x) / (double)steps;
 		y += (b.y - a.y) / (double)steps;
 		i++;

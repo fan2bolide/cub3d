@@ -16,7 +16,6 @@ double	get_orientation(char **map, t_position *pos);
 void	cub_mlx_config(t_cub *cub);
 int		cub_handle_key_press(int keycode, t_cub *cub);
 int		close_window(t_cub *cub);
-int		cub_render_frame(t_cub *cub);
 
 void	cub_update_player_position(int keycode, t_cub *cub);
 

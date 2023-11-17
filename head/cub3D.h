@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/14 13:21:25 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/17 16:49:32 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,8 @@ enum e_key_codes
 # endif
 
 # define SCREEN_DISTANCE	0.8
+# define HEIGHT 0
+# define WIDTH 1
 
 //=================== INCLUDES =====================//
 # include "error_codes.h"
@@ -237,9 +239,9 @@ typedef struct s_iposition
 typedef struct s_bajeanno
 {
 	bool		is_activated;
-	t_iposition *cur_pos;
-	int 		x;
-	int 		y;
+	t_iposition	*cur_pos;
+	int			x;
+	int			y;
 	char		orientation;
 	size_t		last_activation;
 	size_t		last_moove;
@@ -247,12 +249,12 @@ typedef struct s_bajeanno
 }			t_bajeanno;
 
 typedef struct s_data{
-	char	**map;
-	char 	**wall_sur;
+	char		**map;
+	char		**wall_sur;
 	t_bajeanno	*baj;
-	char	*texture[4];
-	t_color	*ceiling_color;
-	t_color	*floor_color;
+	char		*texture[4];
+	t_color		*ceiling_color;
+	t_color		*floor_color;
 }		t_data;
 
 typedef struct s_image
@@ -262,7 +264,7 @@ typedef struct s_image
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-	int 	width;
+	int		width;
 	int		height;
 }			t_image;
 
@@ -271,7 +273,6 @@ typedef struct s_position
 	double	x;
 	double	y;
 }			t_position;
-
 
 typedef struct s_cub
 {
@@ -309,7 +310,7 @@ void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
 int		ray_casting(t_cub *cub);
 
-void	render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
+void		render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
 double angle[cub->win_size[1]], int wall_height[cub->win_size[1]]);
 int			render_frame(t_cub *cub);
 size_t		get_time(void);
@@ -320,9 +321,9 @@ int			check_assignation(t_data *data);
 int			check_format(t_data *data);
 t_position	*get_position(char **map);
 int			get_wall_surroundment(t_data *data);
-void 		clear_line(char **w_surr, t_iposition *cur_pos);
+void		clear_line(char **w_surr, t_iposition *cur_pos);
 int			paint_w_surr(size_t i, t_bajeanno *next_one, t_iposition *cur_pos, char **w_surr);
 void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
-t_iposition get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos);
+t_iposition	get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos);
 
 #endif
