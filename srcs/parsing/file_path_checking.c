@@ -49,7 +49,7 @@ int	is_directory(char *path)
 
 int	check_file_path(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < 4)

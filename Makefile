@@ -1,6 +1,8 @@
 #===========================VARIABLE===============================#
 SRCS		:=	cub3D.c\
 				parsing/parsing.c\
+				parsing/bajeanno.c\
+				parsing/wall_surroundment.c\
 				parsing/get_data.c\
 				parsing/parse_map.c\
 				parsing/parse_colors.c\
@@ -16,6 +18,7 @@ SRCS		:=	cub3D.c\
 				rendering/render_view.c\
 				rendering/render_mini_map.c\
 				rendering/graphic_utils.c\
+				rendering/texture_put.c\
 				rendering/render_frame.c\
 
 
