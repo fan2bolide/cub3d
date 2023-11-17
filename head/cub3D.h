@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/17 20:22:11 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 00:22:28 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@
 # define PRESSED    1
 # define RELEASED   0
 # define BJ_PATH	"textures/bajeanno.xpm"
+# define PRTL_PATH	"textures/portal.xpm"
+# define ORG_PATH	"textures/orange_portal.xpm"
 
 // X11 events
 # define KEY_PRESS			2
@@ -219,6 +221,8 @@ enum e_key_codes
 # include <math.h>
 # include "mlx.h"
 # include "libft.h"
+//# include "portal.h"
+//# include "rendering.h"
 # include <errno.h>
 # include <sys/time.h>
 
@@ -283,13 +287,15 @@ typedef struct s_cub
 	int			keys_states[65509];
 	int			win_size[2];
 	t_image		img;
-	t_image		textures[5];
+	t_image		textures[7];
 	t_position	*player_position;
 	double		view_angle;
 	double		fov;
 	size_t		last_frame_time;
 	t_position	*rays;
 	double		*angles;
+	char		orange_prtl;
+	char 		blue_prtl;
 	int			*wall_heights;
 }		t_cub;
 
