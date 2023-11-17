@@ -18,6 +18,7 @@ SRCS		:=	cub3D.c\
 				rendering/render_view.c\
 				rendering/render_mini_map.c\
 				rendering/graphic_utils.c\
+				rendering/texture_put.c\
 
 
 SRCS_D		:=	srcs/
