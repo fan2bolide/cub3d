@@ -12,7 +12,8 @@
 
 #include "cub3D.h"
 
-void get_delta_to_next_column(t_position ray, double ray_direction, t_position *delta)
+void	get_delta_to_next_column(t_position ray, double ray_direction, \
+													t_position *delta)
 {
 	if (cos(ray_direction) > 0)
 	{
@@ -24,7 +25,8 @@ void get_delta_to_next_column(t_position ray, double ray_direction, t_position *
 	delta->y = tan(ray_direction) * delta->x;
 }
 
-void get_delta_to_next_line(t_position ray, double ray_direction, t_position *delta)
+void	get_delta_to_next_line(t_position ray, double ray_direction, \
+													t_position *delta)
 {
 	if (sin(ray_direction) > 0)
 	{
@@ -36,7 +38,8 @@ void get_delta_to_next_line(t_position ray, double ray_direction, t_position *de
 	delta->x = delta->y / tan(ray_direction);
 }
 
-void apply_minimal_distance(t_position *ray, t_position delta_x, t_position delta_y)
+void	apply_minimal_distance(t_position *ray, t_position delta_x, \
+												t_position delta_y)
 {
 	if (sqrt(delta_x.x * delta_x.x + delta_x.y * delta_x.y) \
 					< sqrt(delta_y.x * delta_y.x + delta_y.y * delta_y.y))
@@ -49,12 +52,11 @@ void apply_minimal_distance(t_position *ray, t_position delta_x, t_position delt
 	ray->y += delta_y.y;
 }
 
-void shoot_ray(t_position *ray, t_cub *cub, double angle)
+void	shoot_ray(t_position *ray, t_cub *cub, double angle)
 {
 	t_position		new_x;
 	t_position		new_y;
 
-	//todo coder les cas de depart (Nord Est West et Sud);
 	while (1)
 	{
 		get_delta_to_next_column(*ray, angle, &new_x);
@@ -62,12 +64,13 @@ void shoot_ray(t_position *ray, t_cub *cub, double angle)
 		apply_minimal_distance(ray, new_x, new_y);
 		if (ray->y < 0 || ray->x < 0 || cub->data->map[(int)ray->y - \
 		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
-		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == '1')
+		- ((int) ray->x && ray->x == (int)ray->x && (cos(angle) < 0))] == '1')
 			return ;
 	}
 }
 
-double get_orientation(char **map, t_position *pos) {
+double	get_orientation(char **map, t_position *pos)
+{
 	char	orientation_char;
 	double	orientation_angle;
 

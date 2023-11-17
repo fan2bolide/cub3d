@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/17 16:49:32 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/06 03:38:05 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,13 +239,18 @@ typedef struct s_iposition
 typedef struct s_bajeanno
 {
 	bool		is_activated;
-	t_iposition	coords;
-	struct s_bajeanno	*next;
-	struct s_bajeanno	*prev;
+	t_iposition *cur_pos;
+	int 		x;
+	int 		y;
+	char		orientation;
+	size_t		last_activation;
+	size_t		last_moove;
+	size_t		speed;
 }			t_bajeanno;
 
 typedef struct s_data{
 	char	**map;
+	char 	**wall_sur;
 	t_bajeanno	*baj;
 	char	*texture[4];
 	t_color	*ceiling_color;
@@ -284,7 +289,6 @@ typedef struct s_cub
 	double		view_angle;
 	double		fov;
 	size_t		last_frame_time;
-	t_bajeanno	bajeanno;
 	t_position	*rays;
 	double		*angles;
 	int			*wall_heights;
@@ -309,13 +313,18 @@ int		ray_casting(t_cub *cub);
 
 void	render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
 double angle[cub->win_size[1]], int wall_height[cub->win_size[1]]);
-int		render_frame(t_cub *cub);
-
-int		is_directory(char *path);
-size_t	get_size(char **tab);
-int		check_definition(t_data *data);
-int		check_assignation(t_data *data);
-int		check_format(t_data *data);
+int			render_frame(t_cub *cub);
+size_t		get_time(void);
+int			is_directory(char *path);
+size_t		get_size(char **tab);
+int			check_definition(t_data *data);
+int			check_assignation(t_data *data);
+int			check_format(t_data *data);
 t_position	*get_position(char **map);
+int			get_wall_surroundment(t_data *data);
+void 		clear_line(char **w_surr, t_iposition *cur_pos);
+int			paint_w_surr(size_t i, t_bajeanno *next_one, t_iposition *cur_pos, char **w_surr);
+void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
+t_iposition get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos);
 
 #endif

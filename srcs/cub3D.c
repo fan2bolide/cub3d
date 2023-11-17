@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/08 21:18:47 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/17 19:01:20 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	main(int argc, char **argv)
 	t_cub	*cub;
 
 	cub = malloc(sizeof (t_cub));
-	ft_bzero(cub->keys_states, 65509);
+	ft_bzero(cub->keys_states, 65509 * sizeof(int));
 	cub->is_fullscreen = false;
 	cub->last_frame_time = get_time();
 	cub->win_size[0] = 900;
@@ -109,7 +109,7 @@ int	main(int argc, char **argv)
 		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), 0);
 	cub->data = parsing(argc, argv);
 	if (!cub->data)
-		return (1);
+		return (free(cub), 1);
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position->x += 0.5;
 	cub->player_position->y += 0.5;
@@ -125,7 +125,6 @@ int	main(int argc, char **argv)
 	cub_mlx_config(cub);
 	return (mlx_loop(cub->mlx), 0);
 }
-
 
 void	cub_update_fov(int keycode, t_cub *cub)
 {
@@ -156,7 +155,7 @@ void	cub_full_screen(t_cub *cub)
 	}
 	free(cub->rays);
 	free(cub->angles);
-	free(wall_heights);
+	free(cub->wall_heights);
 	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
 	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
 	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
@@ -168,7 +167,8 @@ void	cub_full_screen(t_cub *cub)
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
-	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
+	&cub->img.line_length, &cub->img.endian);
+	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	if (!render_frame(cub))
 		return (close_window(cub), (void) 0);
 	cub_mlx_config(cub);
@@ -179,7 +179,6 @@ void	cub_full_screen(t_cub *cub)
 void	cub_full_screen(t_cub *cub)
 {
 	(void)cub;
-
 }
 #endif
 
@@ -201,12 +200,27 @@ int	perform_actions(t_cub *cub)
 		cub_update_player_position(KEY_D, cub);
 	if (cub->keys_states[KEY_F])
 		cub->fov = M_PI_2;
-	if (cub->keys_states[KEY_LEFT] == 1)
+	if (cub->keys_states[KEY_LEFT])
 		cub_update_view_angle(KEY_LEFT, cub);
-	if (cub->keys_states[KEY_RIGHT] == 1)
+	if (cub->keys_states[KEY_RIGHT])
 		cub_update_view_angle(KEY_RIGHT, cub);
-	if (cub->keys_states[KEY_F11] == 1)
+	if (cub->keys_states[KEY_F11])
 		cub_full_screen(cub);
+	if (cub->keys_states[KEY_V] && cub->data->baj->speed < 3000)
+		cub->data->baj->speed += 5;
+	if (cub->keys_states[KEY_N] && cub->data->baj->speed > 100)
+		cub->data->baj->speed -= 5;
+	if (cub->keys_states[KEY_B] && get_time() - cub->data->baj->last_activation > 500)
+	{
+		cub->data->baj->last_activation = get_time();
+		if (cub->data->baj->is_activated)
+			cub->data->baj->is_activated = 0;
+		else
+		{
+			get_next_baj(cub->data->wall_sur, cub->data->baj, cub->data->baj->cur_pos);
+			cub->data->baj->is_activated = 1;
+		}
+	}
 	return (render_frame(cub));
 }
 
@@ -307,7 +321,7 @@ int close_window(t_cub *cub)
 	int	i;
 
 	i = 0;
-	while (i < 4)
+	while (i <= 4)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
