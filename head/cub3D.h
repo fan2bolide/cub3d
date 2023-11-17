@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/06 03:38:05 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/17 16:49:32 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,8 @@ enum e_key_codes
 # endif
 
 # define SCREEN_DISTANCE	0.8
+# define HEIGHT 0
+# define WIDTH 1
 
 //=================== INCLUDES =====================//
 # include "error_codes.h"
