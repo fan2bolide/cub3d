@@ -20,6 +20,7 @@ SRCS		:=	cub3D.c\
 				rendering/graphic_utils.c\
 				rendering/texture_put.c\
 				rendering/render_frame.c\
+				portal/portal.c\
 
 
 SRCS_D		:=	srcs/
@@ -33,6 +34,7 @@ DEPS		:=	$(SRCS:%.c=$(OBJS_D)%.d)
 HEAD		:=	\
 				cub3D.h\
 				error_codes.h\
+				portal.h\
 
 HEAD_D		:=	head/
 
@@ -101,6 +103,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)utils
 			@mkdir -p $(OBJS_D)ray_casting
 			@mkdir -p $(OBJS_D)rendering
+			@mkdir -p $(OBJS_D)portal
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)

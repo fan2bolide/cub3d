@@ -48,8 +48,8 @@ void	render_view(t_cub *cub, t_position *ray_collision, \
 	i = 0;
 	while (i < cub->win_size[1])
 	{
-//		if (wall_height[i] < cub->win_size[0])
 		cub_textures_render(cub, wall_height[i], i, ray_collision[i]);
 		i++;
 	}
+	display_crosshair(cub);
 }

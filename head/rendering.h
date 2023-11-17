@@ -12,6 +12,7 @@
 
 #ifndef RENDERING_H
 # include "cub3D.h"
+# include "portal.h"
 
 # define MINIMAP_SCALE			10
 # define MINIMAP_SIZE			50
