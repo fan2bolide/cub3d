@@ -103,6 +103,11 @@ int	main(int argc, char **argv)
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
+	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
+	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
+	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
+	if (!cub->rays || !cub->angles || !cub->wall_heights)
+		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), 0);
 	cub->data = parsing(argc, argv);
 	if (!cub->data)
 		return (free(cub), 1);
@@ -149,6 +154,14 @@ void	cub_full_screen(t_cub *cub)
 		cub->win_size[0] = 900;
 		cub->win_size[1] = cub->win_size[0] * 16 / 10;
 	}
+	free(cub->rays);
+	free(cub->angles);
+	free(cub->wall_heights);
+	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
+	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
+	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
+	if (!cub->rays || !cub->angles || !cub->wall_heights)
+		return (close_window(cub), (void)0);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_clear_window(cub->mlx, cub->win);
 	mlx_destroy_window(cub->mlx, cub->win);
@@ -326,6 +339,9 @@ int	close_window(t_cub *cub)
 {
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
+	free(cub->angles);
+	free(cub->rays);
+	free(cub->wall_heights);
 	free(cub->mlx);
 	destroy_data(cub->data);
 	free(cub->player_position);

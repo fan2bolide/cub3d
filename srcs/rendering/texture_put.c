@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/16 18:27:19 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/17 19:27:51 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,23 @@ bool	is_bajeanno_tile(t_position ray_collision, t_cub *cub)
 	return (false);
 }
 
+void	set_n_s_textures(int *texture_id, size_t *texture_x,
+					t_position ray_collision, t_cub *cub)
+{
+	if (cub->player_position->y > ray_collision.y)
+	{
+		*texture_id = 0;
+		*texture_x = (int)((ray_collision.x - ((int) ray_collision.x)) \
+			* cub->textures[*texture_id].width);
+	}
+	else
+	{
+		*texture_id = 1;
+		*texture_x = (int)((((int) ray_collision.x) + 1 - ray_collision.x) \
+			* cub->textures[*texture_id].width);
+	}
+}
+
 void	set_texture_id_and_x(int *texture_id, size_t *texture_x, \
 							t_position ray_collision, t_cub *cub)
 {
@@ -85,18 +102,7 @@ void	set_texture_id_and_x(int *texture_id, size_t *texture_x, \
 		}
 		return ;
 	}
-	if (cub->player_position->y > ray_collision.y)
-	{
-		*texture_id = 0;
-		*texture_x = (int)((ray_collision.x - ((int) ray_collision.x)) \
-			* cub->textures[*texture_id].width);
-	}
-	else
-	{
-		*texture_id = 1;
-		*texture_x = (int)((((int) ray_collision.x) + 1 - ray_collision.x) \
-			* cub->textures[*texture_id].width);
-	}
+	set_n_s_textures(texture_id, texture_x, ray_collision, cub);
 }
 
 int	cub_texture_put(int x, t_cub *cub, int wall_height,
