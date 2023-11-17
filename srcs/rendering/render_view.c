@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/16 14:38:02 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/17 19:04:53 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,14 @@ void	render_view(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
 		{
 			while (j < (cub->win_size[0] - wall_height[i]) / 2)
 			{
-				cub_pixel_put(&cub->img, i, j, *((int *)cub->data->ceiling_color));
+				cub_pixel_put(&cub->img, i, j,
+					*((int *)cub->data->ceiling_color));
 				j++;
 			}
 			while (j < cub->win_size[0])
 			{
-				cub_pixel_put(&cub->img, i, j, *((int *)cub->data->floor_color));
+				cub_pixel_put(&cub->img, i, j,
+					*((int *)cub->data->floor_color));
 				j++;
 			}
 		}
@@ -62,7 +64,6 @@ int	get_wall_height(t_cub *cub, t_position ray, double angle)
 	(ray.x - cub->player_position->x) + (ray.y - cub->player_position->y) * \
 	(ray.y - cub->player_position->y));
 	wall_distance *= cos(angle - cub->view_angle);
-
 	wall_height = (SCREEN_DISTANCE * cub->win_size[0] / wall_distance);
 	return ((int)wall_height);
 }
@@ -88,7 +89,8 @@ int	render_frame(t_cub *cub)
 			nb_segments = win_size_2 - i;
 		else
 			nb_segments = (cub->win_size[1] - i) - win_size_2;
-		angle[i] = (cub->view_angle * (i <= (win_size_2))) + (cub->view_angle * (i > (win_size_2))) - atan(nb_segments * segments_size);
+		angle[i] = (cub->view_angle * (i <= (win_size_2)))
+			+ (cub->view_angle * (i > (win_size_2))) - atan(nb_segments * segments_size);
 		if (angle[i] < 0)
 			angle[i] += M_PI * 2;
 		if (angle[i] > M_PI * 2)
