@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 13:34:23 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/18 16:21:36 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,11 +290,16 @@ typedef struct s_cub
 	double		view_angle;
 	double		fov;
 	size_t		last_frame_time;
+	double		*wall_distance;
+	double		*wall_distance_portal;
 	t_position	*rays;
+	t_position	*rays_portal;
 	double		*angles;
+	double		*angles_portal;
 	char		orange_prtl;
 	char 		blue_prtl;
 	int			*wall_heights;
+	int			*wall_heights_portal;
 }		t_cub;
 
 //==================== PARSING =====================//
