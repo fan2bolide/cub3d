@@ -52,6 +52,13 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub, int *texture
 void	set_portal_texture(int *texture_id, size_t *texture_x,
 						   t_position ray_collision, t_cub *cub)
 {
-	if (is_portal_texture(ray_collision, cub, texture_id))
-		set_custom_texture(texture_id, texture_x, ray_collision, cub);
+	int		save_texture_id;
+	size_t	save_texture_x;
+
+	save_texture_id = *texture_id;
+	save_texture_x = *texture_x;
+	if (!is_portal_texture(ray_collision, cub, texture_id))
+		return ;
+	set_custom_texture(texture_id, texture_x, ray_collision, cub);
+
 }

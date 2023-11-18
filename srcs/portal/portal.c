@@ -6,13 +6,13 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:00:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 00:35:20 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 18:45:55 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "portal.h"
 
-void	display_crosshair(t_cub *cub)
+static void	cross(t_cub *cub)
 {
 	t_iposition map_center;
 	t_iposition cross_corner;
@@ -31,5 +31,37 @@ void	display_crosshair(t_cub *cub)
 		}
 		cross_corner.y++;
 	}
+}
+
+static void	point(t_cub *cub)
+{
+	t_iposition map_center;
+	int	i;
+	int	j;
+	double	cos_calc;
+	double	sin_calc;
+
+	map_center.x = cub->win_size[WIDTH] / 2;
+	map_center.y = cub->win_size[HEIGHT] / 2;
+	i = 0;
+	while (i < 360)
+	{
+		j = 0;
+		cos_calc = cos(i * M_PI / 180);
+		sin_calc = sin(i * M_PI / 180);
+		while (j <= 5)
+		{
+			cub_pixel_put(&cub->img, map_center.x + j * cos_calc,
+						  map_center.y + j * sin_calc, 0x778899);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	display_crosshair(t_cub *cub)
+{
+	cross(cub);
+//	point(cub);
 }
 

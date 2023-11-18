@@ -17,6 +17,7 @@
 # ifndef RENDERING_H
 #  include "rendering.h"
 # endif
+
 void	display_crosshair(t_cub *cub);
 void	set_portal_on_map(t_cub *cub, char prtl_id);
 void	set_portal_texture(int *texture_id, size_t *texture_x,
