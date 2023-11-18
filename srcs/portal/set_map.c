@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "portal.h"
+#include "cub3D.h"
 
 static void	set_east_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 {

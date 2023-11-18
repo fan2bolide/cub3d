@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/18 00:59:53 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/09 09:18:40 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,96 @@ void apply_minimal_distance(t_position *ray, t_position delta_x, t_position delt
 	ray->y += delta_y.y;
 }
 
-void shoot_ray(t_position *ray, t_cub *cub, double angle)
+static double	compute_distance(t_position player, t_position ray)
+{
+	return (sqrt((ray.x - player.x) * (ray.x - player.x) \
+				+ (ray.y - player.y) * (ray.y - player.y)));
+}
+
+t_position get_portal_position(t_cub *cub, char portal) {
+	t_position result;
+
+	result.y = 0;
+	while (cub->data->map[(int)result.y])
+	{
+		result.x = 0;
+		while (cub->data->map[(int)result.y][(int)result.x])
+		{
+			if (cub->data->map[(int)result.y][(int)result.x] == portal)
+				return (result);
+			result.x = result.x + 1;
+		}
+		result.y = result.y + 1;
+	}
+	result.x = -1;
+	result.y = -1;
+	return (result);
+}
+
+char get_portal_orientation(t_cub *cub, char portal)
+{
+	if (portal == 'B')
+		return cub->blue_prtl;
+	else
+		return cub->orange_prtl;
+}
+
+void teleport_ray(t_cub *cub, t_position *ray, double *angle, char portal)
+{
+	t_position	portal_position;
+	char 		portal_orientation;
+
+	if (portal == 'B')
+		portal = 'O';
+	else
+		portal = 'B';
+	portal_position = get_portal_position(cub, portal);
+	portal_orientation = get_portal_orientation(cub, portal);
+	if (ray->x - (int)ray->x == 0)
+	{
+		if (portal_orientation == 'N' || portal_orientation == 'S')
+		{
+			ray->x += (portal_position.x - (int)ray->x);
+			if (portal_orientation == 'N')
+				ray->y = portal_position.y;
+			else
+				ray->y = portal_position.y + 1;
+		}
+	}
+	return ;
+}
+
+void shoot_ray(t_position *ray, t_cub *cub, double angle, double *distance)
 {
 	t_position		new_x;
 	t_position		new_y;
+	char 			collision_point;
+	t_position		ray_start;
 
-	//todo coder les cas de depart (Nord Est West et Sud);
+	*distance = 0;
+	ray_start.x = cub->player_position->x;
+	ray_start.y = cub->player_position->y;
 	while (1)
 	{
 		get_delta_to_next_column(*ray, angle, &new_x);
 		get_delta_to_next_line(*ray, angle, &new_y);
 		apply_minimal_distance(ray, new_x, new_y);
-		if (ray->y < 0 || ray->x < 0 || cub->data->map[(int)ray->y - \
-		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
-		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == '1'
-		|| cub->data->map[(int)ray->y - \
-		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
-		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == 'B'
-		|| cub->data->map[(int)ray->y - \
-		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
-		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == 'O')
+		if (ray->y < 0 || ray->x < 0)
 			return ;
+		collision_point = cub->data->map[(int)ray->y - \
+		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
+		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))];
+		if (collision_point == '1')
+		{
+			*distance += compute_distance(ray_start, *ray);
+			return ;
+		}
+		if (collision_point == 'B' || collision_point == 'O')
+		{
+			*distance += compute_distance(ray_start, *ray);
+			if (collision_point == 'B')
+				teleport_ray(cub, ray, &angle, collision_point);
+		}
 	}
 }
 

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "portal.h"
+#include "cub3D.h"
 
 void	display_crosshair(t_cub *cub)
 {

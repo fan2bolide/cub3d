@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 01:31:14 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 13:34:23 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,9 +313,10 @@ t_list	*list_from_file(char *file_path);
 void	destroy_data(t_data *data);
 int		refactor_spaces(t_list *list);
 int		ray_casting(t_cub *cub);
+void	cub_pixel_put(t_image *data, int x, int y, int color);
 
-void		render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
-double angle[cub->win_size[1]], int wall_height[cub->win_size[1]]);
+void		render_minimap(t_cub *cub, t_position *ray_collision, \
+								double *angle, int *wall_height);
 int			render_frame(t_cub *cub);
 size_t		get_time(void);
 int			is_directory(char *path);
@@ -329,5 +330,10 @@ void		clear_line(char **w_surr, t_iposition *cur_pos);
 int			paint_w_surr(size_t i, t_bajeanno *next_one, t_iposition *cur_pos, char **w_surr);
 void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
 t_iposition	get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos);
+
+void	set_portal_on_map(t_cub *cub, char prtl_id);
+void	set_portal_texture(int *texture_id, size_t *texture_x,
+						   t_position ray_collision, t_cub *cub);
+void	display_crosshair(t_cub *cub);
 
 #endif
