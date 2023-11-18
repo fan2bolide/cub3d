@@ -21,6 +21,8 @@ SRCS		:=	cub3D.c\
 				rendering/texture_put.c\
 				rendering/render_frame.c\
 				portal/portal.c\
+				portal/set_map.c\
+				portal/set_texture.c\
 
 
 SRCS_D		:=	srcs/
@@ -34,6 +36,7 @@ DEPS		:=	$(SRCS:%.c=$(OBJS_D)%.d)
 HEAD		:=	\
 				cub3D.h\
 				error_codes.h\
+				rendering.h\
 				portal.h\
 
 HEAD_D		:=	head/

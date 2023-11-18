@@ -6,16 +6,15 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/17 19:27:51 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/17 22:51:00 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-void	set_bajenno_texture(int *texture_id, size_t *texture_x,
+void	set_custom_texture(int *texture_id, size_t *texture_x,
 							t_position ray_collision, t_cub *cub)
 {
-	*texture_id = 4;
 	if (ray_collision.x == (int)ray_collision.x)
 	{
 		if (cub->player_position->x > ray_collision.x)
@@ -85,7 +84,8 @@ void	set_texture_id_and_x(int *texture_id, size_t *texture_x, \
 							t_position ray_collision, t_cub *cub)
 {
 	if (cub->data->baj->is_activated && is_bajeanno_tile(ray_collision, cub))
-		return (set_bajenno_texture(texture_id, texture_x, ray_collision, cub));
+		return (*texture_id = 4,
+				set_custom_texture(texture_id, texture_x, ray_collision, cub));
 	if (ray_collision.x == (int) ray_collision.x)
 	{
 		if (cub->player_position->x > ray_collision.x)
@@ -115,6 +115,7 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	t_iposition	texture;
 
 	set_texture_id_and_x(&texture_id, &texture.x, ray_collision, cub);
+	set_portal_texture(&texture_id, &texture.x, ray_collision, cub);
 	screen_wall_height = wall_height;
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/09 09:18:40 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/18 00:59:53 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,13 @@ void shoot_ray(t_position *ray, t_cub *cub, double angle)
 		apply_minimal_distance(ray, new_x, new_y);
 		if (ray->y < 0 || ray->x < 0 || cub->data->map[(int)ray->y - \
 		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
-		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == '1')
+		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == '1'
+		|| cub->data->map[(int)ray->y - \
+		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
+		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == 'B'
+		|| cub->data->map[(int)ray->y - \
+		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
+		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))] == 'O')
 			return ;
 	}
 }

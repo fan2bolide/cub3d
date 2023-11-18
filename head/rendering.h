@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   rendering.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:38:30 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/17 18:05:36 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/18 00:22:57 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RENDERING_H
+# define RENDERING_H
 # include "cub3D.h"
-# include "portal.h"
-
+# ifndef PORTAL_H
+#  include "portal.h"
+# endif
 # define MINIMAP_SCALE			10
 # define MINIMAP_SIZE			50
 # define MINIMAP_OFFSET			30
@@ -29,5 +31,7 @@ int		cub_texture_put(int x, t_cub *cub, int wall_height,
 int		get_color_of_wall(int x, int y);
 void	render_view(t_cub *cub, t_position *ray_collision, \
 								const int *wall_height);
+void	set_custom_texture(int *texture_id, size_t *texture_x,
+						   t_position ray_collision, t_cub *cub);
 
 #endif

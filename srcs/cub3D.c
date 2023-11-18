@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/17 19:01:20 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 00:08:52 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ t_position	*get_position(char **map)
 void	convert_path_to_mlx_img(t_cub *cub)
 {
 	int i;
+	static char	*custom_path[3] = {BJ_PATH, PRTL_PATH, ORG_PATH};
 
 	i = -1;
 	while (++i < 4)
@@ -71,8 +72,14 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
-	cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, BJ_PATH, &cub->textures[i].width, &cub->textures[i].height);
-	cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
+	while (i < 7)
+	{
+		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, custom_path[i - 4], &cub->textures[i].width,
+													 &cub->textures[i].height);
+		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel,
+												  &cub->textures[i].line_length, &cub->textures[i].endian);
+		i++;
+	}
 }
 
 size_t	get_time(void)
@@ -210,6 +217,10 @@ int	perform_actions(t_cub *cub)
 		cub->data->baj->speed += 5;
 	if (cub->keys_states[KEY_N] && cub->data->baj->speed > 100)
 		cub->data->baj->speed -= 5;
+	if (cub->keys_states[KEY_T])
+		set_portal_on_map(cub, 'B');
+	if (cub->keys_states[KEY_Y])
+		set_portal_on_map(cub, 'O');
 	if (cub->keys_states[KEY_B] && get_time() - cub->data->baj->last_activation > 500)
 	{
 		cub->data->baj->last_activation = get_time();
@@ -321,7 +332,7 @@ int close_window(t_cub *cub)
 	int	i;
 
 	i = 0;
-	while (i <= 4)
+	while (i <= 6)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);

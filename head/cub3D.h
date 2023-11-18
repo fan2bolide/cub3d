@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 00:22:28 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 01:31:14 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,8 +221,6 @@ enum e_key_codes
 # include <math.h>
 # include "mlx.h"
 # include "libft.h"
-//# include "portal.h"
-//# include "rendering.h"
 # include <errno.h>
 # include <sys/time.h>
 

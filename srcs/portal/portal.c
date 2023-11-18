@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:00:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/17 20:35:15 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 00:35:20 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,3 +32,4 @@ void	display_crosshair(t_cub *cub)
 		cross_corner.y++;
 	}
 }
+
