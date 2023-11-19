@@ -131,7 +131,7 @@ int	main(int argc, char **argv)
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
 	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
-	cub->fov = M_PI_2;
+	cub->fov = M_PI_2 - 0.003;
 	if (!render_frame(cub))
 		return (close_window(cub), 1);
 	cub_mlx_config(cub);
