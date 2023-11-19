@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/19 19:01:50 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/20 00:53:44 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,72 @@ int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal)
 		}
 		return (1);
 	}
+	if ((ray->y - (int)ray->y) == 0 && get_portal_orientation(cub, entry_portal) == 'N' && sin(*angle) > 0)
+	{
+		if (portal_orientation == 'N')
+		{
+			ray->y = portal_position.y;
+			ray->x = portal_position.x + (1 - (ray->x - (int)ray->x));
+			*angle -= M_PI;
+			if (*angle > M_PI * 2)
+				*angle -= M_PI * 2;
+		}
+		if (portal_orientation == 'S')
+		{
+			ray->x += (portal_position.x - (int)ray->x);
+			ray->y = portal_position.y + 1;
+		}
+		if (portal_orientation == 'E')
+		{
+			ray->y = portal_position.y + (1 - (ray->x - (int)ray->x));
+			ray->x = portal_position.x + 1;
+			*angle -= M_PI_2;
+			if (*angle > M_PI * 2)
+				*angle -= M_PI * 2;
+		}
+		if (portal_orientation == 'W')
+		{
+			ray->y = portal_position.y + (ray->x - (int)ray->x);
+			ray->x = portal_position.x;
+			*angle += M_PI_2;
+		}
+		return (1);
+	}
+	if ((ray->x - (int)ray->x) == 0 && get_portal_orientation(cub, entry_portal) == 'E' && cos(*angle) < 0)
+	{
+		if (portal_orientation == 'N')
+		{
+			ray->x = portal_position.x + (1 - (ray->y - (int)ray->y));
+			ray->y = portal_position.y;
+			*angle += M_PI_2;
+			if (*angle > M_PI * 2)
+				*angle -= M_PI * 2;
+			return (1);
+		}
+		if (portal_orientation == 'S')
+		{
+			ray->x = portal_position.x + (ray->y - (int)ray->y);
+			ray->y = portal_position.y + 1;
+			*angle -= M_PI_2;
+			if (*angle > M_PI * 2)
+				*angle -= M_PI * 2;
+			return (1);
+		}
+		if (portal_orientation == 'E')
+		{
+			ray->y = portal_position.y + (1 - (ray->y - (int)ray->y));
+			ray->x = portal_position.x + 1;
+			*angle += M_PI;
+			if (*angle > M_PI * 2)
+				*angle -= M_PI * 2;
+		}
+		if (portal_orientation == 'W')
+		{
+			ray->y = portal_position.y + (ray->y - (int)ray->y);
+			ray->x = portal_position.x;
+		}
+		return (1);
+	}
 	return (0);
 }
 
@@ -151,6 +217,10 @@ void	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 		apply_minimal_distance(ray, new_x, new_y);
 		if (ray->y < 0 || ray->x < 0)
 			return ;
+		if (!cub->data->map[(int)ray->y - \
+		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)])
+			printf("y = %d\n", (int)ray->y - \
+		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0));
 		collision_point = cub->data->map[(int)ray->y - \
 		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)][(int)ray->x \
 		- ((int) ray->x && ray->x == (int)ray->x &&(cos(*angle) < 0))];
@@ -167,7 +237,7 @@ void	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 				cub->wall_distance_portal[angle - cub->angles] \
 				= compute_distance(ray_start, *ray);
 			}
-			if (*distance > 300)
+			if (*distance > 100)
 				return ;
 			*distance += compute_distance(ray_start, *ray);
 			if (!teleport_ray(cub, ray, angle, collision_point))
