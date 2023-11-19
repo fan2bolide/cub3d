@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/17 23:12:16 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/18 16:23:47 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 	int		win_size_2;
 	int		i;
 	double	segments_size;
-	double	wall_distance;
 
 	win_size_2 = cub->win_size[1] / 2;
 	i = 0;
@@ -53,8 +52,9 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 		+ (cub->view_angle * (i > (win_size_2))) \
 		- atan(nb_segments * segments_size);
 		modulo_2_pi(angle + i);
-		shoot_ray(ray_pos + i, cub, angle[i], &wall_distance);
-		wall_height[i] = get_wall_height(cub, wall_distance, angle[i]);
+		shoot_ray(ray_pos + i, cub, angle + i, cub->wall_distance + i);
+		wall_height[i] = get_wall_height(cub, cub->wall_distance[i], angle[i]);
+		cub->wall_heights_portal[i] = get_wall_height(cub, cub->wall_distance_portal[i], cub->angles_portal[i]);
 		i++;
 	}
 }

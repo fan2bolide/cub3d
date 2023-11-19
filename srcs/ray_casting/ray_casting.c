@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/09 09:18:40 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/18 23:13:12 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,32 +83,58 @@ char get_portal_orientation(t_cub *cub, char portal)
 		return cub->orange_prtl;
 }
 
-void teleport_ray(t_cub *cub, t_position *ray, double *angle, char portal)
+int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal)
 {
 	t_position	portal_position;
 	char 		portal_orientation;
+	char		out_portal;
 
-	if (portal == 'B')
-		portal = 'O';
+	if (entry_portal == 'B')
+		out_portal = 'O';
 	else
-		portal = 'B';
-	portal_position = get_portal_position(cub, portal);
-	portal_orientation = get_portal_orientation(cub, portal);
-	if (ray->x - (int)ray->x == 0)
+		out_portal = 'B';
+	portal_position = get_portal_position(cub, out_portal);
+	if (portal_position.x == -1 && portal_position.y == -1)
+		return (0);
+	portal_orientation = get_portal_orientation(cub, out_portal);
+	if ((ray->y - (int)ray->y) == 0 && get_portal_orientation(cub, entry_portal) == 'S' && sin(*angle) < 0)
 	{
 		if (portal_orientation == 'N' || portal_orientation == 'S')
 		{
-			ray->x += (portal_position.x - (int)ray->x);
 			if (portal_orientation == 'N')
+			{
+				ray->x += (portal_position.x - (int)ray->x);
 				ray->y = portal_position.y;
+			}
 			else
+			{
+//				printf("%f, %f\n", ray->y, portal_position.y + 1);
 				ray->y = portal_position.y + 1;
+//				printf("%f, %f\n", ray->x, portal_position.x + (1 - (ray->x - (int)ray->x)));
+				ray->x += portal_position.x + (1 - (ray->x - (int)ray->x));
+				*angle += M_PI;
+				if (*angle > M_PI * 2)
+					*angle -= M_PI * 2;
+				printf("%f\n", *angle);
+			}
 		}
+		else
+		{
+			ray->y += (portal_position.x - (int)ray->x);
+			if (portal_orientation == 'W')
+			{
+				ray->x = portal_position.y;
+				*angle += M_PI_2;
+			}
+			else
+				ray->x = portal_position.y + 1;
+		}
+		return (1);
 	}
-	return ;
+	return (0);
 }
 
-void shoot_ray(t_position *ray, t_cub *cub, double angle, double *distance)
+void shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 {
 	t_position		new_x;
 	t_position		new_y;
@@ -120,14 +146,14 @@ void shoot_ray(t_position *ray, t_cub *cub, double angle, double *distance)
 	ray_start.y = cub->player_position->y;
 	while (1)
 	{
-		get_delta_to_next_column(*ray, angle, &new_x);
-		get_delta_to_next_line(*ray, angle, &new_y);
+		get_delta_to_next_column(*ray, *angle, &new_x);
+		get_delta_to_next_line(*ray, *angle, &new_y);
 		apply_minimal_distance(ray, new_x, new_y);
 		if (ray->y < 0 || ray->x < 0)
 			return ;
 		collision_point = cub->data->map[(int)ray->y - \
-		((int)ray->y && ray->y == (int)ray->y && sin(angle) < 0)][(int)ray->x \
-		- ((int) ray->x && ray->x == (int)ray->x &&(cos(angle) < 0))];
+		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)][(int)ray->x \
+		- ((int) ray->x && ray->x == (int)ray->x &&(cos(*angle) < 0))];
 		if (collision_point == '1')
 		{
 			*distance += compute_distance(ray_start, *ray);
@@ -135,9 +161,15 @@ void shoot_ray(t_position *ray, t_cub *cub, double angle, double *distance)
 		}
 		if (collision_point == 'B' || collision_point == 'O')
 		{
+			if (*distance == 0)
+				cub->angles_portal[angle - cub->angles] = *angle;
+			if (*distance > 300)
+				return ;
 			*distance += compute_distance(ray_start, *ray);
-			if (collision_point == 'B')
-				teleport_ray(cub, ray, &angle, collision_point);
+			if (!teleport_ray(cub, ray, angle, collision_point))
+				return ;
+			ray_start.x = ray->x;
+			ray_start.y = ray->y;
 		}
 	}
 }

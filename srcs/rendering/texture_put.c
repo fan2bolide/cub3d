@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_put.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/17 22:51:00 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 20:22:24 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,9 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	int			texture_id;
 	t_iposition	texture;
 
+//	printf("%f, %f\n", ray_collision.x, ray_collision.y);
 	set_texture_id_and_x(&texture_id, &texture.x, ray_collision, cub);
-	set_portal_texture(&texture_id, &texture.x, ray_collision, cub);
+//	set_portal_texture(&texture_id, &texture.x, ray_collision, cub);
 	screen_wall_height = wall_height;
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];

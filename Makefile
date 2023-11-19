@@ -37,7 +37,7 @@ HEAD		:=	\
 				cub3D.h\
 				error_codes.h\
 				rendering.h\
-				portal.h\
+#				portal.h\
 
 HEAD_D		:=	head/
 
