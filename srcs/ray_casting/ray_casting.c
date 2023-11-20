@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/20 00:53:44 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/20 01:48:48 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,6 @@ int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal)
 			*angle += M_PI_2;
 			if (*angle > M_PI * 2)
 				*angle -= M_PI * 2;
-			return (1);
 		}
 		if (portal_orientation == 'S')
 		{
@@ -180,7 +179,6 @@ int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal)
 			*angle -= M_PI_2;
 			if (*angle > M_PI * 2)
 				*angle -= M_PI * 2;
-			return (1);
 		}
 		if (portal_orientation == 'E')
 		{
@@ -194,6 +192,39 @@ int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal)
 		{
 			ray->y = portal_position.y + (ray->y - (int)ray->y);
 			ray->x = portal_position.x;
+		}
+		return (1);
+	}
+	if ((ray->x - (int)ray->x) == 0 && get_portal_orientation(cub, entry_portal) == 'W' && cos(*angle) > 0)
+	{
+		if (portal_orientation == 'N')
+		{
+			ray->x = portal_position.x + (ray->y - (int)ray->y);
+			ray->y = portal_position.y;
+			*angle -= M_PI_2;
+			if (*angle > M_PI * 2)
+				*angle -= M_PI * 2;
+		}
+		if (portal_orientation == 'S')
+		{
+			ray->x = portal_position.x + (1 - (ray->y - (int)ray->y));
+			ray->y = portal_position.y + 1;
+			*angle += M_PI_2;
+			if (*angle > M_PI * 2)
+				*angle -= M_PI * 2;
+		}
+		if (portal_orientation == 'E')
+		{
+			ray->y = portal_position.y + (ray->y - (int)ray->y);
+			ray->x = portal_position.x + 1;
+		}
+		if (portal_orientation == 'W')
+		{
+			ray->y = portal_position.y + (1 - (ray->y - (int)ray->y));
+			ray->x = portal_position.x;
+			*angle += M_PI;
+			if (*angle > M_PI * 2)
+				*angle -= M_PI * 2;
 		}
 		return (1);
 	}
