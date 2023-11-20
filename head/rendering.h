@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:38:30 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/19 00:10:45 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/20 23:26:37 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@
 # define OUTER_MINIMAP_COLOR	0x000000
 
 void	render_mini_map(t_cub *cub, t_position *ray_collision);
-void	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance);
+int		shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance);
 void	cub_put_line(t_cub *cub, t_position a, t_position b, int color);
-void	cub_pixel_put(t_image *data, int x, int y, int color);
 int		cub_texture_put(int x, t_cub *cub, int wall_height,
 			t_position ray_collision);
 int		get_color_of_wall(int x, int y);

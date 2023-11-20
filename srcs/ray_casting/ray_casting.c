@@ -6,36 +6,40 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/20 01:48:48 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/20 23:46:24 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void	get_delta_to_next_column(t_position ray, double ray_direction, \
-													t_position *delta)
+t_position	get_delta_to_next_column(t_position ray, double ray_direction)
 {
+	t_position	delta;
+
 	if (cos(ray_direction) > 0)
 	{
-		delta->x = 1.0 - (ray.x - (int)ray.x);
-		delta->y = tan(ray_direction) * delta->x;
-		return ;
+		delta.x = 1.0 - (ray.x - (int)ray.x);
+		delta.y = tan(ray_direction) * delta.x;
+		return (delta);
 	}
-	delta->x = -(ray.x - (int)ray.x) - (ray.x == (int)ray.x);
-	delta->y = tan(ray_direction) * delta->x;
+	delta.x = -(ray.x - (int)ray.x) - (ray.x == (int)ray.x);
+	delta.y = tan(ray_direction) * delta.x;
+	return (delta);
 }
 
-void	get_delta_to_next_line(t_position ray, double ray_direction, \
-													t_position *delta)
+t_position	get_delta_to_next_line(t_position ray, double ray_direction)
 {
+	t_position	delta;
+
 	if (sin(ray_direction) > 0)
 	{
-		delta->y = 1 - (ray.y - (int)ray.y);
-		delta->x = delta->y / tan(ray_direction);
-		return ;
+		delta.y = 1 - (ray.y - (int)ray.y);
+		delta.x = delta.y / tan(ray_direction);
+		return (delta);
 	}
-	delta->y = -(ray.y - (int)ray.y + ((int)ray.y == ray.y));
-	delta->x = delta->y / tan(ray_direction);
+	delta.y = -(ray.y - (int)ray.y + ((int)ray.y == ray.y));
+	delta.x = delta.y / tan(ray_direction);
+	return (delta);
 }
 
 void	apply_minimal_distance(t_position *ray, t_position delta_x, \
@@ -231,23 +235,21 @@ int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal)
 	return (0);
 }
 
-void	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
+int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 {
-	t_position		new_x;
-	t_position		new_y;
 	char 			collision_point;
 	t_position		ray_start;
+	t_portal_list	*portal_lst;
+	t_portal		*portal;
 
 	*distance = 0;
 	ray_start.x = cub->player_position->x;
 	ray_start.y = cub->player_position->y;
 	while (1)
 	{
-		get_delta_to_next_column(*ray, *angle, &new_x);
-		get_delta_to_next_line(*ray, *angle, &new_y);
-		apply_minimal_distance(ray, new_x, new_y);
+		apply_minimal_distance(ray, get_delta_to_next_column(*ray, *angle), get_delta_to_next_line(*ray, *angle));
 		if (ray->y < 0 || ray->x < 0)
-			return ;
+			return (1);
 		if (!cub->data->map[(int)ray->y - \
 		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)])
 			printf("y = %d\n", (int)ray->y - \
@@ -258,21 +260,23 @@ void	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 		if (collision_point == '1')
 		{
 			*distance += compute_distance(ray_start, *ray);
-			return ;
+			return (1);
 		}
 		if (collision_point == 'B' || collision_point == 'O')
 		{
-			if (*distance == 0)
-			{
-				cub->angles_portal[angle - cub->angles] = *angle;
-				cub->wall_distance_portal[angle - cub->angles] \
-				= compute_distance(ray_start, *ray);
-			}
+			portal = malloc(sizeof (t_portal));
+			if (!portal)
+				return (0);
+			portal->distance = *distance + compute_distance(ray_start, *ray);
+			portal_lst = (t_portal_list *)ft_lstnew(portal);
+			if (!portal_lst)
+				return (0);
+			ft_lstadd_back((t_list **)&cub->portals[angle - cub->angles], (t_list *)portal_lst);
 			if (*distance > 100)
-				return ;
+				return (1);
 			*distance += compute_distance(ray_start, *ray);
 			if (!teleport_ray(cub, ray, angle, collision_point))
-				return ;
+				return (1);
 			ray_start.x = ray->x;
 			ray_start.y = ray->y;
 		}

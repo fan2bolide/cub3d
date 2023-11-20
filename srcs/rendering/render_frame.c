@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/19 18:48:04 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/20 23:51:57 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,17 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 		angle[i] = modulo_2_pi(angle[i]);
 		shoot_ray(ray_pos + i, cub, angle + i, cub->wall_distance + i);
 		wall_height[i] = get_wall_height(cub, cub->wall_distance[i], angle[i]);
-		cub->wall_heights_portal[i] = get_wall_height(cub, cub->wall_distance_portal[i], cub->angles_portal[i]);
 		i++;
 	}
+}
+
+void	clear_lists(t_cub *cub)
+{
+	int i;
+
+	i = 0;
+	while (i < cub->win_size[WIDTH])
+		ft_lstclear(cub->portals[i++], free);
 }
 
 int	render_frame(t_cub *cub)
@@ -70,5 +78,6 @@ int	render_frame(t_cub *cub)
 	render_view(cub, cub->rays, cub->wall_heights);
 	render_mini_map(cub, cub->rays);
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
+	clear_lists(cub);
 	return (1);
 }
