@@ -18,32 +18,32 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub, int *texture
 	{
 		if (cub->player_position->x > ray_collision.x && (cub->orange_prtl == 'E' || cub->blue_prtl == 'E'))
 		{
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1] == 'B')
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1] == 'B' && cub->blue_prtl == 'E')
 				return (*texture_id = 5, true);
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1] == 'O')
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1] == 'O' && cub->orange_prtl == 'E')
 				return (*texture_id = 6, true);
 		}
 		else if (cub->orange_prtl == 'W' || cub->blue_prtl == 'W')
 		{
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] == 'B')
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] == 'B' && cub->blue_prtl == 'W')
 				return (*texture_id = 5, true);
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] == 'O')
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] == 'O' && cub->orange_prtl == 'W')
 				return (*texture_id = 6, true);
 		}
 		return (false);
 	}
-	if (cub->player_position->y > ray_collision.y && (cub->orange_prtl == 'N' || cub->blue_prtl == 'N'))
+	if (cub->player_position->y > ray_collision.y && (cub->orange_prtl == 'S' || cub->blue_prtl == 'S'))
 	{
-		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] == 'B')
+		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] == 'B' && cub->blue_prtl == 'S')
 			return (*texture_id = 5, true);
-		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] == 'O')
+		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] == 'O' && cub->orange_prtl == 'S')
 			return (*texture_id = 6, true);
 	}
-	else if (cub->orange_prtl == 'S' || cub->blue_prtl == 'S')
+	else if (cub->orange_prtl == 'N' || cub->blue_prtl == 'N')
 	{
-		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'B')
+		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'B' && cub->blue_prtl == 'N')
 			return (*texture_id = 5, true);
-		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] =='O')
+		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'O' && cub->orange_prtl == 'N')
 			return(*texture_id = 6, true);
 	}
 	return (false);

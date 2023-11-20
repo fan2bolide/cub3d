@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:09:33 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 01:27:21 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 20:56:21 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ static void	set_north_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	}
 	cub->data->map[(int)middle_ray.y - 1][(int)middle_ray.x] = prtl_id;
 	if (prtl_id == 'O')
-		cub->orange_prtl = 'N';
+		cub->orange_prtl = 'S';
 	else
-		cub->blue_prtl = 'N';
+		cub->blue_prtl = 'S';
 }
 
 static void	set_south_portal(t_cub *cub, t_position middle_ray, char prtl_id)
@@ -95,9 +95,9 @@ static void	set_south_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	}
 	cub->data->map[(int)middle_ray.y][(int)middle_ray.x] = prtl_id;
 	if (prtl_id == 'O')
-		cub->orange_prtl = 'S';
+		cub->orange_prtl = 'N';
 	else
-		cub->blue_prtl = 'S';
+		cub->blue_prtl = 'N';
 
 }
 
@@ -131,4 +131,6 @@ void	set_portal_on_map(t_cub *cub, char prtl_id)
 		else
 			set_south_portal(cub, middle_ray, prtl_id);
 	}
+	printf("%c %c\n", cub->orange_prtl, cub->blue_prtl);
+
 }

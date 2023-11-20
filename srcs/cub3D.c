@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 00:08:52 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/20 16:55:11 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int	main(int argc, char **argv)
 	cub->is_fullscreen = false;
 	cub->last_frame_time = get_time();
 	cub->win_size[0] = 900;
+	cub->cross_hair = 'C';
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
@@ -217,10 +218,6 @@ int	perform_actions(t_cub *cub)
 		cub->data->baj->speed += 5;
 	if (cub->keys_states[KEY_N] && cub->data->baj->speed > 100)
 		cub->data->baj->speed -= 5;
-	if (cub->keys_states[KEY_T])
-		set_portal_on_map(cub, 'B');
-	if (cub->keys_states[KEY_Y])
-		set_portal_on_map(cub, 'O');
 	if (cub->keys_states[KEY_B] && get_time() - cub->data->baj->last_activation > 500)
 	{
 		cub->data->baj->last_activation = get_time();
@@ -247,7 +244,14 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 {
 	if (keycode && keycode > 65508)
 		return (1);
-	cub->keys_states[keycode] = PRESSED;
+	if (keycode == KEY_T)
+		set_portal_on_map(cub, 'B');
+	else if (keycode == KEY_Y)
+		set_portal_on_map(cub, 'O');
+	else if (keycode == KEY_C)
+		cub->cross_hair *= -1;
+	else
+		cub->keys_states[keycode] = PRESSED;
 	return (1);
 }
 

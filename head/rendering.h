@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:38:30 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/18 00:22:57 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/19 00:10:45 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,7 @@ void	render_view(t_cub *cub, t_position *ray_collision, \
 								const int *wall_height);
 void	set_custom_texture(int *texture_id, size_t *texture_x,
 						   t_position ray_collision, t_cub *cub);
+int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
+							  t_position ray_collision);
 
 #endif

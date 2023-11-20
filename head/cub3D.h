@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 01:31:14 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 23:35:23 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define PRESSED    1
 # define RELEASED   0
 # define BJ_PATH	"textures/bajeanno.xpm"
-# define PRTL_PATH	"textures/portal.xpm"
+# define PRTL_PATH	"textures/blue_portal.xpm"
 # define ORG_PATH	"textures/orange_portal.xpm"
 
 // X11 events
@@ -283,6 +283,7 @@ typedef struct s_cub
 	void		*mlx;
 	void		*win;
 	int			keys_states[65509];
+	size_t 		keys_repeat[65509];
 	int			win_size[2];
 	t_image		img;
 	t_image		textures[7];
@@ -295,6 +296,7 @@ typedef struct s_cub
 	char		orange_prtl;
 	char 		blue_prtl;
 	int			*wall_heights;
+	char		cross_hair;
 }		t_cub;
 
 //==================== PARSING =====================//

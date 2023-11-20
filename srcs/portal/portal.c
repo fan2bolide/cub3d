@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 20:00:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 18:45:55 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 20:09:48 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ static void	point(t_cub *cub)
 
 void	display_crosshair(t_cub *cub)
 {
-	cross(cub);
-//	point(cub);
+	if (cub->cross_hair < 0)
+		point(cub);
+	else
+		cross(cub);
 }
 

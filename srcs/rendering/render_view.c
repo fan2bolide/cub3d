@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/17 19:18:47 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/19 00:10:45 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	cub_textures_render(t_cub *cub, int wall_height, int x,
 			cub->data->baj->cur_pos);
 		cub->data->baj->last_moove = get_time();
 	}
-	return (cub_texture_put(x, cub, wall_height, ray_collision));
+	return (cub_texture_put(x, cub, wall_height, ray_collision),
+			cub_portal_texture_put(x, cub, wall_height, ray_collision));
 }
 
 void	render_view(t_cub *cub, t_position *ray_collision, \
