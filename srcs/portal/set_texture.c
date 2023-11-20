@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   set_texture.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:41:56 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 01:16:59 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/18 13:36:51 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "portal.h"
+#include "cub3D.h"
+#include "rendering.h"
 
 static bool	is_portal_texture(t_position ray_collision, t_cub *cub, int *texture_id)
 {

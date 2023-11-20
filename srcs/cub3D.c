@@ -113,6 +113,11 @@ int	main(int argc, char **argv)
 	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
 	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
 	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
+	cub->wall_distance = malloc(sizeof(double) * cub->win_size[1]);
+	cub->rays_portal = ft_calloc(sizeof(t_position) * cub->win_size[1], 1);
+	cub->angles_portal = ft_calloc(sizeof(double) * cub->win_size[1], 1);
+	cub->wall_heights_portal = ft_calloc(sizeof(int) * cub->win_size[1], 1);
+	cub->wall_distance_portal = ft_calloc(sizeof(double) * cub->win_size[1], 1);
 	if (!cub->rays || !cub->angles || !cub->wall_heights)
 		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), 0);
 	cub->data = parsing(argc, argv);

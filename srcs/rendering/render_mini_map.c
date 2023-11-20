@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 02:50:04 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/17 18:35:23 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/18 01:13:57 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,10 @@ void	render_mini_map(t_cub *cub, t_position *ray_collision)
 				put_wall(cub, i, j, 0x000000);
 			if (cub->data->map[i][j] == '0')
 				put_wall(cub, i, j, 0xFFFFFF);
+			if (cub->data->map[i][j] == 'B')
+				put_wall(cub, i, j, 0x0000FF);
+			if (cub->data->map[i][j] == 'O')
+				put_wall(cub, i, j, 0xeec900);
 			j++;
 		}
 		i++;

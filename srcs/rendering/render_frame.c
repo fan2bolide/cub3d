@@ -6,29 +6,30 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/09 02:12:05 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/19 18:48:04 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-static void	modulo_2_pi(double *angle)
+static double	modulo_2_pi(double angle)
 {
-	if (*angle < 0)
-		*angle += M_PI * 2;
-	if (*angle > M_PI * 2)
-		*angle -= M_PI * 2;
+	if (angle < 0)
+		angle += M_PI * 2;
+	if (angle >= M_PI * 2)
+		angle -= M_PI * 2;
+	return (angle);
 }
 
-int	get_wall_height(t_cub *cub, t_position ray, double angle)
+static int	get_wall_height(t_cub *cub, double wall_distance, double ray_angle)
 {
-	double	wall_distance;
 	double	wall_height;
+	double	view_angle;
 
-	wall_distance = sqrt((ray.x - cub->player_position->x) * \
-	(ray.x - cub->player_position->x) + (ray.y - cub->player_position->y) * \
-	(ray.y - cub->player_position->y));
-	wall_distance *= cos(angle - cub->view_angle);
+	view_angle = cub->view_angle;
+	while (cos(fabs(ray_angle - view_angle)) < cos(M_PI_4))
+		view_angle = modulo_2_pi(view_angle + M_PI_2);
+	wall_distance *= cos(ray_angle - view_angle);
 	wall_height = (SCREEN_DISTANCE * cub->win_size[0] / wall_distance);
 	return ((int)wall_height);
 }
@@ -38,8 +39,8 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 {
 	int		nb_segments;
 	int		win_size_2;
-	double	segments_size;
 	int		i;
+	double	segments_size;
 
 	win_size_2 = cub->win_size[1] / 2;
 	i = 0;
@@ -55,9 +56,10 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 		angle[i] = (cub->view_angle * (i <= (win_size_2))) \
 		+ (cub->view_angle * (i > (win_size_2))) \
 		- atan(nb_segments * segments_size);
-		modulo_2_pi(angle + i);
-		shoot_ray(ray_pos + i, cub, angle[i]);
-		wall_height[i] = get_wall_height(cub, ray_pos[i], angle[i]);
+		angle[i] = modulo_2_pi(angle[i]);
+		shoot_ray(ray_pos + i, cub, angle + i, cub->wall_distance + i);
+		wall_height[i] = get_wall_height(cub, cub->wall_distance[i], angle[i]);
+		cub->wall_heights_portal[i] = get_wall_height(cub, cub->wall_distance_portal[i], cub->angles_portal[i]);
 		i++;
 	}
 }

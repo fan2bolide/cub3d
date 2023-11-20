@@ -37,7 +37,7 @@ HEAD		:=	\
 				cub3D.h\
 				error_codes.h\
 				rendering.h\
-				portal.h\
+#				portal.h\
 
 HEAD_D		:=	head/
 
@@ -92,7 +92,7 @@ PARAMETERS	:= test.cub
 all			:	$(NAME)
 
 $(NAME)		:	$(LIB_A) $(OBJS_D) $(OBJS) $(MLX)
-			$(CC) $(CFLAGS) -Ofast -o $(NAME) $(OBJS) $(LIB_A) $(MLX) $(MLX_FLAGS)
+			$(CC) $(CFLAGS) -Ofast -flto -o $(NAME) $(OBJS) $(LIB_A) $(MLX) $(MLX_FLAGS)
 
 $(MLX)		:
 			$(MAKE) -C $(MLX_D)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "portal.h"
+#include "cub3D.h"
 
 static void	set_east_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 {
@@ -131,6 +131,4 @@ void	set_portal_on_map(t_cub *cub, char prtl_id)
 		else
 			set_south_portal(cub, middle_ray, prtl_id);
 	}
-	printf("%c %c\n", cub->orange_prtl, cub->blue_prtl);
-
 }
