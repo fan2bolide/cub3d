@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/21 01:49:20 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 03:35:58 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static double	modulo_2_pi(double angle)
 	return (angle);
 }
 
-static int	get_wall_height(t_cub *cub, double wall_distance, double ray_angle)
+int	get_wall_height(t_cub *cub, double wall_distance, double ray_angle)
 {
 	double	wall_height;
 	double	view_angle;
@@ -59,9 +59,6 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 		angle[i] = modulo_2_pi(angle[i]);
 		shoot_ray(ray_pos + i, cub, angle + i, cub->wall_distance + i);
 		wall_height[i] = get_wall_height(cub, cub->wall_distance[i], angle[i]);
-		if (cub->portals[i])
-			cub->portals[i]->portal->height = get_wall_height(cub, \
-		cub->portals[i]->portal->distance, cub->portals[i]->portal->angle);
 		i++;
 	}
 }
@@ -77,10 +74,10 @@ void	clear_lists(t_cub *cub)
 
 int	render_frame(t_cub *cub)
 {
+	clear_lists(cub);
 	compute_arrays(cub, cub->rays, cub->angles, cub->wall_heights);
 	render_view(cub, cub->rays, cub->wall_heights);
 	render_mini_map(cub, cub->rays);
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
-	clear_lists(cub);
 	return (1);
 }

@@ -6,11 +6,12 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/21 01:49:20 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 03:45:59 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include "rendering.h"
 
 t_position	get_delta_to_next_column(t_position ray, double ray_direction)
 {
@@ -271,6 +272,7 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 			portal->position.x = ray->x;
 			portal->position.y = ray->y;
 			portal->angle = *angle;
+			portal->height = get_wall_height(cub, portal->distance, portal->angle);
 			portal_lst = (t_portal_list *)ft_dblstnew(portal);
 			if (!portal_lst)
 				return (0);
