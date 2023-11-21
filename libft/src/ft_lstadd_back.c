@@ -27,5 +27,4 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	while (curr && curr->next)
 		curr = curr->next;
 	curr->next = new;
-	new->next = NULL;
 }

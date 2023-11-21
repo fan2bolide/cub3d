@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/20 19:25:13 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 01:37:21 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,32 +278,42 @@ typedef struct s_position
 	double	y;
 }			t_position;
 
+typedef struct s_portal
+{
+	t_position	position;
+	double		distance;
+	int			height;
+}	t_portal;
+
+typedef struct s_portal_list
+{
+	t_portal				*portal;
+	struct s_portal_list	*next;
+}	t_portal_list;
+
 typedef struct s_cub
 {
-	t_data		*data;
-	bool		is_fullscreen;
-	void		*mlx;
-	void		*win;
-	int			keys_states[65509];
-	int			win_size[2];
-	t_image		img;
-	t_image		textures[9];
-	t_position	*player_position;
-	double		view_angle;
-	double		fov;
-	size_t		last_frame_time;
-	double		*wall_distance;
-	double		*wall_distance_portal;
-	t_position	*rays;
-	t_position	*rays_portal;
-	double		*angles;
-	double		*angles_portal;
-	char		orange_prtl;
-	char 		blue_prtl;
-	int			*wall_heights;
-	char		cross_hair;
-	int			*wall_heights_portal;
-}		t_cub;
+	t_data			*data;
+	bool			is_fullscreen;
+	void			*mlx;
+	void			*win;
+	int				keys_states[65509];
+	int				win_size[2];
+	t_image			img;
+	t_image			textures[9];
+	t_position		*player_position;
+	double			view_angle;
+	double			fov;
+	size_t			last_frame_time;
+	double			*wall_distance;
+	t_position		*rays;
+	double			*angles;
+	char			orange_prtl;
+	char 			blue_prtl;
+	int				*wall_heights;
+	char			cross_hair;
+	t_portal_list	**portals;
+}	t_cub;
 
 //==================== PARSING =====================//
 t_data	*parsing(int argc, char **argv);

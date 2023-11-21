@@ -1,5 +1,7 @@
 NAME = libft.a
 
+HEAD		=	head/libft.h
+
 SRC			=	ft_atoi.c			\
 				ft_bzero.c			\
 				ft_calloc.c			\
