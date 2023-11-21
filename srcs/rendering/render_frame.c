@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_frame.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/19 18:48:04 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/20 17:58:31 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 	win_size_2 = cub->win_size[1] / 2;
 	i = 0;
 	segments_size = 2 * tan(cub->fov / 2) / (cub->win_size[1] - 1);
+	bzero(cub->wall_distance_portal, cub->win_size[1] * sizeof(double));
+	bzero(cub->wall_heights_portal, cub->win_size[1] * sizeof(int));
+	bzero(cub->rays_portal, cub->win_size[1] * sizeof(t_position));
 	while (i < cub->win_size[1])
 	{
 		ray_pos[i].x = cub->player_position->x;
@@ -59,7 +62,8 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 		angle[i] = modulo_2_pi(angle[i]);
 		shoot_ray(ray_pos + i, cub, angle + i, cub->wall_distance + i);
 		wall_height[i] = get_wall_height(cub, cub->wall_distance[i], angle[i]);
-		cub->wall_heights_portal[i] = get_wall_height(cub, cub->wall_distance_portal[i], cub->angles_portal[i]);
+		if (cub->wall_distance_portal[i])
+			cub->wall_heights_portal[i] = get_wall_height(cub, cub->wall_distance_portal[i], cub->angles_portal[i]);
 		i++;
 	}
 }

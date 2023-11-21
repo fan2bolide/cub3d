@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 23:35:23 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/20 19:25:13 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@
 # define PRESSED    1
 # define RELEASED   0
 # define BJ_PATH	"textures/bajeanno.xpm"
-# define PRTL_PATH	"textures/blue_portal.xpm"
+# define BLUE_PATH	"textures/blue_portal.xpm"
 # define ORG_PATH	"textures/orange_portal.xpm"
+# define BLUE_TR_PATH	"textures/blue_portal_transparent.xpm"
+# define ORG_TR_PATH	"textures/orange_portal_transparent.xpm"
 
 // X11 events
 # define KEY_PRESS			2
@@ -285,7 +287,7 @@ typedef struct s_cub
 	int			keys_states[65509];
 	int			win_size[2];
 	t_image		img;
-	t_image		textures[7];
+	t_image		textures[9];
 	t_position	*player_position;
 	double		view_angle;
 	double		fov;
@@ -341,5 +343,6 @@ void	set_portal_on_map(t_cub *cub, char prtl_id);
 void	set_portal_texture(int *texture_id, size_t *texture_x,
 						   t_position ray_collision, t_cub *cub);
 void	display_crosshair(t_cub *cub);
+int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal);
 
 #endif

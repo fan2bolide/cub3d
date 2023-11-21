@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:09:33 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 20:56:21 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/20 19:05:11 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,9 @@ void	set_portal_on_map(t_cub *cub, char prtl_id)
 				cub->data->map[i][j - 1] = '1';
 		i++;
 	}
-	middle_ray = cub->rays[cub->win_size[WIDTH] / 2];
+	middle_ray = cub->rays_portal[cub->win_size[WIDTH] / 2];
+	if (!middle_ray.x && !middle_ray.y)
+		middle_ray = cub->rays[cub->win_size[WIDTH] / 2];
 	if ((int)middle_ray.x == middle_ray.x)
 	{
 		if (cub->player_position->x > middle_ray.x)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/20 01:48:48 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/20 19:59:54 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ void	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 		{
 			if (*distance == 0)
 			{
+				cub->rays_portal[angle - cub->angles] = *ray;
 				cub->angles_portal[angle - cub->angles] = *angle;
 				cub->wall_distance_portal[angle - cub->angles] \
 				= compute_distance(ray_start, *ray);

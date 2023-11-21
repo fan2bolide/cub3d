@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_texture.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:41:56 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/18 13:36:51 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/20 19:26:34 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,16 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub, int *texture
 void	set_portal_texture(int *texture_id, size_t *texture_x,
 						   t_position ray_collision, t_cub *cub)
 {
-	int		save_texture_id;
-	size_t	save_texture_x;
-
-	save_texture_id = *texture_id;
-	save_texture_x = *texture_x;
+	if (ray_collision.x == 0 && ray_collision.y == 0)
+		return ;
 	if (!is_portal_texture(ray_collision, cub, texture_id))
 		return ;
+	if (cub->orange_prtl != '-' && cub->blue_prtl != '-')
+	{
+		if (*texture_id == 5)
+			*texture_id = 7;
+		if (*texture_id == 6)
+			*texture_id = 8;
+	}
 	set_custom_texture(texture_id, texture_x, ray_collision, cub);
-
 }

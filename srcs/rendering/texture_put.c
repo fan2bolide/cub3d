@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/19 00:10:45 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/20 23:27:19 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	t_iposition	texture;
 
 	set_texture_id_and_x(&texture_id, &texture.x, ray_collision, cub);
-//	set_portal_texture(&texture_id, &texture.x, ray_collision, cub);
 	screen_wall_height = wall_height;
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];
@@ -125,6 +124,42 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	{
 		texture.y = (i + (wall_height - screen_wall_height) / 2) \
 				* cub->textures[texture_id].height / wall_height;
+		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
+			cub_pixel_put(&cub->img, x, y, \
+			*((int *)(cub->textures[texture_id].addr + (texture.y * \
+			cub->textures[texture_id].line_length + texture.x * \
+			(cub->textures[texture_id].bits_per_pixel / 8)))));
+		y++;
+		i++;
+	}
+	return (y);
+}
+
+int put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_collision)
+{
+	int			i;
+	int			y;
+	int			screen_wall_height;
+	int			texture_id;
+	t_iposition	texture;
+
+	set_texture_id_and_x(&texture_id, &texture.x, ray_collision, cub);
+	screen_wall_height = wall_height;
+	if (wall_height > cub->win_size[0])
+		screen_wall_height = cub->win_size[0];
+	y = cub->win_size[0] / 2 - screen_wall_height / 2;
+	i = 0;
+	while (i < screen_wall_height)
+	{
+		texture.y = (i + (wall_height - screen_wall_height) / 2) \
+				* cub->textures[texture_id].height / wall_height;
+		if (((int)texture.x > cub->textures[texture_id].width / 5 && (int)texture.x < cub->textures[texture_id].width - cub->textures[texture_id].width / 5)
+			&& ((int)texture.y > cub->textures[texture_id].height / 5 && (int)texture.y < cub->textures[texture_id].width - cub->textures[texture_id].width / 5))
+		{
+			y++;
+			i++;
+			continue ;
+		}
 		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
 			cub_pixel_put(&cub->img, x, y, \
 			*((int *)(cub->textures[texture_id].addr + (texture.y * \
@@ -146,7 +181,7 @@ int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
 	t_iposition	texture;
 
 	texture_id = -1;
-//	set_texture_id_and_x(&texture_id, &texture.x, ray_collision, cub);
+	put_outline_texture(x, cub, wall_height, ray_collision);
 	set_portal_texture(&texture_id, &texture.x, ray_collision, cub);
 	if (texture_id == -1)
 		return (1);

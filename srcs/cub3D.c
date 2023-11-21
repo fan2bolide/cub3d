@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/20 16:55:11 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/20 22:42:39 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_position	*get_position(char **map)
 void	convert_path_to_mlx_img(t_cub *cub)
 {
 	int i;
-	static char	*custom_path[3] = {BJ_PATH, PRTL_PATH, ORG_PATH};
+	static char	*custom_path[5] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH};
 
 	i = -1;
 	while (++i < 4)
@@ -72,7 +72,7 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
-	while (i < 7)
+	while (i < 9)
 	{
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, custom_path[i - 4], &cub->textures[i].width,
 													 &cub->textures[i].height);
@@ -107,6 +107,8 @@ int	main(int argc, char **argv)
 	cub->last_frame_time = get_time();
 	cub->win_size[0] = 900;
 	cub->cross_hair = 'C';
+	cub->blue_prtl = '-';
+	cub->orange_prtl = '-';
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
@@ -299,6 +301,37 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 		cub->player_position->x = new_x;
 }
 
+void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)
+{
+	t_position	new_pos;
+	double		walk_angle;
+	double		walk_angle_save;
+
+	if ((int)new_x > (int)cub->player_position->x || (int)new_x < (int)cub->player_position->x)
+		new_pos.x = (int)new_x;
+	else
+		new_pos.x = new_x;
+	if ((int)new_y > (int)cub->player_position->y || (int)new_y < (int)cub->player_position->y)
+		new_pos.y = (int)new_y;
+	else
+		new_pos.y = new_y;
+	if (cub->keys_states[KEY_S])
+		walk_angle = cub->view_angle + M_PI;
+	else if (cub->keys_states[KEY_A])
+		walk_angle = cub->view_angle - M_PI_2;
+	else if (cub->keys_states[KEY_D])
+		walk_angle = cub->view_angle + M_PI;
+	else
+		walk_angle = cub->view_angle;
+	walk_angle_save = walk_angle;
+	if(teleport_ray(cub, &new_pos, &walk_angle, prtl_id))
+	{
+		cub->player_position->x = new_pos.x;
+		cub->player_position->y = new_pos.y;
+		cub->view_angle += walk_angle - walk_angle_save;
+	}
+}
+
 void	move_player(double x_change, double y_change, t_cub *cub)
 {
 	double	new_y;
@@ -311,8 +344,15 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		return ;
 	if (cub->data->map[(int)new_y][(int)new_x] == '1')
 		return (report_movement(new_y, new_x, cub));
+	else if (cub->data->map[(int)new_y][(int)new_x] == 'O')
+		teleport_player(new_x, new_y, 'O', cub);
+	else if (cub->data->map[(int)new_y][(int)new_x] == 'B')
+		teleport_player(new_x, new_y, 'B', cub);
+	else
+	{
 	cub->player_position->y = new_y;
 	cub->player_position->x = new_x;
+	}
 }
 
 void	cub_update_player_position(int keycode, t_cub *cub)
@@ -341,7 +381,7 @@ int close_window(t_cub *cub)
 	int	i;
 
 	i = 0;
-	while (i <= 6)
+	while (i <= 8)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
