@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 02:50:04 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/18 01:13:57 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/21 18:04:05 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	cub_put_player_on_map(t_cub *cub, t_position player)
 	}
 }
 
-void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position ray[])
+void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
 {
 	t_position	ray_dupl;
 	int			i;
@@ -67,8 +67,16 @@ void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position ray[])
 	i = 0;
 	while (i < cub->win_size[WIDTH])
 	{
-		ray_dupl.x = ray[i].x * MINIMAP_SCALE - (cub->player_position->x * MINIMAP_SCALE) + (MINIMAP_SIZE) + MINIMAP_OFFSET;
-		ray_dupl.y = ray[i].y * MINIMAP_SCALE - (cub->player_position->y * MINIMAP_SCALE) + (MINIMAP_SIZE) + MINIMAP_OFFSET;
+		if (!cub->portals[i])
+		{
+			ray_dupl.x = ray[i].x * MINIMAP_SCALE - (cub->player_position->x * MINIMAP_SCALE) + (MINIMAP_SIZE) + MINIMAP_OFFSET;
+			ray_dupl.y = ray[i].y * MINIMAP_SCALE - (cub->player_position->y * MINIMAP_SCALE) + (MINIMAP_SIZE) + MINIMAP_OFFSET;
+		}
+		else
+		{
+			ray_dupl.x = cub->portals[i]->portal->position.x * MINIMAP_SCALE - (cub->player_position->x * MINIMAP_SCALE) + (MINIMAP_SIZE) + MINIMAP_OFFSET;
+			ray_dupl.y = cub->portals[i]->portal->position.y * MINIMAP_SCALE - (cub->player_position->y * MINIMAP_SCALE) + (MINIMAP_SIZE) + MINIMAP_OFFSET;
+		}
 		cub_put_line(cub, player, ray_dupl, 0xFF0000);
 		i++;
 	}
