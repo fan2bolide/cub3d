@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/20 17:58:31 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 01:49:20 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 		angle[i] = modulo_2_pi(angle[i]);
 		shoot_ray(ray_pos + i, cub, angle + i, cub->wall_distance + i);
 		wall_height[i] = get_wall_height(cub, cub->wall_distance[i], angle[i]);
+		if (cub->portals[i])
+			cub->portals[i]->portal->height = get_wall_height(cub, \
+		cub->portals[i]->portal->distance, cub->portals[i]->portal->angle);
 		i++;
 	}
 }

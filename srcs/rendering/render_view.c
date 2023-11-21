@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/20 18:26:18 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 01:50:17 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ int	cub_textures_render(t_cub *cub, int wall_height, int x,
 			cub->data->baj->cur_pos);
 		cub->data->baj->last_moove = get_time();
 	}
-	return (cub_texture_put(x, cub, wall_height, ray_collision),
-			cub_portal_texture_put(x, cub, cub->wall_heights_portal[x], cub->rays_portal[x]));
+	cub_texture_put(x, cub, wall_height, ray_collision);
+	if (cub->portals[x])
+		cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, cub->portals[x]->portal->position);
+	return (1);
 }
 
 void	render_view(t_cub *cub, t_position *ray_collision, \
@@ -47,10 +49,6 @@ void	render_view(t_cub *cub, t_position *ray_collision, \
 		i++;
 	}
 	i = 0;
-	int k = 0;
-	while (cub->wall_heights_portal[k++])
-		if (!cub->rays_portal[k - 1].y && !cub->rays_portal[k - 1].x)
-			printf("%i\n", cub->wall_heights_portal[k - 1]);
 	while (i < cub->win_size[1])
 	{
 		cub_textures_render(cub, wall_height[i], i, ray_collision[i]);

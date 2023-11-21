@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/21 01:37:21 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 01:40:06 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,6 +283,7 @@ typedef struct s_portal
 	t_position	position;
 	double		distance;
 	int			height;
+	double		angle;
 }	t_portal;
 
 typedef struct s_portal_list

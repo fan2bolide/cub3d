@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:09:33 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/20 19:05:11 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 02:01:36 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ static void	set_south_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 
 void	set_portal_on_map(t_cub *cub, char prtl_id)
 {
-	t_position	middle_ray;
+	t_position 	middle_ray;
 	size_t		i;
 	size_t		j;
 
@@ -116,8 +116,9 @@ void	set_portal_on_map(t_cub *cub, char prtl_id)
 				cub->data->map[i][j - 1] = '1';
 		i++;
 	}
-	middle_ray = cub->rays_portal[cub->win_size[WIDTH] / 2];
-	if (!middle_ray.x && !middle_ray.y)
+	if (cub->portals[cub->win_size[WIDTH] / 2])
+		middle_ray = cub->portals[cub->win_size[WIDTH] / 2]->portal->position;
+	else
 		middle_ray = cub->rays[cub->win_size[WIDTH] / 2];
 	if ((int)middle_ray.x == middle_ray.x)
 	{

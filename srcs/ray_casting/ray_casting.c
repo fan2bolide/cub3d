@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/20 23:46:24 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/21 01:49:20 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,9 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 			if (!portal)
 				return (0);
 			portal->distance = *distance + compute_distance(ray_start, *ray);
+			portal->position.x = ray->x;
+			portal->position.y = ray->y;
+			portal->angle = *angle;
 			portal_lst = (t_portal_list *)ft_lstnew(portal);
 			if (!portal_lst)
 				return (0);
