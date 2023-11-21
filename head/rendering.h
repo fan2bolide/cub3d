@@ -31,4 +31,7 @@ void	set_custom_texture(int *texture_id, size_t *texture_x,
 int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
 							  t_position ray_collision);
 
+int	get_wall_height(t_cub *cub, double wall_distance, double ray_angle);
+
+
 #endif

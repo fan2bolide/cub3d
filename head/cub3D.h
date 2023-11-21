@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/21 01:40:06 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 03:23:27 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,6 +289,7 @@ typedef struct s_portal
 typedef struct s_portal_list
 {
 	t_portal				*portal;
+	struct s_portal_list	*prev;
 	struct s_portal_list	*next;
 }	t_portal_list;
 
