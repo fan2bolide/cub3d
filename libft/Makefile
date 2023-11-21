@@ -87,6 +87,16 @@ SRC			=	ft_atoi.c			\
 				can_be_converted_to_long.c \
 				ft_free_arr.c \
 				tab_dup_empty.c \
+				ft_dblstmap.c \
+                ft_dblstlast.c \
+                ft_dblstclear.c \
+                ft_dblstnew.c \
+                ft_dblstadd_front.c \
+                ft_dblstfirst.c \
+                ft_dblstdelone.c \
+                ft_dblstsize.c \
+                ft_dblstadd_back.c \
+
 
 OBJ = $(addprefix obj/,$(SRC:.c=.o))
 

@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 13:56:05 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/06 02:53:34 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 03:13:29 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@ typedef struct s_list
 	void			*content;
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_dblist
+{
+	void                    *content;
+	struct s_dblist *prev;
+	struct s_dblist *next;
+}       t_dblist;
 
 int			ft_isspace(int c);
 int			ft_isdigit(int c);
@@ -139,5 +146,14 @@ int			str_starts_with(char *str, char *keyword);
 bool		str_contains_digits_only(char *str);
 bool		can_be_converted_to_long(char *argv1);
 void		ft_free_arr(void **array, void (*del)(void *));
+
+void    ft_dblstadd_back(t_dblist **lst, t_dblist *new);
+void    ft_dblstadd_front(t_dblist **lst, t_dblist *new);
+void    ft_dblstclear(t_dblist **lst, void (*del)(void*));
+void    ft_dblstdelone(t_dblist *lst, void (*del)(void*));
+t_dblist        *ft_dblstfirst(t_dblist *list);
+t_dblist        *ft_dblstlast(t_dblist *lst);
+size_t  ft_dblstsize(t_dblist *lst);
+t_dblist	*ft_dblstnew(void *content);
 
 #endif
