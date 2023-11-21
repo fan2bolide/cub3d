@@ -271,10 +271,10 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 			portal->position.x = ray->x;
 			portal->position.y = ray->y;
 			portal->angle = *angle;
-			portal_lst = (t_portal_list *)ft_lstnew(portal);
+			portal_lst = (t_portal_list *)ft_dblstnew(portal);
 			if (!portal_lst)
 				return (0);
-			ft_lstadd_back((t_list **)&cub->portals[angle - cub->angles], (t_list *)portal_lst);
+			ft_dblstadd_back((t_dblist **)&cub->portals[angle - cub->angles], (t_dblist *)portal_lst);
 			if (*distance > 100)
 				return (1);
 			*distance += compute_distance(ray_start, *ray);
