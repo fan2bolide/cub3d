@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_mini_map.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 02:50:04 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/21 23:41:37 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/22 01:56:13 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void	render_mini_map(t_cub *cub, t_position *ray_collision)
 			if (cub->data->map[i][j] == 'B')
 				put_wall(cub, i, j, 0x889BF8);
 			if (cub->data->map[i][j] == 'O')
-				put_wall(cub, i, j, 0xeec900);
+				put_wall(cub, i, j, 0xf4a460);
 			j++;
 		}
 		i++;

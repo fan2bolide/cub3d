@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/21 03:23:27 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/21 16:59:09 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@
 # define ORG_PATH	"textures/orange_portal.xpm"
 # define BLUE_TR_PATH	"textures/blue_portal_transparent.xpm"
 # define ORG_TR_PATH	"textures/orange_portal_transparent.xpm"
+# define LOAD_SCREEN	"textures/load_screen.xpm"
 
 // X11 events
 # define KEY_PRESS			2
@@ -201,6 +202,7 @@ enum e_key_codes
 	KEY_SEMI_COLON = 59,
 	KEY_COMMAND = 65507,
 	KEY_BACKSPACE = 65288,
+	KEY_RETURN	= 65293,
 	KEY_F11 = 65480
 };
 # else
@@ -295,6 +297,7 @@ typedef struct s_portal_list
 
 typedef struct s_cub
 {
+	t_image			*load_screen;
 	t_data			*data;
 	bool			is_fullscreen;
 	void			*mlx;

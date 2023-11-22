@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/20 23:41:36 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/22 02:10:32 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,19 @@ size_t	get_time(void)
 	return (m_seconds);
 }
 
+void display_load_screen(t_cub *cub)
+{
+	int 	height;
+	int		widht;
+	int		x;
+	int 	y;
+
+	cub->load_screen= mlx_xpm_file_to_image(cub->mlx, LOAD_SCREEN, &widht, &height);
+	x = (cub->win_size[WIDTH] / 2) - (widht / 2);
+	y = (cub->win_size[HEIGHT] / 2) - (height / 2);
+	mlx_put_image_to_window(cub->mlx, cub->win, cub->load_screen,x , y);
+}
+
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -128,6 +141,7 @@ int	main(int argc, char **argv)
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	convert_path_to_mlx_img(cub);
+	display_load_screen(cub);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
 	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
@@ -149,6 +163,13 @@ void	cub_update_fov(int keycode, t_cub *cub)
 	if (cub->fov < M_PI_4)
 		cub->fov = M_PI_4;
 }
+
+void	remove_load_screen(t_cub *cub)
+{
+	mlx_destroy_image(cub->mlx, cub->load_screen);
+	cub->load_screen = NULL;
+}
+
 #if defined(__linux__)
 
 void	cub_full_screen(t_cub *cub)
@@ -248,14 +269,24 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 {
 	if (keycode && keycode > 65508)
 		return (1);
-	if (keycode == KEY_T)
-		set_portal_on_map(cub, 'B');
-	else if (keycode == KEY_Y)
-		set_portal_on_map(cub, 'O');
-	else if (keycode == KEY_C)
-		cub->cross_hair *= -1;
+	if (cub->load_screen)
+	{
+		if (keycode == KEY_RETURN)
+			remove_load_screen(cub);
+		else if (keycode == KEY_ESC)
+			return (close_window(cub));
+	}
 	else
-		cub->keys_states[keycode] = PRESSED;
+	{
+		if (keycode == KEY_T)
+			set_portal_on_map(cub, 'B');
+		else if (keycode == KEY_Y)
+			set_portal_on_map(cub, 'O');
+		else if (keycode == KEY_C)
+			cub->cross_hair *= -1;
+		else
+			cub->keys_states[keycode] = PRESSED;
+	}
 	return (1);
 }
 
@@ -289,13 +320,20 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 	if ((int)old_x != (int)new_x)
 	{
 		if ((int)old_y != (int)new_y)
-			if (cub->data->map[(int)new_y][(int)old_x] == '1')
+		{
+			if (ft_isset(cub->data->map[(int) old_y][(int) new_x], "BO"))
+				return;
+			if (cub->data->map[(int) new_y][(int) old_x] == '1')
 				return (cub->player_position->x = new_x, (void) 0);
+		}
+		if (ft_isset(cub->data->map[(int)new_y][(int)old_x], "BO"))
+			return ;
 		cub->player_position->y = new_y;
 		return ;
 	}
 	if ((int)old_y != (int)new_y)
-		cub->player_position->x = new_x;
+		if (!ft_isset(cub->data->map[(int)old_y][(int)new_x], "BO"))
+			cub->player_position->x = new_x;
 }
 
 void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)

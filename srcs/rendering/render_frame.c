@@ -74,6 +74,8 @@ void	clear_lists(t_cub *cub)
 
 int	render_frame(t_cub *cub)
 {
+	if (cub->load_screen)
+		return (1);
 	clear_lists(cub);
 	compute_arrays(cub, cub->rays, cub->angles, cub->wall_heights);
 	render_view(cub, cub->rays, cub->wall_heights);
