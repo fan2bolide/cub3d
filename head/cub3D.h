@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/21 16:59:09 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/22 02:28:22 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ enum e_key_codes
 	KEY_SEMI_COLON = 41,
 	KEY_COMMAND = 259,
 	KEY_BACKSPACE = 51,
+	KEY_RETURN	= 36,
 	KEY_F11 = 321
 };
 # elif defined(__linux__)
