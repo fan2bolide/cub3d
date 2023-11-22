@@ -64,5 +64,5 @@ void	set_portal_texture(int *texture_id, size_t *texture_x,
 		if (*texture_id == 6)
 			*texture_id = 8;
 	}
-	set_custom_texture(texture_id, texture_x, ray_collision, cub);
+	set_custom_texture(*texture_id, texture_x, ray_collision, cub);
 }

@@ -25,7 +25,7 @@ int	cub_textures_render(t_cub *cub, int wall_height, int x,
 	if (!cub->portals[x])
 		return(cub_texture_put(x, cub, wall_height, ray_collision), 1);
 	cub_texture_put(x, cub, wall_height, ray_collision);
-	cub->portals[x] = ft_dblstlast((t_dblist *)cub->portals[x]);
+	cub->portals[x] = (t_portal_list *)ft_dblstlast((t_dblist *)cub->portals[x]);
 	cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, cub->portals[x]->portal->position);
 	while (cub->portals[x]->prev)
 	{
