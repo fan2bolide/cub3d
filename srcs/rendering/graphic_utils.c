@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 04:06:32 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/17 18:20:47 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/23 19:48:27 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,21 @@ void	cub_put_line(t_cub *cub, t_position a, t_position b, int color)
 	{
 		if (round(x) >= 0 && round(x) < cub->win_size[WIDTH] && round(y) >= 0
 			&& round(y) < cub->win_size[HEIGHT])
-			if ((int)round(y) > a.y - MINIMAP_SIZE && (int)round(y) < a.y + MINIMAP_SIZE && (int)round(x) > a.x - MINIMAP_SIZE && (int)round(x) < a.x + MINIMAP_SIZE)
+			if ((int)round(y) > a.y - MINIMAP_SIZE \
+			&& (int)round(y) < a.y + MINIMAP_SIZE \
+			&& (int)round(x) > a.x - MINIMAP_SIZE \
+			&& (int)round(x) < a.x + MINIMAP_SIZE)
 				cub_pixel_put(&cub->img, (int)round(x), (int)round(y), color);
 		x += (b.x - a.x) / (double)steps;
 		y += (b.y - a.y) / (double)steps;
 		i++;
 	}
+}
+
+int	pixel_is_in_minimap(int x, int y, t_cub *cub)
+{
+	return (y > (cub->player_position->y * MINIMAP_SCALE) - MINIMAP_SIZE \
+		&& y < (cub->player_position->y * MINIMAP_SCALE) + MINIMAP_SIZE - 1 \
+		&& x > (cub->player_position->x * MINIMAP_SCALE) - MINIMAP_SIZE \
+		&& x < cub->player_position->x * MINIMAP_SCALE + MINIMAP_SIZE - 1);
 }

@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/22 01:22:52 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/22 01:27:48 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_colli
 	t_iposition	texture;
 
 	texture_id = set_texture_id_and_x(&texture.x, ray_collision, cub,
-	((t_portal_list *)ft_dblstlast((t_dblist *)cub->portals[x]))->portal->angle);
+	((t_prtl_list *)ft_dblstlast((t_dblist *)cub->portals[x]))->portal->angle);
 	screen_wall_height = wall_height;
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];

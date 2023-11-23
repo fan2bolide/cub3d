@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_frame.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/21 03:35:58 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/23 18:55:18 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	get_wall_height(t_cub *cub, double wall_distance, double ray_angle)
 	double	view_angle;
 
 	view_angle = cub->view_angle;
-	while (cos(fabs(ray_angle - view_angle)) < cos(M_PI_4))
+	while (cos(fabs(ray_angle - view_angle)) < cos(cub->fov / 2))
 		view_angle = modulo_2_pi(view_angle + M_PI_2);
 	wall_distance *= cos(ray_angle - view_angle);
 	wall_height = (SCREEN_DISTANCE * cub->win_size[0] / wall_distance);
@@ -65,7 +65,7 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 
 void	clear_lists(t_cub *cub)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < cub->win_size[WIDTH])
