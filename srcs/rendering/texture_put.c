@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_put.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/22 01:22:52 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/24 15:35:41 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	return (y);
 }
 
-int put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_collision)
+int 	put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_collision)
 {
 	int			i;
 	int			y;
@@ -159,7 +159,7 @@ int put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_colli
 		texture.y = (i + (wall_height - screen_wall_height) / 2) \
 				* cub->textures[texture_id].height / wall_height;
 		if (((int)texture.x > cub->textures[texture_id].width / 5 && (int)texture.x < cub->textures[texture_id].width - cub->textures[texture_id].width / 5)
-			&& ((int)texture.y > cub->textures[texture_id].height / 5 && (int)texture.y < cub->textures[texture_id].width - cub->textures[texture_id].width / 5))
+			&& ((int)texture.y > cub->textures[texture_id].height / 5 && (int)texture.y < cub->textures[texture_id].height - cub->textures[texture_id].width / 5))
 		{
 			y++;
 			i++;
