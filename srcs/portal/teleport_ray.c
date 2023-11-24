@@ -6,14 +6,16 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 20:16:39 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/23 23:56:07 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/24 03:09:59 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-void	tp_from_west(t_position *ray, t_position portal_position, \
-									double *angle, char portal_orientation)
+void	tp_from_west(	t_position *ray,
+						t_position portal_position,
+						double *angle,
+						char portal_orientation)
 {
 	double	offset;
 
@@ -35,8 +37,10 @@ void	tp_from_west(t_position *ray, t_position portal_position, \
 					+ ((portal_orientation == 'W') * M_PI);
 }
 
-void	tp_from_east(t_position *ray, t_position portal_position, \
-									double *angle, char portal_orientation)
+void	tp_from_east(	t_position *ray,
+						t_position portal_position,
+						double *angle,
+						char portal_orientation)
 {
 	double	offset;
 
@@ -58,8 +62,10 @@ void	tp_from_east(t_position *ray, t_position portal_position, \
 					+ (M_PI * (portal_orientation == 'E'));
 }
 
-void	tp_from_south(t_position *ray, \
-			t_position portal_position, double *angle, char portal_orientation)
+void	tp_from_south(	t_position *ray,
+						t_position portal_position,
+						double *angle,
+						char portal_orientation)
 {
 	double	offset;
 
@@ -81,8 +87,10 @@ void	tp_from_south(t_position *ray, \
 					+ (-M_PI_2 * (portal_orientation == 'W'));
 }
 
-void	tp_from_north(t_position *ray, \
-			t_position portal_position, double *angle, char portal_orientation)
+void	tp_from_north(	t_position *ray,
+						t_position portal_position,
+						double *angle,
+						char portal_orientation)
 {
 	double	offset;
 
