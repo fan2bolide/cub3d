@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/24 00:01:11 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/24 04:28:00 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,13 @@ void display_load_screen(t_cub *cub)
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->load_screen,x , y);
 }
 
-int	main(int argc, char **argv)
+t_cub	*init_game(int argc, char **argv)
 {
 	t_cub	*cub;
 
 	cub = malloc(sizeof (t_cub));
+	if (!cub)
+		return (NULL);
 	ft_bzero(cub->keys_states, 65509 * sizeof(int));
 	cub->is_fullscreen = false;
 	cub->last_frame_time = get_time();
@@ -140,7 +142,7 @@ int	main(int argc, char **argv)
 	cub->blue_prtl = '-';
 	cub->orange_prtl = '-';
 	if (cub_check_args(argc, argv, cub))
-		return (free(cub), 1);
+		return (free(cub), NULL);
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
 	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
 	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
@@ -148,15 +150,29 @@ int	main(int argc, char **argv)
 	cub->wall_distance = malloc(sizeof(double) * cub->win_size[1]);
 	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
 	if (!cub->rays || !cub->angles || !cub->wall_heights)
-		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), 0);
+		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), NULL);
 	cub->data = parsing(argc, argv);
 	if (!cub->data)
-		return (free(cub), 1);
+		return (free(cub), NULL);
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position->x += 0.5;
 	cub->player_position->y += 0.5;
+	return (cub);
+}
+
+int	main(int argc, char **argv)
+{
+	t_cub	*cub;
+
+	cub = init_game(argc, argv);
+	if (!cub)
+		return (ft_putstr_fd(ALLOC_ERR, 2), 1);
 	cub->mlx = mlx_init();
+	if (!cub->mlx)
+		return (ft_putstr_fd("Failed to create mlx pointer\n", 2), 1);
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
+	if (!cub->win)
+		return (ft_putstr_fd("failed to create window\n", 2), 1);
 	convert_path_to_mlx_img(cub);
 	display_load_screen(cub);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);

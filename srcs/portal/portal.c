@@ -14,8 +14,8 @@
 
 static void	cross(t_cub *cub)
 {
-	t_iposition map_center;
-	t_iposition cross_corner;
+	t_int_position map_center;
+	t_int_position cross_corner;
 
 	map_center.x = cub->win_size[WIDTH] / 2;
 	map_center.y = cub->win_size[HEIGHT] / 2;
@@ -35,7 +35,7 @@ static void	cross(t_cub *cub)
 
 static void	point(t_cub *cub)
 {
-	t_iposition map_center;
+	t_int_position map_center;
 	int	i;
 	int	j;
 	double	cos_calc;

@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/24 00:21:04 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/24 04:15:00 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include "libft.h"
 # include <errno.h>
 # include <sys/time.h>
+# include <pthread.h>
 
 //=================== DEFINES  =====================//
 
@@ -231,7 +232,7 @@ enum e_key_codes
 # define HEIGHT 0
 # define WIDTH 1
 
-//=================== STUCTURES ====================//
+//=================== STRUCTURES ====================//
 typedef struct s_color{
 	unsigned char	blue;
 	unsigned char	green;
@@ -239,22 +240,22 @@ typedef struct s_color{
 	unsigned char	transparency;
 }	t_color;
 
-typedef struct s_iposition
+typedef struct s_int_position
 {
 	size_t	x;
 	size_t	y;
-}	t_iposition;
+}	t_int_position;
 
 typedef struct s_bajeanno
 {
-	bool		is_activated;
-	t_iposition	*cur_pos;
-	int			x;
-	int			y;
-	char		orientation;
-	size_t		last_activation;
-	size_t		last_moove;
-	size_t		speed;
+	bool			is_activated;
+	t_int_position	*cur_pos;
+	int				x;
+	int				y;
+	char			orientation;
+	size_t			last_activation;
+	size_t			last_move;
+	size_t			speed;
 }	t_bajeanno;
 
 typedef struct s_data{
@@ -351,12 +352,14 @@ int			check_assignation(t_data *data);
 int			check_format(t_data *data);
 t_position	*get_position(char **map);
 int			get_wall_surroundment(t_data *data);
-void		clear_line(char **w_surr, t_iposition *cur_pos);
-int			paint_w_surr(size_t i, t_bajeanno *next_one, t_iposition *cur_pos, \
-														char **w_surr);
+void		clear_line(char **w_surr, t_int_position *cur_pos);
+int			paint_w_surr(	size_t i, \
+							t_bajeanno *next_one, \
+							t_int_position *cur_pos, \
+							char **w_surr);
 void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
-t_iposition	get_next_baj(char **w_surr, t_bajeanno *next_one, \
-										t_iposition *cur_pos);
+t_int_position	get_next_baj(char **w_surr, t_bajeanno *next_one, \
+										t_int_position *cur_pos);
 
 void		set_portal_on_map(t_cub *cub, char prtl_id);
 void		set_portal_texture(int *texture_id, size_t *texture_x,
