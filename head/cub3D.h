@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/21 16:59:09 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/25 01:51:05 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,20 @@
 
 # define PRESSED    1
 # define RELEASED   0
+
+// ========================= PATHS ============================= //
 # define BJ_PATH	"textures/bajeanno.xpm"
 # define BLUE_PATH	"textures/blue_portal.xpm"
 # define ORG_PATH	"textures/orange_portal.xpm"
 # define BLUE_TR_PATH	"textures/blue_portal_transparent.xpm"
 # define ORG_TR_PATH	"textures/orange_portal_transparent.xpm"
+# define BLUE_OUT_P		"textures/outline_blue.xpm"
+# define OR_OUT_P		"textures/outline_orange.xpm"
 # define LOAD_SCREEN	"textures/load_screen.xpm"
+# define MENU_BG		"textures/menu_bg.xpm"
+# define BUTTON			"textures/button.xpm"
+# define BUTTON_SH		"textures/button_shadow.xpm"
+# define CHECK			"textures/check.xpm"
 
 // X11 events
 # define KEY_PRESS			2
@@ -202,6 +210,7 @@ enum e_key_codes
 	KEY_SEMI_COLON = 59,
 	KEY_COMMAND = 65507,
 	KEY_BACKSPACE = 65288,
+	KEY_TAB	= 65289,
 	KEY_RETURN	= 65293,
 	KEY_F11 = 65480
 };
@@ -274,6 +283,20 @@ typedef struct s_image
 	int		height;
 }			t_image;
 
+typedef struct s_menu
+{
+	t_image menu_bg;
+	t_image checker_plain;
+	t_image button;
+	t_image button_shadow;
+	int 	x;
+	int		y;
+	bool	on_screen;
+	int 	cross_hair;
+	int 	outline;
+	size_t	time_pressed;
+}			t_menu;
+
 typedef struct s_position
 {
 	double	x;
@@ -297,7 +320,7 @@ typedef struct s_portal_list
 
 typedef struct s_cub
 {
-	t_image			*load_screen;
+	t_image			load_screen;
 	t_data			*data;
 	bool			is_fullscreen;
 	void			*mlx;
@@ -305,7 +328,7 @@ typedef struct s_cub
 	int				keys_states[65509];
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[9];
+	t_image			textures[11];
 	t_position		*player_position;
 	double			view_angle;
 	double			fov;
@@ -318,6 +341,7 @@ typedef struct s_cub
 	int				*wall_heights;
 	char			cross_hair;
 	t_portal_list	**portals;
+	t_menu 			menu;
 }	t_cub;
 
 //==================== PARSING =====================//
@@ -359,5 +383,11 @@ void	set_portal_texture(int *texture_id, size_t *texture_x,
 						   t_position ray_collision, t_cub *cub);
 void	display_crosshair(t_cub *cub);
 int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal);
+unsigned int	get_pixel_color(t_image *data, int x, int y);
+
+//===================== MENU ======================//
+void	summon_game_menu(t_cub *cub, int dir);
+void	load_game_menu(t_cub *cub);
+void	handle_menu(t_cub *cub);
 
 #endif

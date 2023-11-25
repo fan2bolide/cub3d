@@ -277,7 +277,7 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 			if (!portal_lst)
 				return (0);
 			ft_dblstadd_back((t_dblist **)&cub->portals[angle - cub->angles], (t_dblist *)portal_lst);
-			if (*distance > 100)
+			if (*distance > 300)
 				return (1);
 			*distance += compute_distance(ray_start, *ray);
 			if (!teleport_ray(cub, ray, angle, collision_point))

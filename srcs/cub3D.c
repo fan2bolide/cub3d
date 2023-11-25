@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/22 02:10:32 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/25 01:22:41 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_position	*get_position(char **map)
 void	convert_path_to_mlx_img(t_cub *cub)
 {
 	int i;
-	static char	*custom_path[5] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH};
+	static char	*custom_path[7] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P};
 
 	i = -1;
 	while (++i < 4)
@@ -72,7 +72,7 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
-	while (i < 9)
+	while (i < 11)
 	{
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, custom_path[i - 4], &cub->textures[i].width,
 													 &cub->textures[i].height);
@@ -97,6 +97,26 @@ size_t	get_time(void)
 	return (m_seconds);
 }
 
+void	display_background(t_cub *cub, int start_x, int start_y)
+{
+	int x;
+	int	y;
+
+	x = 0;
+	while (x < cub->win_size[WIDTH])
+	{
+		y = 0;
+		while (y < cub->win_size[HEIGHT])
+		{
+			if (y < start_y || y > start_y + cub->load_screen.height || x < start_x || x > start_x + cub->load_screen.width)
+				cub_pixel_put(&cub->img, x, y, 0x2089ef);
+			y++;
+		}
+		x++;
+	}
+	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
+}
+
 void display_load_screen(t_cub *cub)
 {
 	int 	height;
@@ -104,11 +124,45 @@ void display_load_screen(t_cub *cub)
 	int		x;
 	int 	y;
 
-	cub->load_screen= mlx_xpm_file_to_image(cub->mlx, LOAD_SCREEN, &widht, &height);
+	cub->load_screen.img = mlx_xpm_file_to_image(cub->mlx, LOAD_SCREEN, &widht, &height);
+	mlx_get_data_addr(cub->load_screen.img, &cub->load_screen.bits_per_pixel, &cub->load_screen.line_length, &cub->load_screen.endian);
 	x = (cub->win_size[WIDTH] / 2) - (widht / 2);
 	y = (cub->win_size[HEIGHT] / 2) - (height / 2);
-	mlx_put_image_to_window(cub->mlx, cub->win, cub->load_screen,x , y);
+	display_background(cub, x, y);
+	mlx_put_image_to_window(cub->mlx, cub->win, cub->load_screen.img, x, y);
 }
+
+//void display_load_screen(t_cub *cub, int max_x, int max_y)
+//{
+//	int		x;
+//	int 	y;
+//	int 	start_x;
+//	int 	start_y;
+//	int 	color;
+//
+//	cub->load_screen.img = mlx_xpm_file_to_image(cub->mlx, LOAD_SCREEN, &cub->load_screen.width, &cub->load_screen.height);
+//	cub->load_screen.addr = mlx_get_data_addr(cub->load_screen.img, &cub->load_screen.bits_per_pixel, &cub->load_screen.line_length, &cub->load_screen.endian);
+//	start_x = (max_x / 2) - (cub->load_screen.width / 2);
+//	start_y = (max_y/ 2) - (cub->load_screen.height / 2);
+//	x = 0;
+//	while (x < max_x)
+//	{
+//		y = 0;
+//		while (y < max_y)
+//		{
+//			if (x >= start_x && x <= start_x + cub->load_screen.width && y >= start_y && y <= start_y + cub->load_screen.height)
+//				color = *((int *)(cub->load_screen.addr + ((y - start_y)* \
+//					cub->load_screen.line_length + (x - start_x) * \
+//					(cub->load_screen.bits_per_pixel / 8))));
+//			else
+//				color = 1234;
+//			cub_pixel_put(&cub->img, x, y, color);
+//			y++;
+//		}
+//		x++;
+//	}
+//	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img,x , y);
+//}
 
 int	main(int argc, char **argv)
 {
@@ -141,10 +195,11 @@ int	main(int argc, char **argv)
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	convert_path_to_mlx_img(cub);
-	display_load_screen(cub);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
 	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
+	display_load_screen(cub);
+	load_game_menu(cub);
 	cub->fov = M_PI_2;
 	if (!render_frame(cub))
 		return (close_window(cub), 1);
@@ -166,57 +221,14 @@ void	cub_update_fov(int keycode, t_cub *cub)
 
 void	remove_load_screen(t_cub *cub)
 {
-	mlx_destroy_image(cub->mlx, cub->load_screen);
-	cub->load_screen = NULL;
+	mlx_destroy_image(cub->mlx, cub->load_screen.img);
+	cub->load_screen.img = NULL;
 }
-
-#if defined(__linux__)
-
-void	cub_full_screen(t_cub *cub)
-{
-	cub->keys_states[KEY_F11] = RELEASED;
-	if (cub->is_fullscreen == false)
-	{
-		cub->is_fullscreen = true;
-		mlx_get_screen_size(cub->mlx, &(cub->win_size[1]), &(cub->win_size[0]));
-	}
-	else
-	{
-		cub->is_fullscreen = false;
-		cub->win_size[0] = 900;
-		cub->win_size[1] = cub->win_size[0] * 16 / 10;
-	}
-	free(cub->rays);
-	free(cub->angles);
-	free(cub->wall_heights);
-	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
-	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
-	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
-	if (!cub->rays || !cub->angles || !cub->wall_heights)
-		return (close_window(cub), (void)0);
-	mlx_destroy_image(cub->mlx, cub->img.img);
-	mlx_clear_window(cub->mlx, cub->win);
-	mlx_destroy_window(cub->mlx, cub->win);
-	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
-	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
-	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
-	&cub->img.line_length, &cub->img.endian);
-	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
-	if (!render_frame(cub))
-		return (close_window(cub), (void) 0);
-	cub_mlx_config(cub);
-	mlx_loop(cub->mlx);
-}
-#elif defined(__APPLE__)
-
-void	cub_full_screen(t_cub *cub)
-{
-	(void)cub;
-}
-#endif
 
 int	perform_actions(t_cub *cub)
 {
+	if ((cub->menu.cross_hair == 2 && cub->cross_hair > 0) || (cub->menu.cross_hair == 1 && cub->cross_hair < 0))
+		cub->cross_hair *= -1;
 	if (cub->keys_states[KEY_ESC])
 		return (close_window(cub));
 	if (cub->keys_states[KEY_Z])
@@ -237,8 +249,6 @@ int	perform_actions(t_cub *cub)
 		cub_update_view_angle(KEY_LEFT, cub);
 	if (cub->keys_states[KEY_RIGHT])
 		cub_update_view_angle(KEY_RIGHT, cub);
-	if (cub->keys_states[KEY_F11])
-		cub_full_screen(cub);
 	if (cub->keys_states[KEY_V] && cub->data->baj->speed < 3000)
 		cub->data->baj->speed += 5;
 	if (cub->keys_states[KEY_N] && cub->data->baj->speed > 100)
@@ -269,25 +279,41 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 {
 	if (keycode && keycode > 65508)
 		return (1);
-	if (cub->load_screen)
+	if (cub->load_screen.img)
 	{
 		if (keycode == KEY_RETURN)
 			remove_load_screen(cub);
-		else if (keycode == KEY_ESC)
-			return (close_window(cub));
 	}
-	else
+	else if (!cub->menu.on_screen || keycode == KEY_TAB)
 	{
 		if (keycode == KEY_T)
 			set_portal_on_map(cub, 'B');
 		else if (keycode == KEY_Y)
 			set_portal_on_map(cub, 'O');
-		else if (keycode == KEY_C)
-			cub->cross_hair *= -1;
+		else if (keycode == KEY_TAB)
+			handle_menu(cub);
 		else
 			cub->keys_states[keycode] = PRESSED;
 	}
+	if (keycode == KEY_ESC)
+		return (close_window(cub));
 	return (1);
+}
+
+int	cub_handle_mouse(int button, int x, int y, t_cub *cub)
+{
+	mlx_mouse_get_pos(cub->mlx, cub->win, &x, &y);
+	if (cub->menu.on_screen && x >= cub->menu.x + 516 && x < cub->menu.x + 516 + cub->menu.checker_plain.width && y >= cub->menu.y + 578 && y < cub->menu.y + 578 + cub->menu.checker_plain.height)
+		cub->menu.outline = 2;
+	if (cub->menu.on_screen && x >= cub->menu.x + 516 && x < cub->menu.x + 516 + cub->menu.checker_plain.width && y >= cub->menu.y + 507 && y < cub->menu.y + 507 + cub->menu.checker_plain.height)
+		cub->menu.outline = 1;
+	if (cub->menu.on_screen && x >= cub->menu.x + 382 && x < cub->menu.x + 382 + cub->menu.checker_plain.width && y >= cub->menu.y + 322 && y < cub->menu.y + 322 + cub->menu.checker_plain.height)
+		cub->menu.cross_hair = 1;
+	if (cub->menu.on_screen && x >= cub->menu.x + 477 && x < cub->menu.x + 477 + cub->menu.checker_plain.width && y >= cub->menu.y + 322 && y < cub->menu.y + 322 + cub->menu.checker_plain.height)
+		cub->menu.cross_hair = 2;
+	if (cub->menu.on_screen && x >= cub->menu.x + 420 && x < cub->menu.x + 420 + cub->menu.button.width && y >= cub->menu.y + 60 && y < cub->menu.y + 60 + cub->menu.button.height)
+		handle_menu(cub);
+	return (0);
 }
 
 void cub_mlx_config(t_cub *cub)
@@ -295,7 +321,8 @@ void cub_mlx_config(t_cub *cub)
 	mlx_hook(cub->win, KEY_PRESS, KEY_PRESS_MASK, cub_handle_key_press, cub);
 	mlx_hook(cub->win, KEY_RELEASE, KEY_RELEASE_MASK, cub_handle_key_release, cub);
 	mlx_hook(cub->win, DESTROY_NOTIFY, NO_EVENT_MASK, close_window, cub);
-	mlx_loop_hook(cub->mlx, (int (*)())perform_actions, cub);
+	mlx_mouse_hook(cub->win, cub_handle_mouse, cub);
+	mlx_loop_hook(cub->mlx, perform_actions, cub);
 }
 
 void	cub_update_view_angle(int keycode, t_cub *cub)
@@ -416,7 +443,7 @@ int close_window(t_cub *cub)
 	int	i;
 
 	i = 0;
-	while (i <= 8)
+	while (i <= 10)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
