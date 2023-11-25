@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/24 04:28:00 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/25 03:43:34 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,12 @@ t_position	*create_position(double i, double j)
 	return (pos);
 }
 
+//todo change that to a main-stack t_position variable instead of a sub-stack allocated pointer
+/**
+ *
+ * @param map
+ * @return the position of the player at the start aof the game
+ */
 t_position	*get_position(char **map)
 {
 	int	i;
@@ -136,7 +142,7 @@ t_cub	*init_game(int argc, char **argv)
 		return (NULL);
 	ft_bzero(cub->keys_states, 65509 * sizeof(int));
 	cub->is_fullscreen = false;
-	cub->last_frame_time = get_time();
+//	cub->last_frame_time = get_time();
 	cub->win_size[0] = 900;
 	cub->cross_hair = 'C';
 	cub->blue_prtl = '-';
@@ -149,14 +155,17 @@ t_cub	*init_game(int argc, char **argv)
 	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
 	cub->wall_distance = malloc(sizeof(double) * cub->win_size[1]);
 	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
-	if (!cub->rays || !cub->angles || !cub->wall_heights)
-		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), NULL);
+	if (!cub->rays || !cub->angles || !cub->wall_heights || !cub->portals)
+		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), free(cub->portals), free(cub), NULL);
 	cub->data = parsing(argc, argv);
 	if (!cub->data)
 		return (free(cub), NULL);
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position->x += 0.5;
 	cub->player_position->y += 0.5;
+	cub->next_ray_to_compute = cub->win_size[WIDTH];
+	pthread_mutex_init(&cub->ray_mutex, NULL);
+	pthread_mutex_init(&cub->program_ends_mutex, NULL);
 	return (cub);
 }
 
@@ -182,6 +191,7 @@ int	main(int argc, char **argv)
 	if (!render_frame(cub))
 		return (close_window(cub), 1);
 	cub_mlx_config(cub);
+	create_threads(cub);
 	return (mlx_loop(cub->mlx), 0);
 }
 

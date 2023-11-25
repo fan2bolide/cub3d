@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/24 02:49:48 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/25 03:47:05 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,26 @@ int	get_wall_height(t_cub *cub, double wall_distance, double ray_angle)
 	wall_distance *= cos(ray_angle - view_angle);
 	wall_height = (SCREEN_DISTANCE * cub->win_size[0] / wall_distance);
 	return ((int)wall_height);
+}
+
+void	compute_ray(t_cub *cub, int ray_id, double segments_size)
+{
+	int	win_size_2;
+	int	nb_segments;
+
+	win_size_2 = cub->win_size[WIDTH] / 2;
+	cub->rays[ray_id].x = cub->player_position->x;
+	cub->rays[ray_id].y = cub->player_position->y;
+	if (ray_id <= win_size_2)
+		nb_segments = win_size_2 - ray_id;
+	else
+		nb_segments = (cub->win_size[1] - ray_id) - win_size_2;
+	cub->angles[ray_id] = (cub->view_angle * (ray_id <= (win_size_2))) \
+		+ (cub->view_angle * (ray_id > (win_size_2))) \
+		- atan(nb_segments * segments_size);
+	cub->angles[ray_id] = modulo_2_pi(cub->angles[ray_id]);
+	shoot_ray(cub->rays + ray_id, cub, cub->angles + ray_id, cub->wall_distance + ray_id);
+	cub->wall_heights[ray_id] = get_wall_height(cub, cub->wall_distance[ray_id], cub->angles[ray_id]);
 }
 
 static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
@@ -77,7 +97,21 @@ int	render_frame(t_cub *cub)
 	if (cub->load_screen)
 		return (1);
 	clear_lists(cub);
-	compute_arrays(cub, cub->rays, cub->angles, cub->wall_heights);
+	pthread_mutex_lock(&cub->ray_mutex);
+	cub->next_ray_to_compute = 0;
+	pthread_mutex_unlock(&cub->ray_mutex);
+	while (1)
+	{
+		pthread_mutex_lock(&cub->ray_mutex);
+		if (cub->next_ray_to_compute >= cub->win_size[WIDTH])
+		{
+			pthread_mutex_unlock(&cub->ray_mutex);
+			break;
+		}
+		pthread_mutex_unlock(&cub->ray_mutex);
+		usleep(100);
+	}
+//	compute_arrays(cub, cub->rays, cub->angles, cub->wall_heights);
 	render_view(cub, cub->rays, cub->wall_heights);
 	render_mini_map(cub, cub->rays);
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);

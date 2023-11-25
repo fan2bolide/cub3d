@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/24 04:15:00 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/25 03:45:03 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,18 @@
 # define COLOR_MAP_CHANGE_MASK		8388608
 # define OWNER_GRAB_BUTTON_MASK		16777216
 
-# define PRESSED    1
-# define RELEASED   0
-# define BJ_PATH	"textures/bajeanno.xpm"
-# define BLUE_PATH	"textures/blue_portal.xpm"
-# define ORG_PATH	"textures/orange_portal.xpm"
+# define PRESSED    	1
+# define RELEASED   	0
+# define BJ_PATH		"textures/bajeanno.xpm"
+# define BLUE_PATH		"textures/blue_portal.xpm"
+# define ORG_PATH		"textures/orange_portal.xpm"
 # define BLUE_TR_PATH	"textures/blue_portal_transparent.xpm"
 # define ORG_TR_PATH	"textures/orange_portal_transparent.xpm"
 # define LOAD_SCREEN	"textures/load_screen.xpm"
+
+# ifndef NB_THREADS
+#  define NB_THREADS	8
+# endif
 
 // X11 events
 # define KEY_PRESS			2
@@ -299,6 +303,7 @@ typedef struct s_portal_list
 	struct s_portal_list	*next;
 }	t_prtl_list;
 
+
 typedef struct s_cub
 {
 	t_image			*load_screen;
@@ -313,7 +318,6 @@ typedef struct s_cub
 	t_position		*player_position;
 	double			view_angle;
 	double			fov;
-	size_t			last_frame_time;
 	double			*wall_distance;
 	t_position		*rays;
 	double			*angles;
@@ -322,7 +326,17 @@ typedef struct s_cub
 	int				*wall_heights;
 	char			cross_hair;
 	t_prtl_list		**portals;
+//	struct timeval	last_frame_time;
+	bool			program_ends;
+	pthread_mutex_t program_ends_mutex;
+	pthread_mutex_t ray_mutex;
+	int				next_ray_to_compute;
 }	t_cub;
+
+typedef struct s_render_thread
+{
+	t_cub			*cub;
+}	t_render_thread;
 
 //==================== PARSING =====================//
 t_data		*parsing(int argc, char **argv);
@@ -367,5 +381,7 @@ void		set_portal_texture(int *texture_id, size_t *texture_x,
 void		display_crosshair(t_cub *cub);
 int			teleport_ray(t_cub *cub, t_position *ray, double *angle, \
 													char entry_portal);
+void		compute_ray(t_cub *cub, int ray_id, double segments_size);
+int	create_threads(t_cub *cub);
 
 #endif
