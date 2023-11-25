@@ -6,11 +6,14 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/25 03:47:05 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/25 04:28:01 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
+
+# define NB_OF_USECONDS_IN_A_SECOND 1000000
+# define NB_OF_USECONDS_IN_A_MILLISECOND 1000
 
 static double	modulo_2_pi(double angle)
 {
@@ -92,8 +95,34 @@ void	clear_lists(t_cub *cub)
 		ft_lstclear((t_list **)(cub->portals + i++), free);
 }
 
+struct timeval	get_current_time(void)
+{
+	struct timeval	current_time;
+
+	gettimeofday(&current_time, NULL);
+	if (current_time.tv_usec >= NB_OF_USECONDS_IN_A_SECOND)
+	{
+		current_time.tv_sec += current_time.tv_usec \
+								/ NB_OF_USECONDS_IN_A_SECOND;
+		current_time.tv_usec %= NB_OF_USECONDS_IN_A_SECOND;
+	}
+	return (current_time);
+}
+
+long long	get_timestamp(const struct timeval start_time, \
+							const struct timeval current_time)
+{
+	return ((current_time.tv_sec - start_time.tv_sec)
+			* (long long)NB_OF_USECONDS_IN_A_MILLISECOND
+			+ (current_time.tv_usec - start_time.tv_usec)
+			  / NB_OF_USECONDS_IN_A_MILLISECOND);
+}
+
 int	render_frame(t_cub *cub)
 {
+	struct timeval start_time;
+
+	start_time = get_current_time();
 	if (cub->load_screen)
 		return (1);
 	clear_lists(cub);
@@ -103,7 +132,8 @@ int	render_frame(t_cub *cub)
 	while (1)
 	{
 		pthread_mutex_lock(&cub->ray_mutex);
-		if (cub->next_ray_to_compute >= cub->win_size[WIDTH])
+		if (cub->next_ray_to_compute >= cub->win_size[WIDTH] \
+			&& get_timestamp(start_time, get_current_time()) > 5)
 		{
 			pthread_mutex_unlock(&cub->ray_mutex);
 			break;
