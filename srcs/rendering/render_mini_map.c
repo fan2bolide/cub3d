@@ -39,9 +39,9 @@ void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
 	t_position	ray_adjustment;
 	int			i;
 
-	ray_adjustment.x = -(cub->player_position->x * MINIMAP_SCALE) \
+	ray_adjustment.x = -(cub->player_position.x * MINIMAP_SCALE) \
 						+ (MINIMAP_SIZE) + MINIMAP_OFFSET;
-	ray_adjustment.y = -(cub->player_position->y * MINIMAP_SCALE) \
+	ray_adjustment.y = -(cub->player_position.y * MINIMAP_SCALE) \
 						+ (MINIMAP_SIZE) + MINIMAP_OFFSET;
 	i = 0;
 	while (i < cub->win_size[WIDTH])
@@ -92,11 +92,11 @@ void	render_mini_map(t_cub *cub, t_position *ray_collision)
 
 	put_outer_color(cub);
 	put_walls(cub);
-	player_dup.x = cub->player_position->x * MINIMAP_SCALE \
-		- (cub->player_position->x * MINIMAP_SCALE) \
+	player_dup.x = cub->player_position.x * MINIMAP_SCALE \
+		- (cub->player_position.x * MINIMAP_SCALE) \
 		+ (MINIMAP_SIZE) + MINIMAP_OFFSET;
-	player_dup.y = cub->player_position->y * MINIMAP_SCALE \
-		- (cub->player_position->y * MINIMAP_SCALE) \
+	player_dup.y = cub->player_position.y * MINIMAP_SCALE \
+		- (cub->player_position.y * MINIMAP_SCALE) \
 		+ (MINIMAP_SIZE) + MINIMAP_OFFSET;
 	cub_put_ray_on_minimap(cub, player_dup, ray_collision);
 	cub_put_player_on_map(cub, player_dup);

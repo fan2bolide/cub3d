@@ -17,7 +17,7 @@ void	set_custom_texture(int texture_id, size_t *texture_x,
 {
 	if (ray_collision.x == (int)ray_collision.x)
 	{
-		if (cub->player_position->x > ray_collision.x)
+		if (cub->player_position.x > ray_collision.x)
 			*texture_x = (int)(((int)(ray_collision.y) + 1 - ray_collision.y)
 					* cub->textures[texture_id].width);
 		else
@@ -26,7 +26,7 @@ void	set_custom_texture(int texture_id, size_t *texture_x,
 	}
 	else
 	{
-		if (cub->player_position->y > ray_collision.y)
+		if (cub->player_position.y > ray_collision.y)
 			*texture_x = (int)((ray_collision.x - ((int) ray_collision.x))
 					* cub->textures[texture_id].width);
 		else
@@ -116,7 +116,7 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	int			y;
 	int			screen_wall_height;
 	int			texture_id;
-	t_int_position	texture;
+	t_iposition	texture;
 
 	texture_id = set_texture_id_and_x(&texture.x, ray_collision, cub, cub->angles[x]);
 	screen_wall_height = wall_height;
@@ -145,7 +145,7 @@ int put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_colli
 	int			y;
 	int			screen_wall_height;
 	int			texture_id;
-	t_int_position	texture;
+	t_iposition	texture;
 
 	texture_id = set_texture_id_and_x(&texture.x, ray_collision, cub,
 	((t_prtl_list *)ft_dblstlast((t_dblist *)cub->portals[x]))->portal->angle);
@@ -183,7 +183,7 @@ int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
 	int			y;
 	int			screen_wall_height;
 	int			texture_id;
-	t_int_position	texture;
+	t_iposition	texture;
 
 	texture_id = -1;
 	put_outline_texture(x, cub, wall_height, ray_collision);

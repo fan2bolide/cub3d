@@ -48,8 +48,8 @@ void	cub_put_line(t_cub *cub, t_position a, t_position b, int color)
 
 int	pixel_is_in_minimap(int x, int y, t_cub *cub)
 {
-	return (y > (cub->player_position->y * MINIMAP_SCALE) - MINIMAP_SIZE \
-		&& y < (cub->player_position->y * MINIMAP_SCALE) + MINIMAP_SIZE - 1 \
-		&& x > (cub->player_position->x * MINIMAP_SCALE) - MINIMAP_SIZE \
-		&& x < cub->player_position->x * MINIMAP_SCALE + MINIMAP_SIZE - 1);
+	return (y > (cub->player_position.y * MINIMAP_SCALE) - MINIMAP_SIZE \
+		&& y < (cub->player_position.y * MINIMAP_SCALE) + MINIMAP_SIZE - 1 \
+		&& x > (cub->player_position.x * MINIMAP_SCALE) - MINIMAP_SIZE \
+		&& x < cub->player_position.x * MINIMAP_SCALE + MINIMAP_SIZE - 1);
 }

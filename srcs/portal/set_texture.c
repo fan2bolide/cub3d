@@ -17,7 +17,7 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub, int *texture
 {
 	if (ray_collision.x == (int) ray_collision.x)
 	{
-		if (cub->player_position->x > ray_collision.x && (cub->orange_prtl == 'E' || cub->blue_prtl == 'E'))
+		if (cub->player_position.x > ray_collision.x && (cub->orange_prtl == 'E' || cub->blue_prtl == 'E'))
 		{
 			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1] == 'B' && cub->blue_prtl == 'E')
 				return (*texture_id = 5, true);
@@ -33,7 +33,7 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub, int *texture
 		}
 		return (false);
 	}
-	if (cub->player_position->y > ray_collision.y && (cub->orange_prtl == 'S' || cub->blue_prtl == 'S'))
+	if (cub->player_position.y > ray_collision.y && (cub->orange_prtl == 'S' || cub->blue_prtl == 'S'))
 	{
 		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] == 'B' && cub->blue_prtl == 'S')
 			return (*texture_id = 5, true);

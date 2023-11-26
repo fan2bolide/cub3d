@@ -122,14 +122,14 @@ void	set_portal_on_map(t_cub *cub, char prtl_id)
 		middle_ray = cub->rays[cub->win_size[WIDTH] / 2];
 	if ((int)middle_ray.x == middle_ray.x)
 	{
-		if (cub->player_position->x > middle_ray.x)
+		if (cub->player_position.x > middle_ray.x)
 			set_east_portal(cub, middle_ray, prtl_id);
 		else
 			set_west_portal(cub, middle_ray, prtl_id);
 	}
 	else
 	{
-		if (cub->player_position->y > middle_ray.y)
+		if (cub->player_position.y > middle_ray.y)
 			set_north_portal(cub, middle_ray, prtl_id);
 		else
 			set_south_portal(cub, middle_ray, prtl_id);

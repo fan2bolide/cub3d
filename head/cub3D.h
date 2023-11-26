@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 03:32:24 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 12:05:29 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@
 # define LOAD_SCREEN	"textures/load_screen.xpm"
 
 # ifndef NB_THREADS
-#  define NB_THREADS	8
+#  define NB_THREADS	16
 # endif
 
 // X11 events
@@ -244,16 +244,16 @@ typedef struct s_color{
 	unsigned char	transparency;
 }	t_color;
 
-typedef struct s_int_position
+typedef struct s_iposition
 {
 	size_t	x;
 	size_t	y;
-}	t_int_position;
+}	t_iposition;
 
 typedef struct s_bajeanno
 {
 	bool			is_activated;
-	t_int_position	*cur_pos;
+	t_iposition		*cur_pos;
 	int				x;
 	int				y;
 	char			orientation;
@@ -303,7 +303,6 @@ typedef struct s_portal_list
 	struct s_portal_list	*next;
 }	t_prtl_list;
 
-
 typedef struct s_cub
 {
 	t_image			*load_screen;
@@ -315,7 +314,7 @@ typedef struct s_cub
 	int				win_size[2];
 	t_image			img;
 	t_image			textures[9];
-	t_position		*player_position;
+	t_position		player_position;
 	double			view_angle;
 	double			fov;
 	double			*wall_distance;
@@ -326,10 +325,9 @@ typedef struct s_cub
 	int				*wall_heights;
 	char			cross_hair;
 	t_prtl_list		**portals;
-//	struct timeval	last_frame_time;
 	bool			program_ends;
-	pthread_mutex_t program_ends_mutex;
-	pthread_mutex_t ray_mutex;
+	pthread_mutex_t	program_ends_mutex;
+	pthread_mutex_t	ray_mutex;
 	int				next_ray_to_compute;
 	pthread_t		*threads;
 }	t_cub;
@@ -351,13 +349,15 @@ int			check_for_illegal_char(t_list *file);
 char		**get_map_from_file(t_list *file);
 t_list		*list_from_file(char *file_path);
 
+//================= RAY RELATIVES ==================//
+
 //===================== UTILS ======================//
 void		destroy_data(t_data *data);
 int			refactor_spaces(t_list *list);
 int			ray_casting(t_cub *cub);
 void		cub_pixel_put(t_image *data, int x, int y, int color);
 void		render_minimap(t_cub *cub, t_position *ray_collision, \
-								double *angle, int *wall_height);
+							double *angle, int *wall_height);
 int			render_frame(t_cub *cub);
 size_t		get_time(void);
 int			is_directory(char *path);
@@ -365,24 +365,22 @@ size_t		get_size(char **tab);
 int			check_definition(t_data *data);
 int			check_assignation(t_data *data);
 int			check_format(t_data *data);
-t_position	*get_position(char **map);
+t_position	get_position(char **map);
 int			get_wall_surroundment(t_data *data);
-void		clear_line(char **w_surr, t_int_position *cur_pos);
-int			paint_w_surr(	size_t i, \
-							t_bajeanno *next_one, \
-							t_int_position *cur_pos, \
-							char **w_surr);
+void		clear_line(char **w_surr, t_iposition *cur_pos);
+int			paint_w_surr(size_t i, t_bajeanno *next_one, \
+						t_iposition *cur_pos, char **w_surr);
 void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
-t_int_position	get_next_baj(char **w_surr, t_bajeanno *next_one, \
-										t_int_position *cur_pos);
-
+t_iposition	get_next_baj(char **w_surr, \
+						t_bajeanno *next_one, \
+						t_iposition *cur_pos);
 void		set_portal_on_map(t_cub *cub, char prtl_id);
-void		set_portal_texture(int *texture_id, size_t *texture_x,
-				t_position ray_collision, t_cub *cub);
+void		set_portal_texture(int *texture_id, size_t *texture_x, \
+								t_position ray_collision, t_cub *cub);
 void		display_crosshair(t_cub *cub);
 int			teleport_ray(t_cub *cub, t_position *ray, double *angle, \
-													char entry_portal);
-void		compute_ray(t_cub *cub, int ray_id, double segments_size);
-int	create_threads(t_cub *cub);
+												char entry_portal);
+int			compute_ray(t_cub *cub, int ray_id, double segments_size);
+int			create_threads(t_cub *cub);
 
 #endif

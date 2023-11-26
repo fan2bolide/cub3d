@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/24 00:11:59 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 11:59:37 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 	t_portal		*portal;
 
 	*distance = 0;
-	ray_start.x = cub->player_position->x;
-	ray_start.y = cub->player_position->y;
+	ray_start.x = cub->player_position.x;
+	ray_start.y = cub->player_position.y;
 	while (1)
 	{
 		apply_minimal_distance(ray, get_delta_to_next_column(*ray, *angle), get_delta_to_next_line(*ray, *angle));
@@ -135,7 +135,7 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 			portal->height = get_wall_height(cub, portal->distance, portal->angle);
 			portal_lst = (t_prtl_list *)ft_dblstnew(portal);
 			if (!portal_lst)
-				return (0);
+				return (free(portal), 0);
 			ft_dblstadd_back((t_dblist **)&cub->portals[angle - cub->angles], (t_dblist *)portal_lst);
 			if (*distance > 100)
 				return (1);

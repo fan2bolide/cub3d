@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 04:03:11 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 11:42:56 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ void	cub_update_player_position(int keycode, t_cub *cub);
 
 void	cub_update_view_angle(int keycode, t_cub *cub);
 
-double	get_orientation(char **map, t_position *pos)
+double	get_orientation(char **map, t_position pos)
 {
 	char	orientation_char;
 	double	orientation_angle;
 
-	orientation_char = map[(int)pos->y][(int)pos->x];
+	orientation_char = map[(int)pos.y][(int)pos.x];
 	if (orientation_char == 'N')
 		orientation_angle = 3 * M_PI_2;
 	if (orientation_char == 'E')
@@ -34,7 +34,7 @@ double	get_orientation(char **map, t_position *pos)
 		orientation_angle = M_PI;
 	if (orientation_char == 'S')
 		orientation_angle = M_PI_2;
-	map[(int)pos->y][(int)pos->x] = '0';
+	map[(int)pos.y][(int)pos.x] = '0';
 	return (orientation_angle);
 }
 
@@ -48,26 +48,16 @@ static int	cub_check_args(int argc, char **argv, t_cub *cub)
 	return (0);
 }
 
-t_position	*create_position(double i, double j)
-{
-	t_position	*pos;
-
-	pos = malloc(sizeof(t_position));
-	pos->x = j;
-	pos->y = i;
-	return (pos);
-}
-
-//todo change that to a main-stack t_position variable instead of a sub-stack allocated pointer
 /**
  *
  * @param map
  * @return the position of the player at the start aof the game
  */
-t_position	*get_position(char **map)
+t_position	get_position(char **map)
 {
-	int	i;
-	int	j;
+	int			i;
+	int			j;
+	t_position	position;
 
 	i = 0;
 	while (map[i])
@@ -76,12 +66,18 @@ t_position	*get_position(char **map)
 		while (map[i][j])
 		{
 			if (map[i][j] == 'N' || map[i][j] == 'E' || map[i][j] == 'S' || map[i][j] == 'W')
-				return (create_position((double)i, (double)j));
+			{
+				position.x = j;
+				position.y = i;
+				return (position);
+			}
 			j++;
 		}
 		i++;
 	}
-	return (NULL);
+	position.x = -1;
+	position.y = -1;
+	return (position);
 }
 
 void	convert_path_to_mlx_img(t_cub *cub)
@@ -161,8 +157,8 @@ t_cub	*init_game(int argc, char **argv)
 	if (!cub->data)
 		return (free(cub), NULL);
 	cub->player_position = get_position(cub->data->map);
-	cub->player_position->x += 0.5;
-	cub->player_position->y += 0.5;
+	cub->player_position.x += 0.5;
+	cub->player_position.y += 0.5;
 	cub->next_ray_to_compute = cub->win_size[WIDTH];
 	pthread_mutex_init(&cub->ray_mutex, NULL);
 	pthread_mutex_init(&cub->program_ends_mutex, NULL);
@@ -358,8 +354,8 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 	double	old_x;
 	double	old_y;
 
-	old_x = cub->player_position->x;
-	old_y = cub->player_position->y;
+	old_x = cub->player_position.x;
+	old_y = cub->player_position.y;
 	if ((int)old_x != (int)new_x)
 	{
 		if ((int)old_y != (int)new_y)
@@ -367,16 +363,16 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 			if (ft_isset(cub->data->map[(int) old_y][(int) new_x], "BO"))
 				return;
 			if (cub->data->map[(int) new_y][(int) old_x] == '1')
-				return (cub->player_position->x = new_x, (void) 0);
+				return (cub->player_position.x = new_x, (void) 0);
 		}
 		if (ft_isset(cub->data->map[(int)new_y][(int)old_x], "BO"))
 			return ;
-		cub->player_position->y = new_y;
+		cub->player_position.y = new_y;
 		return ;
 	}
 	if ((int)old_y != (int)new_y)
 		if (!ft_isset(cub->data->map[(int)old_y][(int)new_x], "BO"))
-			cub->player_position->x = new_x;
+			cub->player_position.x = new_x;
 }
 
 void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)
@@ -385,11 +381,11 @@ void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)
 	double		walk_angle;
 	double		walk_angle_save;
 
-	if ((int)new_x > (int)cub->player_position->x || (int)new_x < (int)cub->player_position->x)
+	if ((int)new_x > (int)cub->player_position.x || (int)new_x < (int)cub->player_position.x)
 		new_pos.x = (int)new_x;
 	else
 		new_pos.x = new_x;
-	if ((int)new_y > (int)cub->player_position->y || (int)new_y < (int)cub->player_position->y)
+	if ((int)new_y > (int)cub->player_position.y || (int)new_y < (int)cub->player_position.y)
 		new_pos.y = (int)new_y;
 	else
 		new_pos.y = new_y;
@@ -404,8 +400,8 @@ void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)
 	walk_angle_save = walk_angle;
 	if(teleport_ray(cub, &new_pos, &walk_angle, prtl_id))
 	{
-		cub->player_position->x = new_pos.x;
-		cub->player_position->y = new_pos.y;
+		cub->player_position.x = new_pos.x;
+		cub->player_position.y = new_pos.y;
 		cub->view_angle += walk_angle - walk_angle_save;
 	}
 }
@@ -415,10 +411,10 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 	double	new_y;
 	double	new_x;
 
-	new_y = cub->player_position->y + y_change;
-	new_x = cub->player_position->x + x_change;
-	if (cub->data->map[(int)new_y][(int) cub->player_position->x] == '1' \
-	&& cub->data->map[(int)cub->player_position->y][(int)new_x] == '1')
+	new_y = cub->player_position.y + y_change;
+	new_x = cub->player_position.x + x_change;
+	if (cub->data->map[(int)new_y][(int) cub->player_position.x] == '1' \
+	&& cub->data->map[(int)cub->player_position.y][(int)new_x] == '1')
 		return ;
 	if (cub->data->map[(int)new_y][(int)new_x] == '1')
 		return (report_movement(new_y, new_x, cub));
@@ -428,8 +424,8 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		teleport_player(new_x, new_y, 'B', cub);
 	else
 	{
-	cub->player_position->y = new_y;
-	cub->player_position->x = new_x;
+	cub->player_position.y = new_y;
+	cub->player_position.x = new_x;
 	}
 }
 
@@ -446,10 +442,10 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 	if (keycode == KEY_D)
 		move_player(cos(cub->view_angle + M_PI_2) / 20, \
 		sin(cub->view_angle + M_PI_2) / 20, cub);
-	if (cub->player_position->x - (int)cub->player_position->x < 0.0005)
-		cub->player_position->x += 0.0005;
-	if (cub->player_position->y - (int)cub->player_position->y < 0.0005)
-		cub->player_position->y += 0.0005;
+	if (cub->player_position.x - (int)cub->player_position.x < 0.0005)
+		cub->player_position.x += 0.0005;
+	if (cub->player_position.y - (int)cub->player_position.y < 0.0005)
+		cub->player_position.y += 0.0005;
 }
 
 #if defined(__linux__)
@@ -490,7 +486,6 @@ int	close_window(t_cub *cub)
 	free(cub->wall_heights);
 	free(cub->mlx);
 	destroy_data(cub->data);
-	free(cub->player_position);
 	free(cub);
 	exit(0);
 }

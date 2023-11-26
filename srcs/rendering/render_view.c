@@ -50,5 +50,6 @@ void	render_column(t_cub *cub, int column)
 	while (i < cub->win_size[0])
 		cub_pixel_put(&cub->img, column, i++, \
 								*((int *)cub->data->floor_color));
-	cub_textures_render(cub, cub->wall_heights[column], column, cub->rays[column]);
+	cub_textures_render(cub, cub->wall_heights[column], \
+								column, cub->rays[column]);
 }

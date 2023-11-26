@@ -15,6 +15,7 @@ SRCS		:=	cub3D.c\
 				utils/utils.c\
 				utils/texture_utils.c\
 				ray_casting/ray_casting.c\
+				ray_casting/compute_ray.c\
 				rendering/render_view.c\
 				rendering/render_mini_map.c\
 				rendering/render_mini_map_walls.c\
@@ -27,6 +28,7 @@ SRCS		:=	cub3D.c\
 				portal/teleport_ray.c\
 				portal/portal_utils.c\
 				multithreading/create_threads.c\
+				multithreading/threads_routine.c\
 
 
 SRCS_D		:=	srcs/

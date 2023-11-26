@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   bajeanno.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 13:20:55 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/15 13:09:36 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 12:06:55 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-size_t	get_ind_start(t_int_position *cur_pos, char **w_surr)
+size_t	get_ind_start(t_iposition *cur_pos, char **w_surr)
 {
 	size_t	x;
 	size_t	y;
@@ -34,7 +34,7 @@ size_t	get_ind_start(t_int_position *cur_pos, char **w_surr)
 	return (4);
 }
 
-int	check_empty(char **w_surr, t_int_position *cur_pos, t_bajeanno *baj)
+int	check_empty(char **w_surr, t_iposition *cur_pos, t_bajeanno *baj)
 {
 	size_t	x;
 	size_t	y;
@@ -55,7 +55,7 @@ int	check_empty(char **w_surr, t_int_position *cur_pos, t_bajeanno *baj)
 	return (0);
 }
 
-int	check_letter(char **w_surr, t_int_position *cur_pos, t_bajeanno *baj)
+int	check_letter(char **w_surr, t_iposition *cur_pos, t_bajeanno *baj)
 {
 	size_t	x;
 	size_t	y;
@@ -73,8 +73,8 @@ int	check_letter(char **w_surr, t_int_position *cur_pos, t_bajeanno *baj)
 	return (0);
 }
 
-t_int_position	get_next_baj(char **w_surr, t_bajeanno *next_one,
-							   t_int_position *cur_pos)
+t_iposition	get_next_baj(char **w_surr, t_bajeanno *next_one,
+							t_iposition *cur_pos)
 {
 	size_t	save_start;
 	size_t	i;
@@ -100,7 +100,7 @@ t_int_position	get_next_baj(char **w_surr, t_bajeanno *next_one,
 
 int	get_wall_surroundment(t_data *data)
 {
-	t_position	*player_pos;
+	t_position	player_pos;
 	size_t		i;
 	size_t		j;
 
@@ -108,12 +108,11 @@ int	get_wall_surroundment(t_data *data)
 	player_pos = get_position(data->map);
 	data->baj = ft_calloc(1, sizeof(t_bajeanno));
 	if (data->baj)
-		data->baj->cur_pos = ft_calloc(1, sizeof(t_int_position));
-	if (!data->wall_sur || !player_pos || !data->baj || !data->baj->cur_pos)
-		return (free(player_pos), ft_putstr_fd(ERR ALLOC_ERR EOL, 2), 0);
-	fill_wall_surr_map(data->map, data->wall_sur, (int)player_pos->x,
-		(int)player_pos->y);
-	free(player_pos);
+		data->baj->cur_pos = ft_calloc(1, sizeof(t_iposition));
+	if (!data->wall_sur || !data->baj || !data->baj->cur_pos)
+		return (ft_putstr_fd(ERR ALLOC_ERR EOL, 2), 0);
+	fill_wall_surr_map(data->map, data->wall_sur, (int)player_pos.x,
+		(int)player_pos.y);
 	data->baj->speed = 2000;
 	i = 0;
 	while (data->wall_sur[i++])

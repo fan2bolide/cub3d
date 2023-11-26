@@ -30,9 +30,9 @@ static void	put_wall(t_cub *cub, int i, int j, int color)
 		{
 			if (pixel_is_in_minimap(j, i, cub))
 				cub_pixel_put(&cub->img, \
-				j - (int)(cub->player_position->x * MINIMAP_SCALE) \
+				j - (int)(cub->player_position.x * MINIMAP_SCALE) \
 					+ MINIMAP_SIZE + MINIMAP_OFFSET, \
-				i - (int)(cub->player_position->y * MINIMAP_SCALE) \
+				i - (int)(cub->player_position.y * MINIMAP_SCALE) \
 					+ MINIMAP_SIZE + MINIMAP_OFFSET, color);
 			j++;
 		}

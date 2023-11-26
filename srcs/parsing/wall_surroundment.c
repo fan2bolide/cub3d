@@ -48,7 +48,7 @@ void	fill_wall_surr_map(char **map, char **wall_surr, int x, int y)
 	fill_wall_surr_map(map, wall_surr, x, y - 1);
 }
 
-int	paint_w_surr(size_t i, t_bajeanno *next_one, t_int_position *cur_pos,
+int	paint_w_surr(size_t i, t_bajeanno *next_one, t_iposition *cur_pos,
 					char **w_surr)
 {
 	size_t			y_del[4];
@@ -90,7 +90,7 @@ void	clear_map(size_t x, size_t y, char **w_surr)
 	}
 }
 
-void	clear_line(char **w_surr, t_int_position *cur_pos)
+void	clear_line(char **w_surr, t_iposition *cur_pos)
 {
 	size_t	y;
 	size_t	x;
