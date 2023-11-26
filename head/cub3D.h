@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 11:38:51 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 12:57:00 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,6 +295,7 @@ typedef struct s_cursor
 	bool	is_pressed;
 	int press_x;
 	int press_y;
+	t_iposition initial_pos;
 }			t_cursor;
 
 typedef struct s_menu
@@ -356,6 +357,8 @@ typedef struct s_cub
 	int				*wall_heights;
 	char			cross_hair;
 	t_portal_list	**portals;
+	int 			player_speed;
+	double			sensivity;
 	t_menu			menu;
 }	t_cub;
 

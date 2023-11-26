@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:44:48 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 12:19:42 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 12:46:33 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ void	load_game_menu(t_cub *cub)
 	cub->menu.cursors[SPEED].y = 315;
 	cub->menu.cursors[SENSI].y = 513;
 	cub->menu.cursors[SENSI].x = 1031;
+	cub->menu.cursors[SPEED].initial_pos.x = 1031;
+	cub->menu.cursors[SPEED].initial_pos.y = 315;
+	cub->menu.cursors[SENSI].initial_pos.x = 513;
+	cub->menu.cursors[SENSI].initial_pos.y = 1031;
 }
 
 int	set_button_color(t_cub *cub, int texture_x, int texture_y)
@@ -81,6 +85,16 @@ int	set_cursor_color(t_cub *cub, int texture_x, int texture_y)
 	return (color);
 }
 
+bool	is_checked(int i, t_cub *cub)
+{
+	if ((i == 2 && cub->menu.cross_hair == 1)
+	|| (i == 4 && cub->menu.cross_hair == 2)
+	|| (i == 6 && cub->menu.outline == 1)
+	|| (i == 8 && cub->menu.outline == 2))
+		return (true);
+	return (false);
+}
+
 void	display_customized(t_cub *cub, int texture_x, int texture_y)
 {
 	int			color;
@@ -92,12 +106,10 @@ void	display_customized(t_cub *cub, int texture_x, int texture_y)
 	text[1] = cub->menu.button;
 	color = set_button_color(cub, texture_x, texture_y);
 	i = 0;
-//	if (texture_x >= 870 && texture_x < 1300 && texture_y >= 350 && texture_y < 390)
-//		color = 28374695;
 	while (color < 0 && i < 9)
 	{
 		if (texture_x > coords[i] && texture_x < coords[i] + text[!i].width && texture_y > coords[i + 1] &&
-			texture_y < coords[i + 1] + text[!i].height)
+			texture_y < coords[i + 1] + text[!i].height && (!i || is_checked(i, cub)))
 			color = *((int *)(text[!i].addr + ((texture_y - coords[i + 1]) * \
 					text[!i].line_length + (texture_x - coords[i]) * \
 					(text[!i].bits_per_pixel / 8))));

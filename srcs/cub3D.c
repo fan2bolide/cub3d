@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 12:15:07 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 13:21:21 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,8 @@ int	main(int argc, char **argv)
 	display_load_screen(cub);
 	load_game_menu(cub);
 	cub->fov = M_PI_2;
+	cub->player_speed = 20;
+	cub->sensivity = 0.017;
 	if (!render_frame(cub))
 		return (close_window(cub), 1);
 	cub_mlx_config(cub);
@@ -236,6 +238,7 @@ int	perform_actions(t_cub *cub)
 		if (x > 1200)
 			x = 1200;
 		cub->menu.cursors[SPEED].x = x;
+		cub->player_speed = 20 + (((int)cub->menu.cursors[SPEED].initial_pos.x - (int)cub->menu.cursors[SPEED].x) / 10);
 	}
 	if (cub->menu.cursors[SENSI].is_pressed)
 	{
@@ -244,6 +247,8 @@ int	perform_actions(t_cub *cub)
 		if (x > 1200)
 			x = 1200;
 		cub->menu.cursors[SENSI].x = x;
+		cub->sensivity = 0.017 + ((double)((int)cub->menu.cursors[SENSI].x - (int)cub->menu.cursors[SENSI].initial_pos.x) / 100000);
+		printf("%f\n",((double)((int)cub->menu.cursors[SENSI].x - (int)cub->menu.cursors[SENSI].initial_pos.x) / 500000));
 	}
 	if ((cub->menu.cross_hair == 2 && cub->cross_hair > 0) || (cub->menu.cross_hair == 1 && cub->cross_hair < 0))
 		cub->cross_hair *= -1;
@@ -367,10 +372,11 @@ void cub_mlx_config(t_cub *cub)
 
 void	cub_update_view_angle(int keycode, t_cub *cub)
 {
+	printf("%f\n", cub->sensivity);
 	if (keycode == KEY_LEFT)
-		cub->view_angle -= 0.017;
+		cub->view_angle -= cub->sensivity;
 	else
-		cub->view_angle += 0.017;
+		cub->view_angle += cub->sensivity;
 	if (cub->view_angle < 0)
 		cub->view_angle += (2 * M_PI);
 	else if (cub->view_angle > (2 * M_PI))
@@ -460,16 +466,16 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 void	cub_update_player_position(int keycode, t_cub *cub)
 {
 	if (keycode == KEY_W)
-		move_player(cos(cub->view_angle) / 20, sin(cub->view_angle) / 20, cub);
+		move_player(cos(cub->view_angle) / cub->player_speed, sin(cub->view_angle) / cub->player_speed, cub);
 	if (keycode == KEY_S)
-		move_player(-cos(cub->view_angle) / 20, \
-		-sin(cub->view_angle) / 20, cub);
+		move_player(-cos(cub->view_angle) / cub->player_speed, \
+		-sin(cub->view_angle) / cub->player_speed, cub);
 	if (keycode == KEY_A)
-		move_player(cos(cub->view_angle - M_PI_2) / 20, \
-		sin(cub->view_angle - M_PI_2) / 20, cub);
+		move_player(cos(cub->view_angle - M_PI_2) / cub->player_speed, \
+		sin(cub->view_angle - M_PI_2) / cub->player_speed, cub);
 	if (keycode == KEY_D)
-		move_player(cos(cub->view_angle + M_PI_2) / 20, \
-		sin(cub->view_angle + M_PI_2) / 20, cub);
+		move_player(cos(cub->view_angle + M_PI_2) / cub->player_speed, \
+		sin(cub->view_angle + M_PI_2) / cub->player_speed, cub);
 	if (cub->player_position->x - (int)cub->player_position->x < 0.0005)
 		cub->player_position->x += 0.0005;
 	if (cub->player_position->y - (int)cub->player_position->y < 0.0005)
