@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/25 03:43:34 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 04:03:11 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -474,6 +474,15 @@ int close_window(t_cub *cub)
 
 int	close_window(t_cub *cub)
 {
+	int i;
+
+	i = 0;
+	pthread_mutex_lock(&cub->program_ends_mutex);
+	cub->program_ends = true;
+	pthread_mutex_unlock(&cub->program_ends_mutex);
+	while (i < NB_THREADS)
+		pthread_join(cub->threads[i++], NULL);
+	free(cub->threads);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
 	free(cub->angles);

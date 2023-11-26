@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:38:30 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/24 00:16:40 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 03:59:46 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int			cub_texture_put(int x, t_cub *cub, int wall_height,
 int			get_color_of_wall(int x, int y);
 void		render_view(t_cub *cub, t_position *ray_collision, \
 									const int *wall_height);
+void	render_column(t_cub *cub, int column);
 void		set_custom_texture(int texture_id, size_t *texture_x,
 				t_position ray_collision, t_cub *cub);
 int			cub_portal_texture_put(int x, t_cub *cub, int wall_height,

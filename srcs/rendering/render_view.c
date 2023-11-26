@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/23 20:13:24 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 03:53:54 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,18 @@ int	cub_textures_render(t_cub *cub, int wall_height, int x,
 	return (1);
 }
 
-void	render_view(t_cub *cub, t_position *ray_collision, \
-								const int *wall_height)
+void	render_column(t_cub *cub, int column)
 {
 	int	i;
-	int	j;
 	int	screen_height_2;
 
+	i = 0;
 	screen_height_2 = cub->win_size[0] / 2;
-	i = 0;
-	while (i < cub->win_size[1])
-	{
-		j = 0;
-		while (j < screen_height_2)
-			cub_pixel_put(&cub->img, i, j++, \
-									*((int *)cub->data->ceiling_color));
-		while (j < cub->win_size[0])
-			cub_pixel_put(&cub->img, i, j++, \
-									*((int *)cub->data->floor_color));
-		i++;
-	}
-	i = 0;
-	while (i < cub->win_size[1])
-	{
-		cub_textures_render(cub, wall_height[i], i, ray_collision[i]);
-		i++;
-	}
-	display_crosshair(cub);
+	while (i < screen_height_2)
+		cub_pixel_put(&cub->img, column, i++, \
+								*((int *)cub->data->ceiling_color));
+	while (i < cub->win_size[0])
+		cub_pixel_put(&cub->img, column, i++, \
+								*((int *)cub->data->floor_color));
+	cub_textures_render(cub, cub->wall_heights[column], column, cub->rays[column]);
 }

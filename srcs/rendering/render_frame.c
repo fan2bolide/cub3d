@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/25 04:28:01 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 04:12:05 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,7 @@ int	render_frame(t_cub *cub)
 	while (1)
 	{
 		pthread_mutex_lock(&cub->ray_mutex);
-		if (cub->next_ray_to_compute >= cub->win_size[WIDTH] \
-			&& get_timestamp(start_time, get_current_time()) > 5)
+		if (cub->next_ray_to_compute >= cub->win_size[WIDTH])
 		{
 			pthread_mutex_unlock(&cub->ray_mutex);
 			break;
@@ -141,9 +140,15 @@ int	render_frame(t_cub *cub)
 		pthread_mutex_unlock(&cub->ray_mutex);
 		usleep(100);
 	}
+	while (get_timestamp(start_time, get_current_time()) < 5)
+
+		usleep(100);
 //	compute_arrays(cub, cub->rays, cub->angles, cub->wall_heights);
-	render_view(cub, cub->rays, cub->wall_heights);
+//	render_view(cub, cub->rays, cub->wall_heights);
 	render_mini_map(cub, cub->rays);
+	display_crosshair(cub);
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
+	ft_putnbr(get_timestamp(start_time, get_current_time()));
+	write(1, "\n", 1);
 	return (1);
 }

@@ -6,13 +6,14 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 23:40:40 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/25 02:35:30 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 03:59:28 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include "rendering.h"
 
-void	*routine(void *attr)
+void	*render_thread_routine(void *attr)
 {
 	t_cub	*cub;
 	int		i;
@@ -32,6 +33,7 @@ void	*routine(void *attr)
 		if (i < cub->win_size[WIDTH])
 		{
 			compute_ray(cub, i, segments_size);
+			render_column(cub, i);
 		}
 		else
 			usleep(100);
@@ -40,13 +42,13 @@ void	*routine(void *attr)
 
 int	create_threads(t_cub *cub)
 {
-	pthread_t	threads[NB_THREADS];
 	int			i;
 
 	i = 0;
+	cub->threads = malloc(sizeof(pthread_t) * NB_THREADS);
 	while (i < NB_THREADS)
 	{
-		pthread_create(threads + i, NULL, routine, cub);
+		pthread_create(cub->threads + i, NULL, render_thread_routine, cub);
 		i++;
 	}
 	return (0);
