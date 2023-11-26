@@ -76,7 +76,7 @@ CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra
+CFLAGS		=	-Wall -Wextra -pthread
 
 DFLAGS		:=	-MP -MMD
 
