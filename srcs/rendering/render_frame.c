@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/25 01:30:57 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 03:39:55 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int	render_frame(t_cub *cub)
 	clear_lists(cub);
 	compute_arrays(cub, cub->rays, cub->angles, cub->wall_heights);
 	render_view(cub, cub->rays, cub->wall_heights);
-	if (!cub->menu.on_screen && get_time() - cub->menu.time_pressed > 1200)
+	if (!cub->menu.on_screen && cub->menu.x + cub->menu.menu_bg.width == 0)
 		render_mini_map(cub, cub->rays);
-	summon_game_menu(cub, cub->menu.on_screen + (!cub->menu.on_screen * -2));
+	summon_game_menu(cub, cub->menu.on_screen + (!cub->menu.on_screen * -1));
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	return (1);
 }

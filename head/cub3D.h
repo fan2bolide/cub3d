@@ -6,12 +6,28 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/25 01:51:05 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 03:49:11 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
+
+//=================== INCLUDES =====================//
+# include "error_codes.h"
+# include <unistd.h>
+# include <string.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <math.h>
+# include "mlx.h"
+# include "libft.h"
+# include <errno.h>
+# include <sys/time.h>
+
 //=================== DEFINES  =====================//
 
 // X11 masks
@@ -163,6 +179,7 @@ enum e_key_codes
 	KEY_SEMI_COLON = 41,
 	KEY_COMMAND = 259,
 	KEY_BACKSPACE = 51,
+	KEY_TAB = 48;
 	KEY_F11 = 321
 };
 # elif defined(__linux__)
@@ -222,21 +239,6 @@ enum e_key_codes
 # define HEIGHT 0
 # define WIDTH 1
 
-//=================== INCLUDES =====================//
-# include "error_codes.h"
-# include <unistd.h>
-# include <string.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <math.h>
-# include "mlx.h"
-# include "libft.h"
-# include <errno.h>
-# include <sys/time.h>
-
 //=================== STUCTURES ====================//
 typedef struct s_color{
 	unsigned char	blue;
@@ -285,16 +287,15 @@ typedef struct s_image
 
 typedef struct s_menu
 {
-	t_image menu_bg;
-	t_image checker_plain;
-	t_image button;
-	t_image button_shadow;
-	int 	x;
+	t_image	menu_bg;
+	t_image	checker_plain;
+	t_image	button;
+	t_image	button_shadow;
+	int		x;
 	int		y;
 	bool	on_screen;
-	int 	cross_hair;
-	int 	outline;
-	size_t	time_pressed;
+	int		cross_hair;
+	int		outline;
 }			t_menu;
 
 typedef struct s_position
@@ -337,30 +338,30 @@ typedef struct s_cub
 	t_position		*rays;
 	double			*angles;
 	char			orange_prtl;
-	char 			blue_prtl;
+	char			blue_prtl;
 	int				*wall_heights;
 	char			cross_hair;
 	t_portal_list	**portals;
-	t_menu 			menu;
+	t_menu			menu;
 }	t_cub;
 
 //==================== PARSING =====================//
-t_data	*parsing(int argc, char **argv);
-int		parse_textures(t_data *data, t_list *file);
-t_data	*get_data(char **argv);
-t_list	*skip_metadata_in_file(t_list *file);
-int		check_file_path(t_data *data);
-int		parse_map(char **map);
-int		get_colors(t_data *data, t_list *file);
-int		check_for_illegal_char(t_list *file);
-char	**get_map_from_file(t_list *file);
-t_list	*list_from_file(char *file_path);
+t_data		*parsing(int argc, char **argv);
+int			parse_textures(t_data *data, t_list *file);
+t_data		*get_data(char **argv);
+t_list		*skip_metadata_in_file(t_list *file);
+int			check_file_path(t_data *data);
+int			parse_map(char **map);
+int			get_colors(t_data *data, t_list *file);
+int			check_for_illegal_char(t_list *file);
+char		**get_map_from_file(t_list *file);
+t_list		*list_from_file(char *file_path);
 
 //===================== UTILS ======================//
-void	destroy_data(t_data *data);
-int		refactor_spaces(t_list *list);
-int		ray_casting(t_cub *cub);
-void	cub_pixel_put(t_image *data, int x, int y, int color);
+void		destroy_data(t_data *data);
+int			refactor_spaces(t_list *list);
+int			ray_casting(t_cub *cub);
+void		cub_pixel_put(t_image *data, int x, int y, int color);
 
 void		render_minimap(t_cub *cub, t_position *ray_collision, \
 								double *angle, int *wall_height);
@@ -374,20 +375,22 @@ int			check_format(t_data *data);
 t_position	*get_position(char **map);
 int			get_wall_surroundment(t_data *data);
 void		clear_line(char **w_surr, t_iposition *cur_pos);
-int			paint_w_surr(size_t i, t_bajeanno *next_one, t_iposition *cur_pos, char **w_surr);
+int			paint_w_surr(size_t i, t_bajeanno *next_one, t_iposition *cur_pos,
+				char **w_surr);
 void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
-t_iposition	get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos);
+t_iposition	get_next_baj(char **w_surr, t_bajeanno *next_one,
+				t_iposition *cur_pos);
 
-void	set_portal_on_map(t_cub *cub, char prtl_id);
-void	set_portal_texture(int *texture_id, size_t *texture_x,
-						   t_position ray_collision, t_cub *cub);
-void	display_crosshair(t_cub *cub);
-int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal);
-unsigned int	get_pixel_color(t_image *data, int x, int y);
+void		set_portal_on_map(t_cub *cub, char prtl_id);
+void		set_portal_texture(int *texture_id, size_t *texture_x,
+				t_position ray_collision, t_cub *cub);
+void		display_crosshair(t_cub *cub);
+int			teleport_ray(t_cub *cub, t_position *ray, double *angle,
+				char entry_portal);
 
 //===================== MENU ======================//
-void	summon_game_menu(t_cub *cub, int dir);
-void	load_game_menu(t_cub *cub);
-void	handle_menu(t_cub *cub);
+void		summon_game_menu(t_cub *cub, int dir);
+void		load_game_menu(t_cub *cub);
+void		handle_menu(t_cub *cub);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:44:48 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/25 01:28:32 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 06:10:10 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,91 +29,71 @@ void	load_game_menu(t_cub *cub)
 	cub->menu.outline = 1;
 }
 
-int	get_color(int texture_x, int texture_y, t_cub *cub)
+int	set_button_color(t_cub *cub, int texture_x, int texture_y)
 {
-	t_image	img;
-	int 	x;
-	int 	y;
-
-	if (texture_x > 420 && texture_x < 420 + cub->menu.button.width && texture_y > 60 && texture_y < 60 + cub->menu.button.height)
-	{
-		img = cub->menu.button;
-		x = texture_x - 420;
-		y = texture_y - 60;
-	}
-	else
-	{
-		img = cub->menu.menu_bg;
-		x = texture_x;
-		y = texture_y;
-	}
-	return (*((int *)(img.addr + (y * \
-					img.line_length + x * \
-					(img.bits_per_pixel / 8)))));
-}
-
-void	display_customized(t_cub *cub, int texture_x, int texture_y)
-{
-	int	color;
-	int save_color;
+	int		color;
+	int		save_color;
+	t_image	bu_sh;
 
 	color = -1;
-	if (cub->menu.on_screen || get_time() - cub->menu.time_pressed > 400)
+	bu_sh = cub->menu.button_shadow;
+	if (cub->menu.on_screen || cub->menu.x < -100)
 	{
-		if (texture_x > 425 && texture_x < 425 + cub->menu.button_shadow.width && texture_y > 67 && texture_y < 67 + cub->menu.button_shadow.height)
-			color = *((int *)(cub->menu.button_shadow.addr + ((texture_y - 67) * \
-						cub->menu.button_shadow.line_length + (texture_x - 425) * \
-						(cub->menu.button_shadow.bits_per_pixel / 8))));
+		if (texture_x > 425 && texture_x < 425 + cub->menu.button_shadow.width \
+		&& texture_y > 67 && texture_y < 67 + cub->menu.button_shadow.height)
+			color = *((int *)(bu_sh.addr + ((texture_y - 67) * \
+						bu_sh.line_length + (texture_x - 425) * \
+						(bu_sh.bits_per_pixel / 8))));
 		save_color = color;
-		if (texture_x > 420 && texture_x < 420 + cub->menu.button.width && texture_y > 60 && texture_y < 60 + cub->menu.button.height)
+		if (texture_x > 420 && texture_x < 420 + cub->menu.button.width \
+		&& texture_y > 60 && texture_y < 60 + cub->menu.button.height)
 			color = *((int *)(cub->menu.button.addr + ((texture_y - 60) * \
 						cub->menu.button.line_length + (texture_x - 420) * \
 						(cub->menu.button.bits_per_pixel / 8))));
 		if (color < 0)
 			color = save_color;
 	}
-	else if (texture_x > 425 && texture_x < 425 + cub->menu.button.width && texture_y > 67 && texture_y < 67 + cub->menu.button.height)
-			color = *((int *)(cub->menu.button.addr + ((texture_y - 67) * \
-						cub->menu.button.line_length + (texture_x - 425) * \
-						(cub->menu.button.bits_per_pixel / 8))));
-	if (texture_x >= 382 && texture_x < 382 + cub->menu.checker_plain.width && texture_y >= 322 && texture_y < 322 + cub->menu.checker_plain.height && cub->menu.cross_hair == 1)
-		color = *((int *)(cub->menu.checker_plain.addr + ((texture_y - 322) * \
-					cub->menu.checker_plain.line_length + (texture_x - 382) * \
-					(cub->menu.checker_plain.bits_per_pixel / 8))));
-	if (texture_x >= 477 && texture_x < 477 + cub->menu.checker_plain.width && texture_y >= 322 && texture_y < 322 + cub->menu.checker_plain.height && cub->menu.cross_hair == 2)
-		color = *((int *)(cub->menu.checker_plain.addr + ((texture_y - 322) * \
-					cub->menu.checker_plain.line_length + (texture_x - 477) * \
-					(cub->menu.checker_plain.bits_per_pixel / 8))));
-	if (texture_x >= 516 && texture_x < 516 + cub->menu.checker_plain.width && texture_y >= 507 && texture_y < 507 + cub->menu.checker_plain.height && cub->menu.outline == 1)
-		color = *((int *)(cub->menu.checker_plain.addr + ((texture_y - 507) * \
-					cub->menu.checker_plain.line_length + (texture_x - 516) * \
-					(cub->menu.checker_plain.bits_per_pixel / 8))));
-	if (texture_x >= 516 && texture_x < 516 + cub->menu.checker_plain.width && texture_y >= 578 && texture_y < 578 + cub->menu.checker_plain.height && cub->menu.outline == 2)
-		color = *((int *)(cub->menu.checker_plain.addr + ((texture_y - 578) * \
-					cub->menu.checker_plain.line_length + (texture_x - 516) * \
-					(cub->menu.checker_plain.bits_per_pixel / 8))));
+	return (color);
+}
+
+void	display_customized(t_cub *cub, int texture_x, int texture_y)
+{
+	int			color;
+	int			i;
+	int			save_color;
+	static int	coords[10] = {425, 67, 382, 322, 477, 322, 516, 507, 516, 578};
+	t_image		text[2];
+
+	text[0] = cub->menu.checker_plain;
+	text[1] = cub->menu.button;
+	color = set_button_color(cub, texture_x, texture_y);
+	i = 0;
+	while (color < 0 && i < 9)
+	{
+		if (texture_x > coords[i] && texture_x < coords[i] + text[!i].width && texture_y > coords[i + 1] &&
+			texture_y < coords[i + 1] + text[!i].height)
+			color = *((int *)(text[!i].addr + ((texture_y - coords[i + 1]) * \
+					text[!i].line_length + (texture_x - coords[i]) * \
+					(text[!i].bits_per_pixel / 8))));
+		i += 2;
+	}
 	if (color > 0)
 		cub_pixel_put(&cub->img, cub->menu.x + texture_x, cub->menu.y + texture_y, color);
 }
 
-void	summon_game_menu(t_cub *cub, int dir)
+void	display_menu(t_cub *cub, int max_y, int display_x, int texture_x)
 {
-	int texture_x;
-	int texture_y;
-	int	display_x;
 	int	display_y;
-	int	max_y;
+	int	texture_y;
+	int	color;
 
-	texture_x = cub->menu.menu_bg.width;
-	display_x = cub->menu.x + cub->menu.menu_bg.width;
-	max_y = cub->win_size[HEIGHT] - cub->menu.y;
 	while (display_x > 0 && display_x > cub->menu.x)
 	{
 		display_y = cub->menu.y;
 		texture_y = 0;
 		while (display_y < max_y)
 		{
-			int color = *((int *)(cub->menu.menu_bg.addr + (texture_y * \
+			color = *((int *)(cub->menu.menu_bg.addr + (texture_y * \
 					cub->menu.menu_bg.line_length + texture_x * \
 					(cub->menu.menu_bg.bits_per_pixel / 8))));
 			if (color > 0)
@@ -125,7 +105,20 @@ void	summon_game_menu(t_cub *cub, int dir)
 		display_x--;
 		texture_x--;
 	}
-	cub->menu.x += ((cub->win_size[WIDTH] - cub->menu.menu_bg.width) / 2 - cub->menu.x) / 10 * dir;
+}
+
+void	summon_game_menu(t_cub *cub, int dir)
+{
+	int	texture_x;
+	int	display_x;
+	int	max_y;
+
+	max_y = cub->win_size[HEIGHT] - cub->menu.y;
+	texture_x = cub->menu.menu_bg.width;
+	display_x = cub->menu.x + cub->menu.menu_bg.width;
+	display_menu(cub, max_y, display_x, texture_x);
+	cub->menu.x += ((cub->win_size[WIDTH] - cub->menu.menu_bg.width) / 2 \
+				- cub->menu.x) / 10 * dir;
 	if (cub->menu.x < cub->menu.menu_bg.width * -1)
 		cub->menu.x = cub->menu.menu_bg.width * -1;
 }
@@ -135,7 +128,6 @@ void	handle_menu(t_cub *cub)
 	if (cub->menu.on_screen)
 	{
 		cub->menu.on_screen = false;
-		cub->menu.time_pressed = get_time();
 		cub->menu.x -= 1;
 	}
 	else
