@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:44:48 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 06:10:10 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 12:19:42 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,17 @@ void	load_game_menu(t_cub *cub)
 	cub->menu.button_shadow.addr = mlx_get_data_addr(cub->menu.button_shadow.img, &cub->menu.button_shadow.bits_per_pixel, &cub->menu.button_shadow.line_length, &cub->menu.button_shadow.endian);
 	cub->menu.checker_plain.img = mlx_xpm_file_to_image(cub->mlx, CHECK, &cub->menu.checker_plain.width, &cub->menu.checker_plain.height);
 	cub->menu.checker_plain.addr = mlx_get_data_addr(cub->menu.checker_plain.img, &cub->menu.checker_plain.bits_per_pixel, &cub->menu.checker_plain.line_length, &cub->menu.checker_plain.endian);
+	cub->menu.cursor.img = mlx_xpm_file_to_image(cub->mlx, CURSOR, &cub->menu.cursor.width, &cub->menu.cursor.height);
+	cub->menu.cursor.addr = mlx_get_data_addr(cub->menu.cursor.img, &cub->menu.cursor.bits_per_pixel, &cub->menu.cursor.line_length, &cub->menu.cursor.endian);
 	cub->menu.y = (cub->win_size[HEIGHT] - cub->menu.menu_bg.height) / 2;
 	cub->menu.x = cub->menu.menu_bg.width * -1;
 	cub->menu.on_screen = false;
 	cub->menu.cross_hair = 1;
 	cub->menu.outline = 1;
+	cub->menu.cursors[SPEED].x = 1031;
+	cub->menu.cursors[SPEED].y = 315;
+	cub->menu.cursors[SENSI].y = 513;
+	cub->menu.cursors[SENSI].x = 1031;
 }
 
 int	set_button_color(t_cub *cub, int texture_x, int texture_y)
@@ -56,11 +62,29 @@ int	set_button_color(t_cub *cub, int texture_x, int texture_y)
 	return (color);
 }
 
+int	set_cursor_color(t_cub *cub, int texture_x, int texture_y)
+{
+	int	color;
+	int	i;
+
+	color = -1;
+	i = 0;
+	while (i < 2)
+	{
+		if (texture_x > cub->menu.cursors[i].x && texture_x < cub->menu.cursors[i].x + cub->menu.cursor.width \
+			&& texture_y > cub->menu.cursors[i].y && texture_y < cub->menu.cursors[i].y + cub->menu.cursor.height)
+			color = *((int *)(cub->menu.cursor.addr + ((texture_y - cub->menu.cursors[i].y) * \
+							cub->menu.cursor.line_length + (texture_x - cub->menu.cursors[i].x) * \
+							(cub->menu.cursor.bits_per_pixel / 8))));
+		i++;
+	}
+	return (color);
+}
+
 void	display_customized(t_cub *cub, int texture_x, int texture_y)
 {
 	int			color;
 	int			i;
-	int			save_color;
 	static int	coords[10] = {425, 67, 382, 322, 477, 322, 516, 507, 516, 578};
 	t_image		text[2];
 
@@ -68,6 +92,8 @@ void	display_customized(t_cub *cub, int texture_x, int texture_y)
 	text[1] = cub->menu.button;
 	color = set_button_color(cub, texture_x, texture_y);
 	i = 0;
+//	if (texture_x >= 870 && texture_x < 1300 && texture_y >= 350 && texture_y < 390)
+//		color = 28374695;
 	while (color < 0 && i < 9)
 	{
 		if (texture_x > coords[i] && texture_x < coords[i] + text[!i].width && texture_y > coords[i + 1] &&
@@ -77,6 +103,8 @@ void	display_customized(t_cub *cub, int texture_x, int texture_y)
 					(text[!i].bits_per_pixel / 8))));
 		i += 2;
 	}
+	if (color < 0)
+		color = set_cursor_color(cub, texture_x, texture_y);
 	if (color > 0)
 		cub_pixel_put(&cub->img, cub->menu.x + texture_x, cub->menu.y + texture_y, color);
 }

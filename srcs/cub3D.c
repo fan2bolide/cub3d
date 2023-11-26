@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/25 01:22:41 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 12:15:07 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,6 +227,24 @@ void	remove_load_screen(t_cub *cub)
 
 int	perform_actions(t_cub *cub)
 {
+	int x, y;
+	mlx_mouse_get_pos(cub->mlx, cub->win, &x, &y);
+	if (cub->menu.cursors[SPEED].is_pressed)
+	{
+		if (x < 862)
+			x = 862;
+		if (x > 1200)
+			x = 1200;
+		cub->menu.cursors[SPEED].x = x;
+	}
+	if (cub->menu.cursors[SENSI].is_pressed)
+	{
+		if (x < 862)
+			x = 862;
+		if (x > 1200)
+			x = 1200;
+		cub->menu.cursors[SENSI].x = x;
+	}
 	if ((cub->menu.cross_hair == 2 && cub->cross_hair > 0) || (cub->menu.cross_hair == 1 && cub->cross_hair < 0))
 		cub->cross_hair *= -1;
 	if (cub->keys_states[KEY_ESC])
@@ -300,9 +318,17 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 	return (1);
 }
 
+int cub_handle_mouse_release(int button, int x, int y, t_cub *cub)
+{
+	if (cub->menu.cursors[SPEED].is_pressed)
+		cub->menu.cursors[SPEED].is_pressed = false;
+	if (cub->menu.cursors[SENSI].is_pressed)
+		cub->menu.cursors[SENSI].is_pressed = false;
+	return (0);
+}
+
 int	cub_handle_mouse(int button, int x, int y, t_cub *cub)
 {
-	mlx_mouse_get_pos(cub->mlx, cub->win, &x, &y);
 	if (cub->menu.on_screen && x >= cub->menu.x + 516 && x < cub->menu.x + 516 + cub->menu.checker_plain.width && y >= cub->menu.y + 578 && y < cub->menu.y + 578 + cub->menu.checker_plain.height)
 		cub->menu.outline = 2;
 	if (cub->menu.on_screen && x >= cub->menu.x + 516 && x < cub->menu.x + 516 + cub->menu.checker_plain.width && y >= cub->menu.y + 507 && y < cub->menu.y + 507 + cub->menu.checker_plain.height)
@@ -313,6 +339,19 @@ int	cub_handle_mouse(int button, int x, int y, t_cub *cub)
 		cub->menu.cross_hair = 2;
 	if (cub->menu.on_screen && x >= cub->menu.x + 420 && x < cub->menu.x + 420 + cub->menu.button.width && y >= cub->menu.y + 60 && y < cub->menu.y + 60 + cub->menu.button.height)
 		handle_menu(cub);
+
+	if ((cub->menu.on_screen && x - cub->menu.x >= cub->menu.cursors[SPEED].x && x - cub->menu.x < cub->menu.cursors[SPEED].x + cub->menu.cursor.width && y - abs(cub->menu.y) >= cub->menu.cursors[SPEED].y && y - abs(cub->menu.y) < cub->menu.cursors[SPEED].y + cub->menu.cursor.height) || (x - cub->menu.x >= 870 && x - cub->menu.x < 1300 && y - cub->menu.y >= 350 && y - cub->menu.y < 390))
+	{
+		cub->menu.cursors[SPEED].is_pressed = true;
+		cub->menu.cursors[SPEED].press_x = x;
+		cub->menu.cursors[SPEED].press_y = y;
+	}
+	if ((cub->menu.on_screen && x - cub->menu.x >= cub->menu.cursors[SENSI].x && x - cub->menu.x < cub->menu.cursors[SENSI].x + cub->menu.cursor.width && y - abs(cub->menu.y) >= cub->menu.cursors[SENSI].y && y - abs(cub->menu.y) < cub->menu.cursors[SENSI].y + cub->menu.cursor.height) || (x - cub->menu.x >= 870 && x - cub->menu.x < 1300 && y - cub->menu.y >= 548 && y - cub->menu.y < 588))
+	{
+		cub->menu.cursors[SENSI].is_pressed = true;
+		cub->menu.cursors[SENSI].press_x = x;
+		cub->menu.cursors[SENSI].press_y = y;
+	}
 	return (0);
 }
 
@@ -322,6 +361,7 @@ void cub_mlx_config(t_cub *cub)
 	mlx_hook(cub->win, KEY_RELEASE, KEY_RELEASE_MASK, cub_handle_key_release, cub);
 	mlx_hook(cub->win, DESTROY_NOTIFY, NO_EVENT_MASK, close_window, cub);
 	mlx_mouse_hook(cub->win, cub_handle_mouse, cub);
+	mlx_hook(cub->win, BUTTON_RELEASE, BUTTON_RELEASE_MASK, cub_handle_mouse_release, cub);
 	mlx_loop_hook(cub->mlx, perform_actions, cub);
 }
 

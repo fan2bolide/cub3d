@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 03:49:11 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/26 11:38:51 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@
 
 # define PRESSED    1
 # define RELEASED   0
+# define SPEED		0
+# define SENSI		1
 
 // ========================= PATHS ============================= //
 # define BJ_PATH	"textures/bajeanno.xpm"
@@ -74,6 +76,7 @@
 # define BUTTON			"textures/button.xpm"
 # define BUTTON_SH		"textures/button_shadow.xpm"
 # define CHECK			"textures/check.xpm"
+# define CURSOR			"textures/cursor.xpm"
 
 // X11 events
 # define KEY_PRESS			2
@@ -285,14 +288,25 @@ typedef struct s_image
 	int		height;
 }			t_image;
 
+typedef struct s_cursor
+{
+	int	x;
+	int y;
+	bool	is_pressed;
+	int press_x;
+	int press_y;
+}			t_cursor;
+
 typedef struct s_menu
 {
 	t_image	menu_bg;
 	t_image	checker_plain;
 	t_image	button;
 	t_image	button_shadow;
+	t_image	cursor;
 	int		x;
 	int		y;
+	t_cursor	cursors[2];
 	bool	on_screen;
 	int		cross_hair;
 	int		outline;
