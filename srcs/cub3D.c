@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/27 07:32:46 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/27 11:29:05 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,7 +426,6 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		cub->player_position.y = new_y;
 		cub->player_position.x = new_x;
 	}
-	printf("x = %f, y = %f\n", cub->player_position.x, cub->player_position.y);
 }
 
 void	cub_update_player_position(int keycode, t_cub *cub)
@@ -458,7 +457,6 @@ int close_window(t_cub *cub)
 	mlx_destroy_display(cub->mlx);
 	free(cub->mlx);
 	destroy_data(cub->data);
-	free(cub->player_position);
 	free(cub);
 	exit(0);
 }
