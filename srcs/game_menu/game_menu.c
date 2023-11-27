@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 15:44:48 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 12:46:33 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/27 04:41:41 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	load_game_menu(t_cub *cub)
 {
-	cub->menu.menu_bg.img = mlx_xpm_file_to_image(cub->mlx, MENU_BG, &cub->menu.menu_bg.width, &cub->menu.menu_bg.height);
+	cub->menu.menu_bg.img= mlx_xpm_file_to_image(cub->mlx, MENU_BG, &cub->menu.menu_bg.width, &cub->menu.menu_bg.height);
 	cub->menu.menu_bg.addr = mlx_get_data_addr(cub->menu.menu_bg.img, &cub->menu.menu_bg.bits_per_pixel, &cub->menu.menu_bg.line_length, &cub->menu.menu_bg.endian);
 	cub->menu.button.img = mlx_xpm_file_to_image(cub->mlx, BUTTON, &cub->menu.button.width, &cub->menu.button.height);
 	cub->menu.button.addr = mlx_get_data_addr(cub->menu.button.img, &cub->menu.button.bits_per_pixel, &cub->menu.button.line_length, &cub->menu.button.endian);
@@ -24,6 +24,8 @@ void	load_game_menu(t_cub *cub)
 	cub->menu.checker_plain.addr = mlx_get_data_addr(cub->menu.checker_plain.img, &cub->menu.checker_plain.bits_per_pixel, &cub->menu.checker_plain.line_length, &cub->menu.checker_plain.endian);
 	cub->menu.cursor.img = mlx_xpm_file_to_image(cub->mlx, CURSOR, &cub->menu.cursor.width, &cub->menu.cursor.height);
 	cub->menu.cursor.addr = mlx_get_data_addr(cub->menu.cursor.img, &cub->menu.cursor.bits_per_pixel, &cub->menu.cursor.line_length, &cub->menu.cursor.endian);
+	cub->menu.reset.img = mlx_xpm_file_to_image(cub->mlx, RESET, &cub->menu.reset.width, &cub->menu.reset.height);
+	cub->menu.reset.addr = mlx_get_data_addr(cub->menu.reset.img, &cub->menu.reset.bits_per_pixel, &cub->menu.reset.line_length, &cub->menu.reset.endian);
 	cub->menu.y = (cub->win_size[HEIGHT] - cub->menu.menu_bg.height) / 2;
 	cub->menu.x = cub->menu.menu_bg.width * -1;
 	cub->menu.on_screen = false;
@@ -35,8 +37,52 @@ void	load_game_menu(t_cub *cub)
 	cub->menu.cursors[SENSI].x = 1031;
 	cub->menu.cursors[SPEED].initial_pos.x = 1031;
 	cub->menu.cursors[SPEED].initial_pos.y = 315;
-	cub->menu.cursors[SENSI].initial_pos.x = 513;
-	cub->menu.cursors[SENSI].initial_pos.y = 1031;
+	cub->menu.cursors[SENSI].initial_pos.x = 1031;
+	cub->menu.cursors[SENSI].initial_pos.y = 513;
+	cub->menu.reseters[SPEED].x = 1317;
+	cub->menu.reseters[SPEED].y = 344;
+	cub->menu.reseters[SENSI].x = 1317;
+	cub->menu.reseters[SENSI].y = 542;
+	int i = 0;
+	while (i++ < 2)
+	{
+		cub->menu.cursors[i - 1].is_pressed = false;
+		cub->menu.reseters[i - 1].is_pressed = false;
+	}
+}
+
+int	set_reset_button_color(t_cub *cub, int texture_x, int texture_y)
+{
+	int color;
+	static int	coords[4];
+	int	i;
+
+	coords[0] = cub->menu.reseters[SPEED].x;
+	coords[1] = cub->menu.reseters[SPEED].y;
+	coords[2] = cub->menu.reseters[SENSI].x;
+	coords[3] = cub->menu.reseters[SENSI].y;
+	color = -1;
+	i = 0;
+	while (i < 4)
+		if (cub->menu.reseters[i++ > 1].is_pressed)
+			coords[i - 1] += 4;
+	i = 0;
+	while (i < 3 && color < 0)
+	{
+		if (texture_x > coords[i] && texture_x < coords[i] + cub->menu.reset.width \
+			&& texture_y > coords[i + 1] && texture_y < coords[i + 1] + cub->menu.reset.height)
+				color = *((int *)(cub->menu.reset.addr + ((texture_y - coords[i + 1]) * \
+							cub->menu.reset.line_length + (texture_x - coords[i]) * \
+							(cub->menu.reset.bits_per_pixel / 8))));
+		if (cub->menu.reseters[i == 2].is_pressed)
+			if (texture_x > coords[i] + cub->menu.reset.width - 4 ||
+				texture_y > coords[i + 1] + cub->menu.reset.height - 4 ||
+				(texture_x > coords[i] + cub->menu.reset.width - 6 &&
+				 texture_y > coords[i + 1] + cub->menu.reset.height - 6) || color == 15783256 || color == 15783257 )
+				color = -1;
+		i += 2;
+	}
+	return (color);
 }
 
 int	set_button_color(t_cub *cub, int texture_x, int texture_y)
@@ -45,12 +91,12 @@ int	set_button_color(t_cub *cub, int texture_x, int texture_y)
 	int		save_color;
 	t_image	bu_sh;
 
-	color = -1;
+	color = set_reset_button_color(cub, texture_x, texture_y);
 	bu_sh = cub->menu.button_shadow;
 	if (cub->menu.on_screen || cub->menu.x < -100)
 	{
-		if (texture_x > 425 && texture_x < 425 + cub->menu.button_shadow.width \
-		&& texture_y > 67 && texture_y < 67 + cub->menu.button_shadow.height)
+		if (texture_x > 425 && texture_x < 425 + bu_sh.width \
+		&& texture_y > 67 && texture_y < 67 + bu_sh.height)
 			color = *((int *)(bu_sh.addr + ((texture_y - 67) * \
 						bu_sh.line_length + (texture_x - 425) * \
 						(bu_sh.bits_per_pixel / 8))));

@@ -210,10 +210,7 @@ int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
 			continue;
 		}
 		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
-			cub_pixel_put(&cub->img, x, y, \
-			*((int *)(cub->textures[texture_id].addr + (texture.y * \
-			cub->textures[texture_id].line_length + texture.x * \
-			(cub->textures[texture_id].bits_per_pixel / 8)))));
+			cub_pixel_put(&cub->img, x, y, color);
 		y++;
 		i++;
 	}

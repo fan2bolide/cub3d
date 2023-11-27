@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 12:57:00 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/27 06:55:57 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@
 # define BUTTON_SH		"textures/button_shadow.xpm"
 # define CHECK			"textures/check.xpm"
 # define CURSOR			"textures/cursor.xpm"
+# define RESET			"textures/reset.xpm"
 
 // X11 events
 # define KEY_PRESS			2
@@ -305,9 +306,11 @@ typedef struct s_menu
 	t_image	button;
 	t_image	button_shadow;
 	t_image	cursor;
+	t_image reset;
 	int		x;
 	int		y;
 	t_cursor	cursors[2];
+	t_cursor	reseters[2];
 	bool	on_screen;
 	int		cross_hair;
 	int		outline;

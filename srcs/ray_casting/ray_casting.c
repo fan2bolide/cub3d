@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/21 03:45:59 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/27 07:30:03 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal)
 		if (portal_orientation == 'W')
 		{
 			ray->y = portal_position.y + (ray->y - (int)ray->y);
-			ray->x = portal_position.x;
+			ray->x = portal_position.x - 0.005;
 		}
 		return (1);
 	}
@@ -221,7 +221,7 @@ int teleport_ray(t_cub *cub, t_position *ray, double *angle, char entry_portal)
 		if (portal_orientation == 'E')
 		{
 			ray->y = portal_position.y + (ray->y - (int)ray->y);
-			ray->x = portal_position.x + 1;
+			ray->x = portal_position.x + 1 + 0.005;
 		}
 		if (portal_orientation == 'W')
 		{

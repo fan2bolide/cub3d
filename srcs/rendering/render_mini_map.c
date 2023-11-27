@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 02:50:04 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/22 01:56:13 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/27 11:23:11 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	cub_put_player_on_map(t_cub *cub, t_position player)
 		while (j < (int)player.y + radius + 1)
 		{
 			if (pow(player.x - i, 2) + pow(player.y - j, 2) < pow(radius, 2))
-				cub_pixel_put(&cub->img, i, j, 0x0000FF);
+				cub_pixel_put(&cub->img, i, j, 0x97f1d0);
 			j++;
 		}
 		i++;
@@ -84,12 +84,13 @@ void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
 			ray_dup.y = cub->portals[i++]->portal->position.y * MINIMAP_SCALE \
 						+ ray_adjustment.y;
 		}
-		cub_put_line(cub, player, ray_dup, 0xFF0000);
+		cub_put_line(cub, player, ray_dup, 0xffa2e8);
 	}
 }
 
 void put_outer_color(t_cub *cub)
 {
+	static int	colors[2] = {OUT_COLOR, IN_COLOR};
 	int	pixel_x;
 	int	pixel_y;
 	int	i;
@@ -97,13 +98,13 @@ void put_outer_color(t_cub *cub)
 
 	i = MINIMAP_OFFSET - 5;
 	pixel_y = 0;
-	while (pixel_y < (MINIMAP_SIZE * 2) + 10)
+	while (pixel_y < (MINIMAP_SIZE * 2) + 11)
 	{
 		pixel_x = 0;
 		j = MINIMAP_OFFSET - 5;
-		while (pixel_x < (MINIMAP_SIZE * 2) + 10)
+		while (pixel_x < (MINIMAP_SIZE * 2) + 11)
 		{
-			cub_pixel_put(&cub->img, j, i, OUTER_MINIMAP_COLOR);
+			cub_pixel_put(&cub->img, j, i, colors[pixel_x > 5 && pixel_x < (MINIMAP_SIZE * 2 + 10) - 5 && pixel_y > 5 && pixel_y < (MINIMAP_SIZE * 2 + 10)- 5]);
 			pixel_x++;
 			j++;
 		}
@@ -126,9 +127,9 @@ void	render_mini_map(t_cub *cub, t_position *ray_collision)
 		while (cub->data->map[i][j])
 		{
 			if (cub->data->map[i][j] == '1')
-				put_wall(cub, i, j, 0x000000);
+				put_wall(cub, i, j, 0x2089ef);
 			if (cub->data->map[i][j] == '0')
-				put_wall(cub, i, j, 0xFFFFFF);
+				put_wall(cub, i, j, 0Xffe3b8);
 			if (cub->data->map[i][j] == 'B')
 				put_wall(cub, i, j, 0x889BF8);
 			if (cub->data->map[i][j] == 'O')

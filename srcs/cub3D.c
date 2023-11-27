@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 13:21:21 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/27 07:44:49 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,38 +132,6 @@ void display_load_screen(t_cub *cub)
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->load_screen.img, x, y);
 }
 
-//void display_load_screen(t_cub *cub, int max_x, int max_y)
-//{
-//	int		x;
-//	int 	y;
-//	int 	start_x;
-//	int 	start_y;
-//	int 	color;
-//
-//	cub->load_screen.img = mlx_xpm_file_to_image(cub->mlx, LOAD_SCREEN, &cub->load_screen.width, &cub->load_screen.height);
-//	cub->load_screen.addr = mlx_get_data_addr(cub->load_screen.img, &cub->load_screen.bits_per_pixel, &cub->load_screen.line_length, &cub->load_screen.endian);
-//	start_x = (max_x / 2) - (cub->load_screen.width / 2);
-//	start_y = (max_y/ 2) - (cub->load_screen.height / 2);
-//	x = 0;
-//	while (x < max_x)
-//	{
-//		y = 0;
-//		while (y < max_y)
-//		{
-//			if (x >= start_x && x <= start_x + cub->load_screen.width && y >= start_y && y <= start_y + cub->load_screen.height)
-//				color = *((int *)(cub->load_screen.addr + ((y - start_y)* \
-//					cub->load_screen.line_length + (x - start_x) * \
-//					(cub->load_screen.bits_per_pixel / 8))));
-//			else
-//				color = 1234;
-//			cub_pixel_put(&cub->img, x, y, color);
-//			y++;
-//		}
-//		x++;
-//	}
-//	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img,x , y);
-//}
-
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -247,8 +215,17 @@ int	perform_actions(t_cub *cub)
 		if (x > 1200)
 			x = 1200;
 		cub->menu.cursors[SENSI].x = x;
-		cub->sensivity = 0.017 + ((double)((int)cub->menu.cursors[SENSI].x - (int)cub->menu.cursors[SENSI].initial_pos.x) / 100000);
-		printf("%f\n",((double)((int)cub->menu.cursors[SENSI].x - (int)cub->menu.cursors[SENSI].initial_pos.x) / 500000));
+		cub->sensivity = 0.017 + (double)((int)cub->menu.cursors[SENSI].x - (int)cub->menu.cursors[SENSI].initial_pos.x) / 10000;
+	}
+	if (cub->menu.reseters[SPEED].is_pressed)
+	{
+		cub->player_speed = 20;
+		cub->menu.cursors[SPEED].x = (int) cub->menu.cursors[SPEED].initial_pos.x;
+	}
+	if (cub->menu.reseters[SENSI].is_pressed)
+	{
+		cub->sensivity = 0.017;
+		cub->menu.cursors[SENSI].x = (int) cub->menu.cursors[SENSI].initial_pos.x;
 	}
 	if ((cub->menu.cross_hair == 2 && cub->cross_hair > 0) || (cub->menu.cross_hair == 1 && cub->cross_hair < 0))
 		cub->cross_hair *= -1;
@@ -329,33 +306,50 @@ int cub_handle_mouse_release(int button, int x, int y, t_cub *cub)
 		cub->menu.cursors[SPEED].is_pressed = false;
 	if (cub->menu.cursors[SENSI].is_pressed)
 		cub->menu.cursors[SENSI].is_pressed = false;
+	if (cub->menu.reseters[SPEED].is_pressed)
+		cub->menu.reseters[SPEED].is_pressed = false;
+	if (cub->menu.reseters[SENSI].is_pressed)
+		cub->menu.reseters[SENSI].is_pressed = false;
 	return (0);
 }
 
 int	cub_handle_mouse(int button, int x, int y, t_cub *cub)
 {
-	if (cub->menu.on_screen && x >= cub->menu.x + 516 && x < cub->menu.x + 516 + cub->menu.checker_plain.width && y >= cub->menu.y + 578 && y < cub->menu.y + 578 + cub->menu.checker_plain.height)
+	if (!cub->menu.on_screen)
+		return (1);
+	if (x >= cub->menu.x + 516 && x < cub->menu.x + 516 + cub->menu.checker_plain.width && y >= cub->menu.y + 578 && y < cub->menu.y + 578 + cub->menu.checker_plain.height)
 		cub->menu.outline = 2;
-	if (cub->menu.on_screen && x >= cub->menu.x + 516 && x < cub->menu.x + 516 + cub->menu.checker_plain.width && y >= cub->menu.y + 507 && y < cub->menu.y + 507 + cub->menu.checker_plain.height)
+	if (x >= cub->menu.x + 516 && x < cub->menu.x + 516 + cub->menu.checker_plain.width && y >= cub->menu.y + 507 && y < cub->menu.y + 507 + cub->menu.checker_plain.height)
 		cub->menu.outline = 1;
-	if (cub->menu.on_screen && x >= cub->menu.x + 382 && x < cub->menu.x + 382 + cub->menu.checker_plain.width && y >= cub->menu.y + 322 && y < cub->menu.y + 322 + cub->menu.checker_plain.height)
+	if (x >= cub->menu.x + 382 && x < cub->menu.x + 382 + cub->menu.checker_plain.width && y >= cub->menu.y + 322 && y < cub->menu.y + 322 + cub->menu.checker_plain.height)
 		cub->menu.cross_hair = 1;
-	if (cub->menu.on_screen && x >= cub->menu.x + 477 && x < cub->menu.x + 477 + cub->menu.checker_plain.width && y >= cub->menu.y + 322 && y < cub->menu.y + 322 + cub->menu.checker_plain.height)
+	if (x >= cub->menu.x + 477 && x < cub->menu.x + 477 + cub->menu.checker_plain.width && y >= cub->menu.y + 322 && y < cub->menu.y + 322 + cub->menu.checker_plain.height)
 		cub->menu.cross_hair = 2;
-	if (cub->menu.on_screen && x >= cub->menu.x + 420 && x < cub->menu.x + 420 + cub->menu.button.width && y >= cub->menu.y + 60 && y < cub->menu.y + 60 + cub->menu.button.height)
+	if (x >= cub->menu.x + 420 && x < cub->menu.x + 420 + cub->menu.button.width && y >= cub->menu.y + 60 && y < cub->menu.y + 60 + cub->menu.button.height)
 		handle_menu(cub);
-
-	if ((cub->menu.on_screen && x - cub->menu.x >= cub->menu.cursors[SPEED].x && x - cub->menu.x < cub->menu.cursors[SPEED].x + cub->menu.cursor.width && y - abs(cub->menu.y) >= cub->menu.cursors[SPEED].y && y - abs(cub->menu.y) < cub->menu.cursors[SPEED].y + cub->menu.cursor.height) || (x - cub->menu.x >= 870 && x - cub->menu.x < 1300 && y - cub->menu.y >= 350 && y - cub->menu.y < 390))
+	if ((x - cub->menu.x >= cub->menu.cursors[SPEED].x && x - cub->menu.x < cub->menu.cursors[SPEED].x + cub->menu.cursor.width && y - abs(cub->menu.y) >= cub->menu.cursors[SPEED].y && y - abs(cub->menu.y) < cub->menu.cursors[SPEED].y + cub->menu.cursor.height) || (x - cub->menu.x >= 870 && x - cub->menu.x < 1300 && y - cub->menu.y >= 350 && y - cub->menu.y < 390))
 	{
 		cub->menu.cursors[SPEED].is_pressed = true;
 		cub->menu.cursors[SPEED].press_x = x;
 		cub->menu.cursors[SPEED].press_y = y;
 	}
-	if ((cub->menu.on_screen && x - cub->menu.x >= cub->menu.cursors[SENSI].x && x - cub->menu.x < cub->menu.cursors[SENSI].x + cub->menu.cursor.width && y - abs(cub->menu.y) >= cub->menu.cursors[SENSI].y && y - abs(cub->menu.y) < cub->menu.cursors[SENSI].y + cub->menu.cursor.height) || (x - cub->menu.x >= 870 && x - cub->menu.x < 1300 && y - cub->menu.y >= 548 && y - cub->menu.y < 588))
+	if ((x - cub->menu.x >= cub->menu.cursors[SENSI].x && x - cub->menu.x < cub->menu.cursors[SENSI].x + cub->menu.cursor.width && y - abs(cub->menu.y) >= cub->menu.cursors[SENSI].y && y - abs(cub->menu.y) < cub->menu.cursors[SENSI].y + cub->menu.cursor.height) || (x - cub->menu.x >= 870 && x - cub->menu.x < 1300 && y - cub->menu.y >= 548 && y - cub->menu.y < 588))
 	{
 		cub->menu.cursors[SENSI].is_pressed = true;
 		cub->menu.cursors[SENSI].press_x = x;
 		cub->menu.cursors[SENSI].press_y = y;
+	}
+	if ((x - cub->menu.x >= cub->menu.reseters[SPEED].x && x - cub->menu.x < cub->menu.reseters[SPEED].x + cub->menu.reset.width && y - abs(cub->menu.y) >= cub->menu.reseters[SPEED].y && y - abs(cub->menu.y) < cub->menu.reseters[SPEED].y + cub->menu.reset.height))// || (x - cub->menu.x >= 870 && x - cub->menu.x < 1300 && y - cub->menu.y >= 548 && y - cub->menu.y < 588))
+	{
+		cub->menu.reseters[SPEED].is_pressed = true;
+		cub->menu.reseters[SPEED].press_x = x;
+		cub->menu.reseters[SPEED].press_y = y;
+	}
+	if ((x - cub->menu.x >= cub->menu.reseters[SENSI].x && x - cub->menu.x < cub->menu.reseters[SENSI].x + cub->menu.reset.width && y - abs(cub->menu.y) >= cub->menu.reseters[SENSI].y && y - abs(cub->menu.y) < cub->menu.reseters[SENSI].y + cub->menu.reset.height)) //|| (x - cub->menu.x >= 870 && x - cub->menu.x < 1300 && y - cub->menu.y >= 548 && y - cub->menu.y < 588))
+	{
+		cub->menu.reseters[SENSI].is_pressed = true;
+		cub->menu.reseters[SENSI].press_x = x;
+		cub->menu.reseters[SENSI].press_y = y;
 	}
 	return (0);
 }
@@ -372,7 +366,6 @@ void cub_mlx_config(t_cub *cub)
 
 void	cub_update_view_angle(int keycode, t_cub *cub)
 {
-	printf("%f\n", cub->sensivity);
 	if (keycode == KEY_LEFT)
 		cub->view_angle -= cub->sensivity;
 	else
@@ -465,6 +458,8 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 
 void	cub_update_player_position(int keycode, t_cub *cub)
 {
+	char *portal;
+
 	if (keycode == KEY_W)
 		move_player(cos(cub->view_angle) / cub->player_speed, sin(cub->view_angle) / cub->player_speed, cub);
 	if (keycode == KEY_S)
@@ -476,8 +471,22 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 	if (keycode == KEY_D)
 		move_player(cos(cub->view_angle + M_PI_2) / cub->player_speed, \
 		sin(cub->view_angle + M_PI_2) / cub->player_speed, cub);
-	if (cub->player_position->x - (int)cub->player_position->x < 0.0005)
-		cub->player_position->x += 0.0005;
+
+//	if (cub->player_position->x == (int)cub->player_position->x)
+//	{
+//		portal = &cub->data->map[(int)cub->player_position->y][(int)cub->player_position->x];
+//		if (*portal == 'O' && cub->orange_prtl == 'W')
+//			cub->player_position->x -= 0.00005;
+//		if (*portal == 'O' && cub->orange_prtl == 'E')
+//			cub->player_position->x += 0.00005;
+//		if (*portal == 'B' && cub->blue_prtl == 'W')
+//			cub->player_position->x -= 0.00005;
+//		if (*portal == 'O' && cub->blue_prtl == 'E')
+//			cub->player_position->x += 0.00005;
+//	}
+//	if ((int)cub->player_position->x - cub->player_position->x < 0.0005)
+//		cub->player_position->x -= 0.0005;
+
 	if (cub->player_position->y - (int)cub->player_position->y < 0.0005)
 		cub->player_position->y += 0.0005;
 }

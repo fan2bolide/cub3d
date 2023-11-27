@@ -16,7 +16,8 @@
 # define MINIMAP_SCALE			10
 # define MINIMAP_SIZE			50
 # define MINIMAP_OFFSET			30
-# define OUTER_MINIMAP_COLOR	0x000000
+# define OUT_COLOR	0x000000
+# define IN_COLOR	0Xffe3b8
 
 void	render_mini_map(t_cub *cub, t_position *ray_collision);
 int		shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance);
