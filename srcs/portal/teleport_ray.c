@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 20:16:39 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/27 07:47:45 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/27 07:48:05 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,6 @@ void	tp_from_west(	t_position *ray,
 	*angle = *angle + ((portal_orientation == 'S') * M_PI_2) \
 					- ((portal_orientation == 'N') * M_PI_2) \
 					+ ((portal_orientation == 'W') * M_PI);
-	if (portal_orientation == 'E')
-		ray->x += 0.00005;
-	if (portal_orientation == 'E')
-		ray->x += 0.00005;
-	if (portal_orientation == 'E')
-		ray->x += 0.00005;
-	if (portal_orientation == 'E')
-		ray->x += 0.00005;
 }
 
 void	tp_from_east(	t_position *ray,
