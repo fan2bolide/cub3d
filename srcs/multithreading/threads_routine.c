@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 10:36:26 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/26 12:34:46 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 12:38:07 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ void	*render_thread_routine(void *attr)
 				continue ;
 			}
 			render_column(cub, i);
+			if (i == cub->win_size[WIDTH] - 1)
+			{
+				pthread_mutex_lock(&cub->ray_mutex);
+				cub->is_frame_rendered = true;
+				pthread_mutex_unlock(&cub->ray_mutex);
+			}
 		}
 		else
 			usleep(100);

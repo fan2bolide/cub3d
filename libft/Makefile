@@ -121,7 +121,7 @@ clean:
 fclean: clean
 	$(RM) -f $(NAME)
 
-fsan_a: FLAGS += -fsanitize=address -g3
+fsan_a: FLAGS += -fsanitize=thread -g3
 fsan_a: all
 
 re: fclean all

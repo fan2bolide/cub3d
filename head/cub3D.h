@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 12:05:29 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 12:05:30 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,6 +330,7 @@ typedef struct s_cub
 	pthread_mutex_t	ray_mutex;
 	int				next_ray_to_compute;
 	pthread_t		*threads;
+	bool			is_frame_rendered;
 }	t_cub;
 
 typedef struct s_render_thread

@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 20:16:39 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/24 03:09:59 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/27 07:47:45 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,24 @@ void	tp_from_west(	t_position *ray,
 	if (portal_orientation == 'N' || portal_orientation == 'S')
 	{
 		ray->x = portal_position.x + offset;
-		ray->y = portal_position.y + (portal_orientation == 'S');
+		ray->y = portal_position.y + ((portal_orientation == 'S') * 1.01) - 0.005;
 	}
 	else if (portal_orientation == 'E' || portal_orientation == 'W')
 	{
 		ray->y = portal_position.y + offset;
-		ray->x = portal_position.x + (portal_orientation == 'E');
+		ray->x = portal_position.x + ((portal_orientation == 'E') * 1.01) - 0.005;
 	}
 	*angle = *angle + ((portal_orientation == 'S') * M_PI_2) \
 					- ((portal_orientation == 'N') * M_PI_2) \
 					+ ((portal_orientation == 'W') * M_PI);
+	if (portal_orientation == 'E')
+		ray->x += 0.00005;
+	if (portal_orientation == 'E')
+		ray->x += 0.00005;
+	if (portal_orientation == 'E')
+		ray->x += 0.00005;
+	if (portal_orientation == 'E')
+		ray->x += 0.00005;
 }
 
 void	tp_from_east(	t_position *ray,
@@ -50,12 +58,12 @@ void	tp_from_east(	t_position *ray,
 	if (portal_orientation == 'N' || portal_orientation == 'S')
 	{
 		ray->x = portal_position.x + offset;
-		ray->y = portal_position.y + (portal_orientation == 'S');
+		ray->y = portal_position.y + ((portal_orientation == 'S') * 1.01) - 0.005;
 	}
 	if (portal_orientation == 'E' || portal_orientation == 'W')
 	{
 		ray->y = portal_position.y + offset;
-		ray->x = portal_position.x + (portal_orientation == 'E');
+		ray->x = portal_position.x + ((portal_orientation == 'E') * 1.01) - 0.005;
 	}
 	*angle = *angle + (M_PI_2 * (portal_orientation == 'N')) \
 					+ (-M_PI_2 * (portal_orientation == 'S')) \
@@ -75,12 +83,12 @@ void	tp_from_south(	t_position *ray,
 	if (portal_orientation == 'N' || portal_orientation == 'S')
 	{
 		ray->x = portal_position.x + offset;
-		ray->y = portal_position.y + (portal_orientation == 'S');
+		ray->y = portal_position.y + ((portal_orientation == 'S') * 1.01) - 0.005;
 	}
 	if (portal_orientation == 'E' || portal_orientation == 'W')
 	{
 		ray->y = portal_position.y + offset;
-		ray->x = portal_position.x + (portal_orientation == 'E');
+		ray->x = portal_position.x + ((portal_orientation == 'E') * 1.01) - 0.005;
 	}
 	*angle = *angle + (M_PI * (portal_orientation == 'S')) \
 					+ (M_PI_2 * (portal_orientation == 'E')) \
@@ -100,12 +108,12 @@ void	tp_from_north(	t_position *ray,
 	if (portal_orientation == 'N' || portal_orientation == 'S')
 	{
 		ray->x = portal_position.x + offset;
-		ray->y = portal_position.y + (portal_orientation == 'S');
+		ray->y = portal_position.y + ((portal_orientation == 'S') * 1.01) - 0.005;
 	}
 	if (portal_orientation == 'E' || portal_orientation == 'W')
 	{
 		ray->y = portal_position.y + offset;
-		ray->x = portal_position.x + (portal_orientation == 'E');
+		ray->x = portal_position.x + ((portal_orientation == 'E') * 1.01) - 0.005;
 	}
 	*angle = *angle + (M_PI * (portal_orientation == 'N')) \
 					+ (-M_PI_2 * (portal_orientation == 'E')) \

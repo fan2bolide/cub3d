@@ -83,7 +83,7 @@ CFLAGS		=	-Wall -Wextra -pthread
 DFLAGS		:=	-MP -MMD
 
 #=========================DEBUG==============================#
-ASAN_F		:=	-g3 -fsanitize=address
+ASAN_F		:=	-g3 -fsanitize=thread
 
 ENV			:=	env -i
 

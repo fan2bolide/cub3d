@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 11:42:56 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/27 07:32:46 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ t_cub	*init_game(int argc, char **argv)
 		return (NULL);
 	ft_bzero(cub->keys_states, 65509 * sizeof(int));
 	cub->is_fullscreen = false;
-//	cub->last_frame_time = get_time();
 	cub->win_size[0] = 900;
 	cub->cross_hair = 'C';
 	cub->blue_prtl = '-';
@@ -400,8 +399,8 @@ void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)
 	walk_angle_save = walk_angle;
 	if(teleport_ray(cub, &new_pos, &walk_angle, prtl_id))
 	{
-		cub->player_position.x = new_pos.x;
-		cub->player_position.y = new_pos.y;
+		cub->player_position.x = new_pos.x - (0.00005 * (cos(walk_angle) < 0)) + (0.00005 * (cos(walk_angle) > 0));
+		cub->player_position.y = new_pos.y - (0.00005 * (sin(walk_angle) < 0)) + (0.00005 * (sin(walk_angle) > 0));
 		cub->view_angle += walk_angle - walk_angle_save;
 	}
 }
@@ -424,9 +423,10 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		teleport_player(new_x, new_y, 'B', cub);
 	else
 	{
-	cub->player_position.y = new_y;
-	cub->player_position.x = new_x;
+		cub->player_position.y = new_y;
+		cub->player_position.x = new_x;
 	}
+	printf("x = %f, y = %f\n", cub->player_position.x, cub->player_position.y);
 }
 
 void	cub_update_player_position(int keycode, t_cub *cub)
@@ -442,10 +442,6 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 	if (keycode == KEY_D)
 		move_player(cos(cub->view_angle + M_PI_2) / 20, \
 		sin(cub->view_angle + M_PI_2) / 20, cub);
-	if (cub->player_position.x - (int)cub->player_position.x < 0.0005)
-		cub->player_position.x += 0.0005;
-	if (cub->player_position.y - (int)cub->player_position.y < 0.0005)
-		cub->player_position.y += 0.0005;
 }
 
 #if defined(__linux__)
@@ -476,8 +472,11 @@ int	close_window(t_cub *cub)
 	pthread_mutex_lock(&cub->program_ends_mutex);
 	cub->program_ends = true;
 	pthread_mutex_unlock(&cub->program_ends_mutex);
+	usleep(1000);
 	while (i < NB_THREADS)
 		pthread_join(cub->threads[i++], NULL);
+	pthread_mutex_destroy(&cub->program_ends_mutex);
+	pthread_mutex_destroy(&cub->ray_mutex);
 	free(cub->threads);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);

@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/26 12:22:35 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/27 05:18:07 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	wait_rendering(t_cub *cub, struct timeval start_time)
 	while (1)
 	{
 		pthread_mutex_lock(&cub->ray_mutex);
-		if (cub->next_ray_to_compute >= cub->win_size[WIDTH])
+		if (cub->next_ray_to_compute >= cub->win_size[WIDTH] && cub->is_frame_rendered)
 		{
 			pthread_mutex_unlock(&cub->ray_mutex);
 			break ;
@@ -87,6 +87,7 @@ int	render_frame(t_cub *cub)
 	start_time = get_current_time();
 	if (cub->load_screen)
 		return (1);
+	cub->is_frame_rendered = 0;
 	pthread_mutex_lock(&cub->ray_mutex);
 	cub->next_ray_to_compute = 0;
 	pthread_mutex_unlock(&cub->ray_mutex);
