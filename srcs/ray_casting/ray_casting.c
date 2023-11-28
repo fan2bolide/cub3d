@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/24 00:11:59 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/27 07:30:03 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 			if (!portal_lst)
 				return (0);
 			ft_dblstadd_back((t_dblist **)&cub->portals[angle - cub->angles], (t_dblist *)portal_lst);
-			if (*distance > 100)
+			if (*distance > 300)
 				return (1);
 			*distance += compute_distance(ray_start, *ray);
 			if (!teleport_ray(cub, ray, angle, collision_point))

@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:41:56 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/20 19:26:34 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/25 01:49:26 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,9 @@ void	set_portal_texture(int *texture_id, size_t *texture_x,
 		if (*texture_id == 6)
 			*texture_id = 8;
 	}
+	if ((*texture_id == 7 || *texture_id == 5) && cub->menu.outline == 2)
+		*texture_id = 9;
+	if ((*texture_id == 8 || *texture_id == 6) && cub->menu.outline == 2)
+		*texture_id = 10;
 	set_custom_texture(*texture_id, texture_x, ray_collision, cub);
 }

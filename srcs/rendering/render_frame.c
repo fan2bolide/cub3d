@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_frame.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/24 02:49:48 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/26 03:39:55 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,14 @@ void	clear_lists(t_cub *cub)
 
 int	render_frame(t_cub *cub)
 {
-	if (cub->load_screen)
+	if (cub->load_screen.img)
 		return (1);
 	clear_lists(cub);
 	compute_arrays(cub, cub->rays, cub->angles, cub->wall_heights);
 	render_view(cub, cub->rays, cub->wall_heights);
-	render_mini_map(cub, cub->rays);
+	if (!cub->menu.on_screen && cub->menu.x + cub->menu.menu_bg.width == 0)
+		render_mini_map(cub, cub->rays);
+	summon_game_menu(cub, cub->menu.on_screen + (!cub->menu.on_screen * -1));
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	return (1);
 }

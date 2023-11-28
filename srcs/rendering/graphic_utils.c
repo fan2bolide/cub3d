@@ -20,6 +20,14 @@ void	cub_pixel_put(t_image *data, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
+unsigned int	get_pixel_color(t_image *data, int x, int y)
+{
+	char *dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	return (*(unsigned int *)dst);
+}
+
 void	cub_put_line(t_cub *cub, t_position a, t_position b, int color)
 {
 	int		i;

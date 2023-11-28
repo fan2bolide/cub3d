@@ -26,6 +26,9 @@ SRCS		:=	cub3D.c\
 				portal/set_texture.c\
 				portal/teleport_ray.c\
 				portal/portal_utils.c\
+				game_menu/game_menu.c\
+				game_menu/init.c\
+				game_menu/color_setters.c\
 
 
 SRCS_D		:=	srcs/
@@ -109,6 +112,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)ray_casting
 			@mkdir -p $(OBJS_D)rendering
 			@mkdir -p $(OBJS_D)portal
+			@mkdir -p $(OBJS_D)game_menu
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)
