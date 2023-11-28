@@ -139,7 +139,7 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	return (y);
 }
 
-int 	put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_collision)
+int	put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_collision)
 {
 	int			i;
 	int			y;
@@ -148,7 +148,7 @@ int 	put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_coll
 	t_iposition	texture;
 
 	texture_id = set_texture_id_and_x(&texture.x, ray_collision, cub,
-	((t_portal_list *)ft_dblstlast((t_dblist *)cub->portals[x]))->portal->angle);
+	((t_prtl_list *)ft_dblstlast((t_dblist *)cub->portals[x]))->portal->angle);
 	screen_wall_height = wall_height;
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];

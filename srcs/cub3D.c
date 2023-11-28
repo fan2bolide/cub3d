@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/22 02:10:32 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/24 00:01:11 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-double	get_orientation(char **map, t_position *pos);
 void	cub_mlx_config(t_cub *cub);
 int		cub_handle_key_press(int keycode, t_cub *cub);
 int		close_window(t_cub *cub);
@@ -20,6 +19,24 @@ int		close_window(t_cub *cub);
 void	cub_update_player_position(int keycode, t_cub *cub);
 
 void	cub_update_view_angle(int keycode, t_cub *cub);
+
+double	get_orientation(char **map, t_position *pos)
+{
+	char	orientation_char;
+	double	orientation_angle;
+
+	orientation_char = map[(int)pos->y][(int)pos->x];
+	if (orientation_char == 'N')
+		orientation_angle = 3 * M_PI_2;
+	if (orientation_char == 'E')
+		orientation_angle = 0;
+	if (orientation_char == 'W')
+		orientation_angle = M_PI;
+	if (orientation_char == 'S')
+		orientation_angle = M_PI_2;
+	map[(int)pos->y][(int)pos->x] = '0';
+	return (orientation_angle);
+}
 
 static int	cub_check_args(int argc, char **argv, t_cub *cub)
 {
@@ -129,7 +146,7 @@ int	main(int argc, char **argv)
 	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
 	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
 	cub->wall_distance = malloc(sizeof(double) * cub->win_size[1]);
-	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_portal_list *));
+	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
 	if (!cub->rays || !cub->angles || !cub->wall_heights)
 		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), 0);
 	cub->data = parsing(argc, argv);
