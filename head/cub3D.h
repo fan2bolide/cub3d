@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/27 06:55:57 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/28 07:24:59 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -407,10 +407,14 @@ void		set_portal_texture(int *texture_id, size_t *texture_x,
 void		display_crosshair(t_cub *cub);
 int			teleport_ray(t_cub *cub, t_position *ray, double *angle,
 				char entry_portal);
+int			close_window(t_cub *cub);
 
 //===================== MENU ======================//
 void		summon_game_menu(t_cub *cub, int dir);
 void		load_game_menu(t_cub *cub);
 void		handle_menu(t_cub *cub);
+int			set_cursor_color(t_cub *cub, int texture_x, int texture_y);
+int			set_button_color(t_cub *cub, int texture_x, int texture_y);
+void		init_reseters(int coords[4], t_cursor *reseters);
 
 #endif

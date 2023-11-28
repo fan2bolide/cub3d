@@ -24,6 +24,8 @@ SRCS		:=	cub3D.c\
 				portal/set_map.c\
 				portal/set_texture.c\
 				game_menu/game_menu.c\
+				game_menu/init.c\
+				game_menu/color_setters.c\
 
 
 SRCS_D		:=	srcs/
