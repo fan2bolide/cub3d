@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/27 11:29:05 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:55:47 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ t_cub	*init_game(int argc, char **argv)
 	cub->next_ray_to_compute = cub->win_size[WIDTH];
 	pthread_mutex_init(&cub->ray_mutex, NULL);
 	pthread_mutex_init(&cub->program_ends_mutex, NULL);
+	pthread_mutex_init(&cub->finished_mutex, NULL);
 	return (cub);
 }
 
@@ -473,6 +474,7 @@ int	close_window(t_cub *cub)
 	usleep(1000);
 	while (i < NB_THREADS)
 		pthread_join(cub->threads[i++], NULL);
+	pthread_mutex_destroy(&cub->finished_mutex);
 	pthread_mutex_destroy(&cub->program_ends_mutex);
 	pthread_mutex_destroy(&cub->ray_mutex);
 	free(cub->threads);

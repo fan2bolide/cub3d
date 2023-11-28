@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/27 05:18:07 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:58:05 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,11 @@ long long	get_timestamp(const struct timeval start_time, \
 
 void	wait_rendering(t_cub *cub, struct timeval start_time)
 {
+	int i;
 	while (1)
 	{
 		pthread_mutex_lock(&cub->ray_mutex);
+//		printf("%d %d\n", cub->next_ray_to_compute, cub->is_frame_rendered);
 		if (cub->next_ray_to_compute >= cub->win_size[WIDTH] && cub->is_frame_rendered)
 		{
 			pthread_mutex_unlock(&cub->ray_mutex);
@@ -78,6 +80,14 @@ void	wait_rendering(t_cub *cub, struct timeval start_time)
 	}
 	while (get_timestamp(start_time, get_current_time()) < 5)
 		usleep(100);
+	i = 0;
+	while (i < NB_THREADS)
+	{
+		if (cub->threads_finished_rendering[i])
+			i++;
+		else
+			usleep(100);
+	}
 }
 
 int	render_frame(t_cub *cub)
@@ -87,8 +97,9 @@ int	render_frame(t_cub *cub)
 	start_time = get_current_time();
 	if (cub->load_screen)
 		return (1);
-	cub->is_frame_rendered = 0;
 	pthread_mutex_lock(&cub->ray_mutex);
+	ft_bzero(cub->threads_finished_rendering, NB_THREADS * sizeof(bool));
+	cub->is_frame_rendered = 0;
 	cub->next_ray_to_compute = 0;
 	pthread_mutex_unlock(&cub->ray_mutex);
 	pthread_mutex_lock(&cub->program_ends_mutex);
@@ -97,6 +108,7 @@ int	render_frame(t_cub *cub)
 	pthread_mutex_unlock(&cub->program_ends_mutex);
 	wait_rendering(cub, start_time);
 	render_mini_map(cub, cub->rays);
+	clear_lists(cub);
 	display_crosshair(cub);
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	return (1);

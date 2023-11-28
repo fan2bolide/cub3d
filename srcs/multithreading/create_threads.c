@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 23:40:40 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/26 10:44:44 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:37:35 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,12 @@ int	create_threads(t_cub *cub)
 
 	i = 0;
 	cub->threads = malloc(sizeof(pthread_t) * NB_THREADS);
+	t_render_thread renderThread[NB_THREADS];
 	while (i < NB_THREADS)
 	{
-		if (pthread_create(cub->threads + i, NULL, render_thread_routine, cub))
+		renderThread[i].cub = cub;
+		renderThread[i].id = i;
+		if (pthread_create(cub->threads + i, NULL, render_thread_routine, &renderThread[i]))
 			return (delete_threads(cub, i), 0);
 		i++;
 	}

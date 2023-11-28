@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/26 10:36:26 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/27 09:37:36 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/28 16:04:10 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	*render_thread_routine(void *attr)
 	int		i;
 	double	segments_size;
 
-	cub = attr;
+	cub = ((t_render_thread *)attr)->cub;
 	segments_size = 2 * tan(cub->fov / 2) / (cub->win_size[1] - 1);
 	while (1)
 	{
@@ -40,8 +40,6 @@ void	*render_thread_routine(void *attr)
 		i = get_ray_index(cub);
 		if (i < cub->win_size[WIDTH])
 		{
-			ft_lstclear((t_list **)&cub->portals[i], free);
-			cub->portals[i] = NULL;
 			if (!compute_ray(cub, i, segments_size))
 			{
 				pthread_mutex_lock(&cub->program_ends_mutex);
@@ -50,14 +48,19 @@ void	*render_thread_routine(void *attr)
 				continue ;
 			}
 			render_column(cub, i);
-			if (i == cub->win_size[WIDTH] - 1)
+			pthread_mutex_lock(&cub->ray_mutex);
+			if (cub->next_ray_to_compute == cub->win_size[WIDTH])
 			{
-				pthread_mutex_lock(&cub->ray_mutex);
 				cub->is_frame_rendered = true;
-				pthread_mutex_unlock(&cub->ray_mutex);
 			}
+			pthread_mutex_unlock(&cub->ray_mutex);
 		}
 		else
+		{
+			pthread_mutex_lock(&cub->ray_mutex);
+			cub->threads_finished_rendering[((t_render_thread *)attr)->id] = true;
+			pthread_mutex_unlock(&cub->ray_mutex);
 			usleep(100);
+		}
 	}
 }

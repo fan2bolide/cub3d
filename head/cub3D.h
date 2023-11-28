@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/26 12:05:30 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:39:59 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,14 +328,17 @@ typedef struct s_cub
 	bool			program_ends;
 	pthread_mutex_t	program_ends_mutex;
 	pthread_mutex_t	ray_mutex;
+	pthread_mutex_t finished_mutex;
 	int				next_ray_to_compute;
 	pthread_t		*threads;
-	bool			is_frame_rendered;
+	bool			threads_finished_rendering[NB_THREADS];
+	bool 			is_frame_rendered;
 }	t_cub;
 
 typedef struct s_render_thread
 {
 	t_cub			*cub;
+	int				id;
 }	t_render_thread;
 
 //==================== PARSING =====================//
