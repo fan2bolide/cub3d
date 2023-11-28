@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/24 00:21:04 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/28 12:54:46 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,8 +361,7 @@ typedef struct s_cub
 	char			blue_prtl;
 	int				*wall_heights;
 	char			cross_hair;
-	t_portal_list	**portals;
-	int 			player_speed;
+	int				player_speed;
 	double			sensivity;
 	t_menu			menu;
 	t_prtl_list		**portals;

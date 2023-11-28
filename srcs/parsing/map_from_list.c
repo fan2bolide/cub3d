@@ -81,7 +81,7 @@ static char	**create_map(t_list *curr)
 	i = 0;
 	while (curr && curr->content && ((char *)curr->content)[0] && ++i)
 		curr = curr->next;
-	map = malloc(sizeof(char *) * (i + 1));
+	map = ft_calloc(i + 1, sizeof(char *));
 	if (!map)
 		return (NULL);
 	ft_bzero(map, i + 1);
