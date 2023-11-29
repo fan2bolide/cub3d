@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/28 12:58:50 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/29 12:34:08 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,13 +137,13 @@ void	display_background(t_cub *cub, int start_x, int start_y)
 void display_load_screen(t_cub *cub)
 {
 	int 	height;
-	int		widht;
+	int		width;
 	int		x;
 	int 	y;
 
-	cub->load_screen.img = mlx_xpm_file_to_image(cub->mlx, LOAD_SCREEN, &widht, &height);
+	cub->load_screen.img = mlx_xpm_file_to_image(cub->mlx, LOAD_SCREEN, &width, &height);
 	mlx_get_data_addr(cub->load_screen.img, &cub->load_screen.bits_per_pixel, &cub->load_screen.line_length, &cub->load_screen.endian);
-	x = (cub->win_size[WIDTH] / 2) - (widht / 2);
+	x = (cub->win_size[WIDTH] / 2) - (width / 2);
 	y = (cub->win_size[HEIGHT] / 2) - (height / 2);
 	display_background(cub, x, y);
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->load_screen.img, x, y);
@@ -177,6 +177,7 @@ int	main(int argc, char **argv)
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position->x += 0.5;
 	cub->player_position->y += 0.5;
+	cub->last_mouse_pos = -1;
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
 	convert_path_to_mlx_img(cub);
@@ -212,10 +213,34 @@ void	remove_load_screen(t_cub *cub)
 	cub->load_screen.img = NULL;
 }
 
+#if defined (__APPLE__)
+
+void	mouse_get_pos(t_cub *cub, int *x, int *y)
+{
+	mlx_mouse_get_pos(cub->win, x, y);
+}
+#elif defined (__linux__)
+
+void	mouse_get_pos(t_cub *cub, int *x, int *y)
+{
+	mlx_mouse_get_pos(cub->mlx, cub->win, x, y);
+}
+#endif
+
 int	perform_actions(t_cub *cub)
 {
 	int x, y;
-	mlx_mouse_get_pos(cub->mlx, cub->win, &x, &y);
+	if (cub->menu.on_screen)
+	{
+		mlx_mouse_move(cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+		mlx_mouse_show();
+	}
+	else
+	{
+		mlx_mouse_hide();
+		mlx_mouse_move(cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+	}
+	mouse_get_pos(cub, &x, &y);
 	if (cub->menu.cursors[SPEED].is_pressed)
 	{
 		if (x < 862)
@@ -317,8 +342,11 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 	return (1);
 }
 
-int cub_handle_mouse_release(t_cub *cub)
+int cub_handle_mouse_release(int button, int x, int y, t_cub *cub)
 {
+	(void)button;
+	(void)y;
+	(void)x;
 	if (cub->menu.cursors[SPEED].is_pressed)
 		cub->menu.cursors[SPEED].is_pressed = false;
 	if (cub->menu.cursors[SENSI].is_pressed)
@@ -372,10 +400,25 @@ int	cub_handle_mouse(int button, int x, int y, t_cub *cub)
 	return (0);
 }
 
+int	cub_handle_mouse_move(int x, int y, t_cub *cub)
+{
+	(void)y;
+	if (!cub->menu.on_screen)
+	{
+		//mlx_mouse_hide();
+		if (cub->last_mouse_pos != -1)
+			cub->view_angle += (x - cub->last_mouse_pos) * M_PI / 100 * cub->sensivity;
+		mlx_mouse_move(cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+		cub->last_mouse_pos = cub->win_size[WIDTH] / 2;
+	}
+	return (1);
+}
+
 void cub_mlx_config(t_cub *cub)
 {
 	mlx_hook(cub->win, KEY_PRESS, KEY_PRESS_MASK, cub_handle_key_press, cub);
 	mlx_hook(cub->win, KEY_RELEASE, KEY_RELEASE_MASK, cub_handle_key_release, cub);
+	mlx_hook(cub->win, MOTION_NOTIFY, POINTER_MOTION_MASK, cub_handle_mouse_move, cub);
 	mlx_hook(cub->win, DESTROY_NOTIFY, NO_EVENT_MASK, close_window, cub);
 	mlx_mouse_hook(cub->win, cub_handle_mouse, cub);
 	mlx_hook(cub->win, BUTTON_RELEASE, BUTTON_RELEASE_MASK, cub_handle_mouse_release, cub);

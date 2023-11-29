@@ -185,7 +185,7 @@ enum e_key_codes
 	KEY_COMMAND = 259,
 	KEY_BACKSPACE = 51,
 	KEY_RETURN	= 36,
-	KEY_TAB = 48;
+	KEY_TAB = 48,
 	KEY_F11 = 321
 };
 # elif defined(__linux__)
@@ -347,6 +347,7 @@ typedef struct s_cub
 	void			*mlx;
 	void			*win;
 	int				keys_states[65509];
+	int				last_mouse_pos;
 	int				win_size[2];
 	t_image			img;
 	t_image			textures[11];
