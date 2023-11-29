@@ -225,6 +225,18 @@ void	cub_mouse_move(t_cub *cub, int x, int y)
 	mlx_mouse_move(cub->win, x, y);
 }
 
+void	cub_mouse_show(t_cub *cub)
+{
+	(void)cub;
+	mlx_mouse_show();
+}
+
+void	cub_mouse_hide(t_cub *cub)
+{
+	(void)cub;
+	mlx_mouse_hide();
+}
+
 #elif defined (__linux__)
 
 void	mouse_get_pos(t_cub *cub, int *x, int *y)
@@ -232,10 +244,21 @@ void	mouse_get_pos(t_cub *cub, int *x, int *y)
 	mlx_mouse_get_pos(cub->mlx, cub->win, x, y);
 }
 
-void cub_mouse_move(t_cub *cub, int x, int y)
+void	cub_mouse_move(t_cub *cub, int x, int y)
 {
 	mlx_mouse_move(cub->mlx, cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
 }
+
+void	cub_mouse_show(t_cub *cub)
+{
+	mlx_mouse_show(cub->mlx, cub->win);
+}
+
+void	cub_mouse_hide(t_cub *cub)
+{
+	mlx_mouse_hide(cub->mlx, cub->win);
+}
+
 #endif
 
 int	perform_actions(t_cub *cub)
@@ -244,11 +267,11 @@ int	perform_actions(t_cub *cub)
 	if (cub->menu.on_screen)
 	{
 		cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
-		mlx_mouse_show();
+		cub_mouse_show(cub);
 	}
 	else
 	{
-		mlx_mouse_hide();
+		cub_mouse_hide(cub);
 		cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
 	}
 	mouse_get_pos(cub, &x, &y);
@@ -419,7 +442,7 @@ int	cub_handle_mouse_move(int x, int y, t_cub *cub)
 		//mlx_mouse_hide();
 		if (cub->last_mouse_pos != -1)
 			cub->view_angle += (x - cub->last_mouse_pos) * M_PI / 100 * cub->sensivity;
-		mlx_mouse_move(cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+		cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
 		cub->last_mouse_pos = cub->win_size[WIDTH] / 2;
 	}
 	return (1);
