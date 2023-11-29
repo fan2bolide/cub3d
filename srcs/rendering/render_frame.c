@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/26 03:39:55 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/29 13:33:05 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ void	clear_lists(t_cub *cub)
 
 	i = 0;
 	while (i < cub->win_size[WIDTH])
-		ft_lstclear((t_list **)(cub->portals + i++), free);
+	{
+		ft_lstclear((t_list **) (cub->portals + i), free);
+		ft_lstclear((t_list **) (cub->doors + i++), free);
+	}
 }
 
 int	render_frame(t_cub *cub)

@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/29 11:20:41 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/29 13:47:04 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ int	main(int argc, char **argv)
 	if (!cub)
 		return (1);
 	cub->data = parsing(argc, argv);
-	if (!cub->data || cub_check_args(argc, argv, cub))
+	if (!cub->data || cub_check_args(argc, argv, cub) || !init_doors(cub))
 		return (free(cub), 1);
 	ft_bzero(cub->keys_states, 65509 * sizeof(int));
 	cub->is_fullscreen = false;
@@ -172,6 +172,7 @@ int	main(int argc, char **argv)
 	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
 	cub->wall_distance = malloc(sizeof(double) * cub->win_size[1]);
 	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
+	cub->doors = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
 	if (!cub->rays || !cub->angles || !cub->wall_heights)
 		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), 0);
 	cub->player_position = get_position(cub->data->map);
@@ -248,8 +249,6 @@ int	perform_actions(t_cub *cub)
 		cub->cross_hair *= -1;
 	if (cub->keys_states[KEY_ESC])
 		return (close_window(cub));
-	if (cub->keys_states[KEY_SPACE])
-		open_door(cub);
 	if (cub->keys_states[KEY_Z])
 		cub_update_fov(KEY_Z, cub);
 	if (cub->keys_states[KEY_X])
@@ -309,6 +308,8 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 			set_portal_on_map(cub, 'B');
 		else if (keycode == KEY_Y)
 			set_portal_on_map(cub, 'O');
+		else if (keycode == KEY_SPACE)
+			open_door(cub);
 		else if (keycode == KEY_TAB)
 			handle_menu(cub);
 		else
@@ -319,8 +320,11 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 	return (1);
 }
 
-int cub_handle_mouse_release(t_cub *cub)
+int cub_handle_mouse_release(int button, int x, int y, t_cub *cub)
 {
+	(void)button;
+	(void)x;
+	(void)y;
 	if (cub->menu.cursors[SPEED].is_pressed)
 		cub->menu.cursors[SPEED].is_pressed = false;
 	if (cub->menu.cursors[SENSI].is_pressed)

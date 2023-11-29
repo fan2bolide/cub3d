@@ -47,7 +47,7 @@ void	load_game_menu(t_cub *cub)
 
 	ft_memcpy(images, (t_image *[6]){&cub->menu.menu_bg, &cub->menu.button,
 		&cub->menu.button_shadow, &cub->menu.checker_plain, &cub->menu.cursor,
-		&cub->menu.reset}, sizeof(t_image) * 6);
+		&cub->menu.reset}, sizeof(t_image *) * 6);
 	i = 0;
 	while (i < 6)
 	{

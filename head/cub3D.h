@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/29 09:20:17 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/29 13:04:46 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,6 +324,13 @@ typedef struct s_position
 	double	y;
 }	t_position;
 
+typedef struct s_door
+{
+	double opening_status;
+	size_t x;
+	size_t y;
+}	t_door;
+
 typedef struct s_portal
 {
 	t_position	position;
@@ -365,6 +372,8 @@ typedef struct s_cub
 	double			sensivity;
 	t_menu			menu;
 	t_prtl_list		**portals;
+	t_prtl_list		**doors;
+	t_door			*doors_status;
 }	t_cub;
 
 //==================== PARSING =====================//
@@ -412,6 +421,7 @@ void		display_crosshair(t_cub *cub);
 int			teleport_ray(t_cub *cub, t_position *ray, double *angle,
 				char entry_portal);
 int			close_window(t_cub *cub);
+double		compute_distance(t_position player, t_position ray);
 
 //===================== MENU ======================//
 void		summon_game_menu(t_cub *cub, int dir);
@@ -422,6 +432,9 @@ int			set_button_color(t_cub *cub, int texture_x, int texture_y);
 void		init_reseters(int coords[4], t_cursor *reseters);
 
 //===================== DOORS ======================//
+# define	DOOR_MAX_OPENING 2
 void		open_door(t_cub *cub);
+int			init_doors(t_cub *cub);
+
 
 #endif

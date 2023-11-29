@@ -109,6 +109,48 @@ int	set_texture_id_and_x(size_t *texture_x, \
 	return (set_n_s_textures(texture_x, ray_collision, cub, angle));
 }
 
+void	set_door_texture(int *texture_id, size_t *texture_x, t_position ray_collision, t_cub *cub)
+{
+
+}
+
+int cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision)
+{
+	int i;
+	int y;
+	int screen_wall_height;
+	int texture_id;
+	t_iposition texture;
+
+	texture_id = -1;
+	set_door_texture(&texture_id, &texture.x, ray_collision, cub);
+	if (texture_id == -1)
+		return (1);
+	screen_wall_height = wall_height;
+	if (wall_height > cub->win_size[0])
+		screen_wall_height = cub->win_size[0];
+	y = cub->win_size[0] / 2 - screen_wall_height / 2;
+	i = 0;
+	while (i < screen_wall_height)
+	{
+		texture.y = (i + (wall_height - screen_wall_height) / 2) \
+* cub->textures[texture_id].height / wall_height;
+		int color = *((int *) (cub->textures[texture_id].addr + (texture.y * \
+		cub->textures[texture_id].line_length + texture.x * \
+		(cub->textures[texture_id].bits_per_pixel / 8))));
+		if (color < 0)
+		{
+			y++;
+			i++;
+			continue;
+		}
+		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
+			cub_pixel_put(&cub->img, x, y, color);
+		y++;
+		i++;
+	}
+	return (y);
+}
 int	cub_texture_put(int x, t_cub *cub, int wall_height,
 			t_position ray_collision)
 {

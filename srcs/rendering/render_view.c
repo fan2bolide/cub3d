@@ -22,17 +22,32 @@ int	cub_textures_render(t_cub *cub, int wall_height, int x,
 			cub->data->baj->cur_pos);
 		cub->data->baj->last_moove = get_time();
 	}
-	if (!cub->portals[x])
-		return (cub_texture_put(x, cub, wall_height, ray_collision), 1);
 	cub_texture_put(x, cub, wall_height, ray_collision);
-	cub->portals[x] = (t_prtl_list *)ft_dblstlast((t_dblist *)cub->portals[x]);
-	cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, \
-								cub->portals[x]->portal->position);
-	while (cub->portals[x]->prev)
+	if (!cub->portals[x] && !cub->doors[x])
+		return (1);
+	if (cub->portals[x])
 	{
-		cub->portals[x] = cub->portals[x]->prev;
+		cub->portals[x] = (t_prtl_list *)ft_dblstlast((t_dblist *)cub->portals[x]);
 		cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, \
 									cub->portals[x]->portal->position);
+		while (cub->portals[x]->prev)
+		{
+			cub->portals[x] = cub->portals[x]->prev;
+			cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, \
+										cub->portals[x]->portal->position);
+		}
+	}
+	if (cub->doors[x])
+	{
+		cub->portals[x] = (t_prtl_list *) ft_dblstlast((t_dblist *) cub->portals[x]);
+		cub_door_texture_put(x, cub, cub->doors[x]->portal->height, \
+                                    cub->doors[x]->portal->position);
+		while (cub->portals[x]->prev)
+		{
+			cub->portals[x] = cub->portals[x]->prev;
+			cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, \
+                                        cub->portals[x]->portal->position);
+		}
 	}
 	return (1);
 }
