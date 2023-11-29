@@ -27,8 +27,10 @@ int	compute_ray(t_cub *cub, int ray_id, double segments_size)
 	int	nb_segments;
 
 	win_size_2 = cub->win_size[WIDTH] / 2;
+	pthread_mutex_lock(&cub->ray_mutex);
 	cub->rays[ray_id].x = cub->player_position.x;
 	cub->rays[ray_id].y = cub->player_position.y;
+	pthread_mutex_unlock(&cub->ray_mutex);
 	if (ray_id <= win_size_2)
 		nb_segments = win_size_2 - ray_id;
 	else

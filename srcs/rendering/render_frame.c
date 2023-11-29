@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_frame.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/29 08:03:30 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/29 08:07:45 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,10 @@ int	render_frame(t_cub *cub)
 	start_time = get_current_time();
 	if (cub->load_screen)
 		return (1);
-	pthread_mutex_lock(&cub->ray_mutex);
+	pthread_mutex_lock(&cub->finished_mutex);
 	ft_bzero(cub->threads_finished_rendering, NB_THREADS * sizeof(bool));
+	pthread_mutex_unlock(&cub->finished_mutex);
+	pthread_mutex_lock(&cub->ray_mutex);
 	cub->is_frame_rendered = 0;
 	cub->next_ray_to_compute = 0;
 	pthread_mutex_unlock(&cub->ray_mutex);

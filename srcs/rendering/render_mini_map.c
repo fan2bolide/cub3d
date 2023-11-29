@@ -48,8 +48,10 @@ void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
 	{
 		if (!cub->portals[i])
 		{
+			pthread_mutex_lock(&cub->ray_mutex);
 			ray_dup.x = ray[i].x * MINIMAP_SCALE + ray_adjustment.x;
 			ray_dup.y = ray[i++].y * MINIMAP_SCALE + ray_adjustment.y;
+			pthread_mutex_unlock(&cub->ray_mutex);
 		}
 		else
 		{
