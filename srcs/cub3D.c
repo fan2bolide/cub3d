@@ -219,11 +219,22 @@ void	mouse_get_pos(t_cub *cub, int *x, int *y)
 {
 	mlx_mouse_get_pos(cub->win, x, y);
 }
+
+void	cub_mouse_move(t_cub *cub, int x, int y)
+{
+	mlx_mouse_move(cub->win, x, y);
+}
+
 #elif defined (__linux__)
 
 void	mouse_get_pos(t_cub *cub, int *x, int *y)
 {
 	mlx_mouse_get_pos(cub->mlx, cub->win, x, y);
+}
+
+void cub_mouse_move(t_cub *cub, int x, int y)
+{
+	mlx_mouse_move(cub->mlx, cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
 }
 #endif
 
@@ -232,13 +243,13 @@ int	perform_actions(t_cub *cub)
 	int x, y;
 	if (cub->menu.on_screen)
 	{
-		mlx_mouse_move(cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+		cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
 		mlx_mouse_show();
 	}
 	else
 	{
 		mlx_mouse_hide();
-		mlx_mouse_move(cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+		cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
 	}
 	mouse_get_pos(cub, &x, &y);
 	if (cub->menu.cursors[SPEED].is_pressed)
