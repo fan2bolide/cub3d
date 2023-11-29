@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:11:11 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 15:14:15 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/29 09:41:49 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	refactor_spaces(t_list *file)
 
 	while (file && file->content)
 	{
-		if (!ft_strisset(file->content, "10NSEW \n") \
+		if (!ft_strisset(file->content, ALLOWED_IN_FILE) \
 			|| ft_strisset(file->content, " \n"))
 		{
 			new_content = ft_strtrim(file->content, " \n");

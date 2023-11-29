@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 23:17:38 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/02 06:18:16 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/29 09:38:45 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static char	**create_map(t_list *curr)
 	i = 0;
 	while (curr && curr->content && ((char *)curr->content)[0] && ++i)
 		curr = curr->next;
-	map = malloc(sizeof(char *) * (i + 1));
+	map = ft_calloc(i + 1, sizeof(char *));
 	if (!map)
 		return (NULL);
 	ft_bzero(map, i + 1);

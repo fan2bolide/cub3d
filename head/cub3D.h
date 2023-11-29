@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/28 07:24:59 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/29 09:20:17 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -366,6 +366,9 @@ typedef struct s_cub
 }	t_cub;
 
 //==================== PARSING =====================//
+# define ALLOWED_CHARS		"NSEW01D "
+# define NOT_WALLS_CHARS	"NSEWD0"
+# define ALLOWED_IN_FILE	"10NSEWD \n"
 t_data		*parsing(int argc, char **argv);
 int			parse_textures(t_data *data, t_list *file);
 t_data		*get_data(char **argv);

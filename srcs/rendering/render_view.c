@@ -49,9 +49,9 @@ void	render_view(t_cub *cub, t_position *ray_collision, \
 		j = 0;
 		{
 			while (j < screen_height_2)
-				cub_pixel_put(&cub->img, i, j++, *((int *)cub->data->ceiling_color));
+				cub_pixel_put(&cub->img, i, j++, -1);//*((int *)cub->data->ceiling_color));
 			while (j < cub->win_size[0])
-				cub_pixel_put(&cub->img, i, j++, *((int *)cub->data->floor_color));
+				cub_pixel_put(&cub->img, i, j++, -1);//*((int *)cub->data->floor_color));
 		}
 		i++;
 	}

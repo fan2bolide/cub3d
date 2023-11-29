@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 17:12:38 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/28 01:34:07 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/29 09:34:39 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	check_for_illegal_char(t_list *file)
 	while (file && file->content)
 	{
 		content = file->content;
-		if (!ft_strisset(content, "NSEW 10"))
+		if (!ft_strisset(content, ALLOWED_CHARS))
 			return (ft_putstr_fd(ERR ILL_CHAR EOL, 2), 1);
 		file = file->next;
 	}
@@ -56,7 +56,7 @@ int	check_wall_surroundment(char **map)
 		x = -1;
 		while (map[y][++x])
 		{
-			if (ft_isset(map[y][x], "0NSEW"))
+			if (ft_isset(map[y][x], NOT_WALLS_CHARS))
 			{
 				if (!map[y][x + 1] || map[y][x + 1] == ' ')
 					return (ft_putstr_fd(ERR E_WALL_SUR EOL, 2), 1);

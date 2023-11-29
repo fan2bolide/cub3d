@@ -146,6 +146,9 @@ int	main(int argc, char **argv)
 	cub->orange_prtl = '-';
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
+	cub->data = parsing(argc, argv);
+	if (!cub->data)
+		return (free(cub), 1);
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
 	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
 	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
@@ -154,9 +157,6 @@ int	main(int argc, char **argv)
 	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_portal_list *));
 	if (!cub->rays || !cub->angles || !cub->wall_heights)
 		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), 0);
-	cub->data = parsing(argc, argv);
-	if (!cub->data)
-		return (free(cub), 1);
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position->x += 0.5;
 	cub->player_position->y += 0.5;
