@@ -17,12 +17,15 @@ SRCS		:=	cub3D.c\
 				ray_casting/ray_casting.c\
 				rendering/render_view.c\
 				rendering/render_mini_map.c\
+				rendering/render_mini_map_walls.c\
 				rendering/graphic_utils.c\
 				rendering/texture_put.c\
 				rendering/render_frame.c\
 				portal/portal.c\
 				portal/set_map.c\
 				portal/set_texture.c\
+				portal/teleport_ray.c\
+				portal/portal_utils.c\
 				game_menu/game_menu.c\
 				game_menu/init.c\
 				game_menu/color_setters.c\

@@ -6,13 +6,12 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/28 08:33:10 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/28 12:58:50 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-double	get_orientation(char **map, t_position *pos);
 void	cub_mlx_config(t_cub *cub);
 int		cub_handle_key_press(int keycode, t_cub *cub);
 int		close_window(t_cub *cub);
@@ -21,13 +20,31 @@ void	cub_update_player_position(int keycode, t_cub *cub);
 
 void	cub_update_view_angle(int keycode, t_cub *cub);
 
+double	get_orientation(char **map, t_position *pos)
+{
+	char	orientation_char;
+	double	orientation_angle;
+
+	orientation_char = map[(int)pos->y][(int)pos->x];
+	if (orientation_char == 'N')
+		orientation_angle = 3 * M_PI_2;
+	if (orientation_char == 'E')
+		orientation_angle = 0;
+	if (orientation_char == 'W')
+		orientation_angle = M_PI;
+	if (orientation_char == 'S')
+		orientation_angle = M_PI_2;
+	map[(int)pos->y][(int)pos->x] = '0';
+	return (orientation_angle);
+}
+
 static int	cub_check_args(int argc, char **argv, t_cub *cub)
 {
 	if (argc == 4)
 		if (ft_strequ(argv[2], "-s"))
 			return (cub->win_size[0] = ft_atoi(argv[3]), 0);
 	if (argc != 2)
-		return (write(2, USAGE, ft_strlen(USAGE)), 1);
+		return (ft_putstr_fd(USAGE EOL, 2), 1);
 	return (0);
 }
 
@@ -136,7 +153,12 @@ int	main(int argc, char **argv)
 {
 	t_cub	*cub;
 
-	cub = malloc(sizeof (t_cub));
+	cub = ft_calloc(1, sizeof (t_cub));
+	if (!cub)
+		return (1);
+	cub->data = parsing(argc, argv);
+	if (!cub->data || cub_check_args(argc, argv, cub))
+		return (free(cub), 1);
 	ft_bzero(cub->keys_states, 65509 * sizeof(int));
 	cub->is_fullscreen = false;
 	cub->last_frame_time = get_time();
@@ -144,17 +166,12 @@ int	main(int argc, char **argv)
 	cub->cross_hair = 'C';
 	cub->blue_prtl = '-';
 	cub->orange_prtl = '-';
-	if (cub_check_args(argc, argv, cub))
-		return (free(cub), 1);
-	cub->data = parsing(argc, argv);
-	if (!cub->data)
-		return (free(cub), 1);
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
 	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
 	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
 	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
 	cub->wall_distance = malloc(sizeof(double) * cub->win_size[1]);
-	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_portal_list *));
+	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
 	if (!cub->rays || !cub->angles || !cub->wall_heights)
 		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), 0);
 	cub->player_position = get_position(cub->data->map);
@@ -300,7 +317,7 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 	return (1);
 }
 
-int cub_handle_mouse_release(int button, int x, int y, t_cub *cub)
+int cub_handle_mouse_release(t_cub *cub)
 {
 	if (cub->menu.cursors[SPEED].is_pressed)
 		cub->menu.cursors[SPEED].is_pressed = false;
@@ -315,6 +332,7 @@ int cub_handle_mouse_release(int button, int x, int y, t_cub *cub)
 
 int	cub_handle_mouse(int button, int x, int y, t_cub *cub)
 {
+	(void)button;
 	if (!cub->menu.on_screen)
 		return (1);
 	if (x >= cub->menu.x + 516 && x < cub->menu.x + 516 + cub->menu.checker_plain.width && y >= cub->menu.y + 578 && y < cub->menu.y + 578 + cub->menu.checker_plain.height)
@@ -458,8 +476,6 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 
 void	cub_update_player_position(int keycode, t_cub *cub)
 {
-	char *portal;
-
 	if (keycode == KEY_W)
 		move_player(cos(cub->view_angle) / cub->player_speed, sin(cub->view_angle) / cub->player_speed, cub);
 	if (keycode == KEY_S)
@@ -471,21 +487,6 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 	if (keycode == KEY_D)
 		move_player(cos(cub->view_angle + M_PI_2) / cub->player_speed, \
 		sin(cub->view_angle + M_PI_2) / cub->player_speed, cub);
-
-//	if (cub->player_position->x == (int)cub->player_position->x)
-//	{
-//		portal = &cub->data->map[(int)cub->player_position->y][(int)cub->player_position->x];
-//		if (*portal == 'O' && cub->orange_prtl == 'W')
-//			cub->player_position->x -= 0.00005;
-//		if (*portal == 'O' && cub->orange_prtl == 'E')
-//			cub->player_position->x += 0.00005;
-//		if (*portal == 'B' && cub->blue_prtl == 'W')
-//			cub->player_position->x -= 0.00005;
-//		if (*portal == 'O' && cub->blue_prtl == 'E')
-//			cub->player_position->x += 0.00005;
-//	}
-//	if ((int)cub->player_position->x - cub->player_position->x < 0.0005)
-//		cub->player_position->x -= 0.0005;
 
 	if (cub->player_position->y - (int)cub->player_position->y < 0.0005)
 		cub->player_position->y += 0.0005;

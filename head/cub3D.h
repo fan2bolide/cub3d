@@ -14,6 +14,7 @@
 # define CUB3D_H
 
 //=================== INCLUDES =====================//
+
 # include "error_codes.h"
 # include <unistd.h>
 # include <string.h>
@@ -183,6 +184,7 @@ enum e_key_codes
 	KEY_SEMI_COLON = 41,
 	KEY_COMMAND = 259,
 	KEY_BACKSPACE = 51,
+	KEY_RETURN	= 36,
 	KEY_TAB = 48;
 	KEY_F11 = 321
 };
@@ -249,13 +251,13 @@ typedef struct s_color{
 	unsigned char	green;
 	unsigned char	red;
 	unsigned char	transparency;
-}		t_color;
+}	t_color;
 
 typedef struct s_iposition
 {
 	size_t	x;
 	size_t	y;
-}			t_iposition;
+}	t_iposition;
 
 typedef struct s_bajeanno
 {
@@ -267,7 +269,7 @@ typedef struct s_bajeanno
 	size_t		last_activation;
 	size_t		last_moove;
 	size_t		speed;
-}			t_bajeanno;
+}	t_bajeanno;
 
 typedef struct s_data{
 	char		**map;
@@ -276,7 +278,7 @@ typedef struct s_data{
 	char		*texture[4];
 	t_color		*ceiling_color;
 	t_color		*floor_color;
-}		t_data;
+}	t_data;
 
 typedef struct s_image
 {
@@ -287,7 +289,7 @@ typedef struct s_image
 	int		endian;
 	int		width;
 	int		height;
-}			t_image;
+}	t_image;
 
 typedef struct s_cursor
 {
@@ -320,7 +322,7 @@ typedef struct s_position
 {
 	double	x;
 	double	y;
-}			t_position;
+}	t_position;
 
 typedef struct s_portal
 {
@@ -330,12 +332,12 @@ typedef struct s_portal
 	double		angle;
 }	t_portal;
 
-typedef struct s_portal_list
+typedef struct s_prtl_list
 {
 	t_portal				*portal;
-	struct s_portal_list	*prev;
-	struct s_portal_list	*next;
-}	t_portal_list;
+	struct s_prtl_list	*prev;
+	struct s_prtl_list	*next;
+}	t_prtl_list;
 
 typedef struct s_cub
 {
@@ -359,10 +361,10 @@ typedef struct s_cub
 	char			blue_prtl;
 	int				*wall_heights;
 	char			cross_hair;
-	t_portal_list	**portals;
-	int 			player_speed;
+	int				player_speed;
 	double			sensivity;
 	t_menu			menu;
+	t_prtl_list		**portals;
 }	t_cub;
 
 //==================== PARSING =====================//
@@ -385,7 +387,6 @@ void		destroy_data(t_data *data);
 int			refactor_spaces(t_list *list);
 int			ray_casting(t_cub *cub);
 void		cub_pixel_put(t_image *data, int x, int y, int color);
-
 void		render_minimap(t_cub *cub, t_position *ray_collision, \
 								double *angle, int *wall_height);
 int			render_frame(t_cub *cub);

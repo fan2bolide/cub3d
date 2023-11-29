@@ -66,4 +66,3 @@ void	display_crosshair(t_cub *cub)
 	else
 		cross(cub);
 }
-
