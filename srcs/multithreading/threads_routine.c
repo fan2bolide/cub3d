@@ -57,9 +57,9 @@ void	*render_thread_routine(void *attr)
 		}
 		else
 		{
-			pthread_mutex_lock(&cub->ray_mutex);
+			pthread_mutex_lock(&cub->finished_mutex);
 			cub->threads_finished_rendering[((t_render_thread *)attr)->id] = true;
-			pthread_mutex_unlock(&cub->ray_mutex);
+			pthread_mutex_unlock(&cub->finished_mutex);
 			usleep(100);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/28 15:58:05 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/11/29 08:03:30 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,11 @@ void	wait_rendering(t_cub *cub, struct timeval start_time)
 	i = 0;
 	while (i < NB_THREADS)
 	{
-		if (cub->threads_finished_rendering[i])
+		bool test;
+		pthread_mutex_lock(&cub->finished_mutex);
+		test = cub->threads_finished_rendering[i];
+		pthread_mutex_unlock(&cub->finished_mutex);
+		if (test)
 			i++;
 		else
 			usleep(100);
