@@ -29,6 +29,7 @@ SRCS		:=	cub3D.c\
 				game_menu/game_menu.c\
 				game_menu/init.c\
 				game_menu/color_setters.c\
+				doors/doors.c\
 
 
 SRCS_D		:=	srcs/
@@ -113,6 +114,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)rendering
 			@mkdir -p $(OBJS_D)portal
 			@mkdir -p $(OBJS_D)game_menu
+			@mkdir -p $(OBJS_D)doors
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)

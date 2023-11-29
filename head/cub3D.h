@@ -421,4 +421,7 @@ int			set_cursor_color(t_cub *cub, int texture_x, int texture_y);
 int			set_button_color(t_cub *cub, int texture_x, int texture_y);
 void		init_reseters(int coords[4], t_cursor *reseters);
 
+//===================== DOORS ======================//
+void		open_door(t_cub *cub);
+
 #endif

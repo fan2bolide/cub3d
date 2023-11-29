@@ -118,7 +118,7 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 		collision_point = cub->data->map[(int)ray->y - \
 		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)][(int)ray->x \
 		- ((int) ray->x && ray->x == (int)ray->x &&(cos(*angle) < 0))];
-		if (collision_point == '1')
+		if (collision_point == '1' || collision_point == 'D')
 		{
 			*distance += compute_distance(ray_start, *ray);
 			return (1);

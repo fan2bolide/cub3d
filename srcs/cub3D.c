@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/28 12:58:50 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/29 11:20:41 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,8 @@ int	perform_actions(t_cub *cub)
 		cub->cross_hair *= -1;
 	if (cub->keys_states[KEY_ESC])
 		return (close_window(cub));
+	if (cub->keys_states[KEY_SPACE])
+		open_door(cub);
 	if (cub->keys_states[KEY_Z])
 		cub_update_fov(KEY_Z, cub);
 	if (cub->keys_states[KEY_X])
