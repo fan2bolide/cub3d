@@ -418,5 +418,9 @@ void		handle_menu(t_cub *cub);
 int			set_cursor_color(t_cub *cub, int texture_x, int texture_y);
 int			set_button_color(t_cub *cub, int texture_x, int texture_y);
 void		init_reseters(int coords[4], t_cursor *reseters);
+void		mouse_get_pos(t_cub *cub, int *x, int *y);
+void		cub_mouse_move(t_cub *cub, int x, int y);
+void		cub_mouse_show(t_cub *cub);
+void		cub_mouse_hide(t_cub *cub);
 
 #endif

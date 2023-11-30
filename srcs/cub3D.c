@@ -207,54 +207,6 @@ void	cub_update_fov(int keycode, t_cub *cub)
 		cub->fov = M_PI_4;
 }
 
-#if defined (__APPLE__)
-
-void	mouse_get_pos(t_cub *cub, int *x, int *y)
-{
-	mlx_mouse_get_pos(cub->win, x, y);
-}
-
-void	cub_mouse_move(t_cub *cub, int x, int y)
-{
-	mlx_mouse_move(cub->win, x, y);
-}
-
-void	cub_mouse_show(t_cub *cub)
-{
-	(void)cub;
-	mlx_mouse_show();
-}
-
-void	cub_mouse_hide(t_cub *cub)
-{
-	(void)cub;
-	mlx_mouse_hide();
-}
-#endif
-
-#if defined (__linux__)
-
-void	mouse_get_pos(t_cub *cub, int *x, int *y)
-{
-	mlx_mouse_get_pos(cub->mlx, cub->win, x, y);
-}
-
-void	cub_mouse_move(t_cub *cub, int x, int y)
-{
-	mlx_mouse_move(cub->mlx, cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
-}
-
-void	cub_mouse_show(t_cub *cub)
-{
-	mlx_mouse_show(cub->mlx, cub->win);
-}
-
-void	cub_mouse_hide(t_cub *cub)
-{
-	mlx_mouse_hide(cub->mlx, cub->win);
-}
-
-#endif
 
 void	remove_load_screen(t_cub *cub)
 {
@@ -568,6 +520,53 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 		cub->player_position->y += 0.0005;
 }
 
+#if defined (__APPLE__)
+
+void	mouse_get_pos(t_cub *cub, int *x, int *y)
+{
+	mlx_mouse_get_pos(cub->win, x, y);
+}
+
+void	cub_mouse_move(t_cub *cub, int x, int y)
+{
+	mlx_mouse_move(cub->win, x, y);
+}
+
+void	cub_mouse_show(t_cub *cub)
+{
+	(void)cub;
+	mlx_mouse_show();
+}
+
+void	cub_mouse_hide(t_cub *cub)
+{
+	(void)cub;
+	mlx_mouse_hide();
+}
+
+#elif defined (__linux__)
+
+void	mouse_get_pos(t_cub *cub, int *x, int *y)
+{
+	mlx_mouse_get_pos(cub->mlx, cub->win, x, y);
+}
+
+void	cub_mouse_move(t_cub *cub, int x, int y)
+{
+	mlx_mouse_move(cub->mlx, cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+}
+
+void	cub_mouse_show(t_cub *cub)
+{
+	mlx_mouse_show(cub->mlx, cub->win);
+}
+
+void	cub_mouse_hide(t_cub *cub)
+{
+	mlx_mouse_hide(cub->mlx, cub->win);
+}
+
+#endif
 
 #if defined(__linux__)
 
@@ -603,3 +602,4 @@ int	close_window(t_cub *cub)
 	exit(0);
 }
 #endif
+
