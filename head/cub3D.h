@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
 /*   Updated: 2023/11/28 15:39:59 by bajeanno         ###   ########.fr       */
@@ -60,14 +60,26 @@
 # define COLOR_MAP_CHANGE_MASK		8388608
 # define OWNER_GRAB_BUTTON_MASK		16777216
 
-# define PRESSED    	1
-# define RELEASED   	0
+# define PRESSED    1
+# define RELEASED   0
+# define SPEED		0
+# define SENSI		1
+
+// ========================= PATHS ============================= //
 # define BJ_PATH		"textures/bajeanno.xpm"
 # define BLUE_PATH		"textures/blue_portal.xpm"
 # define ORG_PATH		"textures/orange_portal.xpm"
 # define BLUE_TR_PATH	"textures/blue_portal_transparent.xpm"
 # define ORG_TR_PATH	"textures/orange_portal_transparent.xpm"
+# define BLUE_OUT_P		"textures/outline_blue.xpm"
+# define OR_OUT_P		"textures/outline_orange.xpm"
 # define LOAD_SCREEN	"textures/load_screen.xpm"
+# define MENU_BG		"textures/menu_bg.xpm"
+# define BUTTON			"textures/button.xpm"
+# define BUTTON_SH		"textures/button_shadow.xpm"
+# define CHECK			"textures/check.xpm"
+# define CURSOR			"textures/cursor.xpm"
+# define RESET			"textures/reset.xpm"
 
 # ifndef NB_THREADS
 #  define NB_THREADS	16
@@ -178,6 +190,7 @@ enum e_key_codes
 	KEY_COMMAND = 259,
 	KEY_BACKSPACE = 51,
 	KEY_RETURN	= 36,
+	KEY_TAB = 48,
 	KEY_F11 = 321
 };
 # elif defined(__linux__)
@@ -225,6 +238,7 @@ enum e_key_codes
 	KEY_SEMI_COLON = 59,
 	KEY_COMMAND = 65507,
 	KEY_BACKSPACE = 65288,
+	KEY_TAB	= 65289,
 	KEY_RETURN	= 65293,
 	KEY_F11 = 65480
 };
@@ -282,6 +296,33 @@ typedef struct s_image
 	int		height;
 }	t_image;
 
+typedef struct s_cursor
+{
+	int	x;
+	int y;
+	bool	is_pressed;
+	int press_x;
+	int press_y;
+	t_iposition initial_pos;
+}			t_cursor;
+
+typedef struct s_menu
+{
+	t_image	menu_bg;
+	t_image	checker_plain;
+	t_image	button;
+	t_image	button_shadow;
+	t_image	cursor;
+	t_image reset;
+	int		x;
+	int		y;
+	t_cursor	cursors[2];
+	t_cursor	reseters[2];
+	bool	on_screen;
+	int		cross_hair;
+	int		outline;
+}			t_menu;
+
 typedef struct s_position
 {
 	double	x;
@@ -296,27 +337,29 @@ typedef struct s_portal
 	double		angle;
 }	t_portal;
 
-typedef struct s_portal_list
+typedef struct s_prtl_list
 {
 	t_portal				*portal;
-	struct s_portal_list	*prev;
-	struct s_portal_list	*next;
+	struct s_prtl_list	*prev;
+	struct s_prtl_list	*next;
 }	t_prtl_list;
 
 typedef struct s_cub
 {
-	t_image			*load_screen;
+	t_image			load_screen;
 	t_data			*data;
 	bool			is_fullscreen;
 	void			*mlx;
 	void			*win;
 	int				keys_states[65509];
+	int				last_mouse_pos;
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[9];
+	t_image			textures[11];
 	t_position		player_position;
 	double			view_angle;
 	double			fov;
+	size_t			last_frame_time;
 	double			*wall_distance;
 	t_position		*rays;
 	double			*angles;
@@ -324,6 +367,9 @@ typedef struct s_cub
 	char			blue_prtl;
 	int				*wall_heights;
 	char			cross_hair;
+	int				player_speed;
+	double			sensivity;
+	t_menu			menu;
 	t_prtl_list		**portals;
 	bool			program_ends;
 	pthread_mutex_t	program_ends_mutex;
@@ -376,14 +422,27 @@ int			paint_w_surr(size_t i, t_bajeanno *next_one, \
 						t_iposition *cur_pos, char **w_surr);
 void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
 t_iposition	get_next_baj(char **w_surr, \
-						t_bajeanno *next_one, \
+						t_bajeanno *next_one,
 						t_iposition *cur_pos);
 void		set_portal_on_map(t_cub *cub, char prtl_id);
 void		set_portal_texture(int *texture_id, size_t *texture_x, \
 								t_position ray_collision, t_cub *cub);
 void		display_crosshair(t_cub *cub);
-int			teleport_ray(t_cub *cub, t_position *ray, double *angle, \
-												char entry_portal);
+int			teleport_ray(t_cub *cub, t_position *ray, double *angle,
+				char entry_portal);
+int			close_window(t_cub *cub);
+
+//===================== MENU ======================//
+void		summon_game_menu(t_cub *cub, int dir);
+void		load_game_menu(t_cub *cub);
+void		handle_menu(t_cub *cub);
+int			set_cursor_color(t_cub *cub, int texture_x, int texture_y);
+int			set_button_color(t_cub *cub, int texture_x, int texture_y);
+void		init_reseters(int coords[4], t_cursor *reseters);
+void		mouse_get_pos(t_cub *cub, int *x, int *y);
+void		cub_mouse_move(t_cub *cub, int x, int y);
+void		cub_mouse_show(t_cub *cub);
+void		cub_mouse_hide(t_cub *cub);
 int			compute_ray(t_cub *cub, int ray_id, double segments_size);
 int			create_threads(t_cub *cub);
 

@@ -99,7 +99,7 @@ int	render_frame(t_cub *cub)
 	struct timeval	start_time;
 
 	start_time = get_current_time();
-	if (cub->load_screen)
+	if (cub->load_screen.img)
 		return (1);
 	pthread_mutex_lock(&cub->finished_mutex);
 	ft_bzero(cub->threads_finished_rendering, NB_THREADS * sizeof(bool));
@@ -113,9 +113,11 @@ int	render_frame(t_cub *cub)
 		return (0);
 	pthread_mutex_unlock(&cub->program_ends_mutex);
 	wait_rendering(cub, start_time);
-	render_mini_map(cub, cub->rays);
+	if (!cub->menu.on_screen && cub->menu.x + cub->menu.menu_bg.width == 0)
+		render_mini_map(cub, cub->rays);
 	clear_lists(cub);
 	display_crosshair(cub);
+	summon_game_menu(cub, cub->menu.on_screen + (!cub->menu.on_screen * -1));
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	return (1);
 }

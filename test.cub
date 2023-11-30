@@ -1,9 +1,9 @@
-EA                                                                 textures/simonkraft/bookshelf_01.xpm
-NO textures/simonkraft/bookshelf.xpm
-C 133, 185, 230
-F 48, 31, 61
-WE textures/simonkraft/bookshelf_01.xpm
-SO   textures/matrix.xpm
+EA                                                                 textures/cub_east.xpm
+NO textures/bajeanno.xpm
+C 217, 217, 138
+F 217, 217, 138
+WE textures/bajeanno.xpm
+SO   textures/cub_south.xpm
 
            111
            101
