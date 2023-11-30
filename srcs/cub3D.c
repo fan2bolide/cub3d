@@ -207,12 +207,6 @@ void	cub_update_fov(int keycode, t_cub *cub)
 		cub->fov = M_PI_4;
 }
 
-void	remove_load_screen(t_cub *cub)
-{
-	mlx_destroy_image(cub->mlx, cub->load_screen.img);
-	cub->load_screen.img = NULL;
-}
-
 #if defined (__APPLE__)
 
 void	mouse_get_pos(t_cub *cub, int *x, int *y)
@@ -236,8 +230,9 @@ void	cub_mouse_hide(t_cub *cub)
 	(void)cub;
 	mlx_mouse_hide();
 }
+#endif
 
-#elif defined (__linux__)
+#if defined (__linux__)
 
 void	mouse_get_pos(t_cub *cub, int *x, int *y)
 {
@@ -261,19 +256,19 @@ void	cub_mouse_hide(t_cub *cub)
 
 #endif
 
+void	remove_load_screen(t_cub *cub)
+{
+	mlx_destroy_image(cub->mlx, cub->load_screen.img);
+	cub->load_screen.img = NULL;
+	cub->menu.on_screen = false;
+	cub_mouse_hide(cub);
+}
+
 int	perform_actions(t_cub *cub)
 {
-	int x, y;
-	if (cub->menu.on_screen)
-	{
-		cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
-		cub_mouse_show(cub);
-	}
-	else
-	{
-		cub_mouse_hide(cub);
-		cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
-	}
+	int	x;
+	int	y;
+
 	mouse_get_pos(cub, &x, &y);
 	if (cub->menu.cursors[SPEED].is_pressed)
 	{
@@ -367,7 +362,10 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 		else if (keycode == KEY_Y)
 			set_portal_on_map(cub, 'O');
 		else if (keycode == KEY_TAB)
+		{
+			printf("handle menu\n");
 			handle_menu(cub);
+		}
 		else
 			cub->keys_states[keycode] = PRESSED;
 	}
@@ -439,10 +437,11 @@ int	cub_handle_mouse_move(int x, int y, t_cub *cub)
 	(void)y;
 	if (!cub->menu.on_screen)
 	{
-		//mlx_mouse_hide();
+		double view_angle = cub->view_angle;
 		if (cub->last_mouse_pos != -1)
-			cub->view_angle += (x - cub->last_mouse_pos) * M_PI / 100 * cub->sensivity;
-		cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+			cub->view_angle += (x - cub->last_mouse_pos) * M_PI / 64 * cub->sensivity;
+		if (fabs(view_angle - cub->view_angle) > 0.001)
+			cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
 		cub->last_mouse_pos = cub->win_size[WIDTH] / 2;
 	}
 	return (1);
@@ -568,6 +567,7 @@ void	cub_update_player_position(int keycode, t_cub *cub)
 	if (cub->player_position->y - (int)cub->player_position->y < 0.0005)
 		cub->player_position->y += 0.0005;
 }
+
 
 #if defined(__linux__)
 

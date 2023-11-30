@@ -99,11 +99,13 @@ void	handle_menu(t_cub *cub)
 	if (cub->menu.on_screen)
 	{
 		cub->menu.on_screen = false;
+		mlx_mouse_hide();
 		cub->menu.x -= 1;
 	}
 	else
 	{
 		cub->menu.on_screen = true;
+		mlx_mouse_show();
 		ft_bzero(cub->keys_states, 65509 * sizeof(int));
 	}
 }

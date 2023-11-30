@@ -20,7 +20,7 @@ static void	init_menu_coords(t_cub *cub)
 
 	cub->menu.y = (cub->win_size[HEIGHT] - cub->menu.menu_bg.height) / 2;
 	cub->menu.x = cub->menu.menu_bg.width * -1;
-	cub->menu.on_screen = false;
+	cub->menu.on_screen = true;
 	cub->menu.cross_hair = 1;
 	cub->menu.outline = 1;
 	i = 0;
