@@ -314,10 +314,7 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 		else if (keycode == KEY_Y)
 			set_portal_on_map(cub, 'O');
 		else if (keycode == KEY_TAB)
-		{
-			printf("handle menu\n");
 			handle_menu(cub);
-		}
 		else
 			cub->keys_states[keycode] = PRESSED;
 	}
@@ -553,7 +550,7 @@ void	mouse_get_pos(t_cub *cub, int *x, int *y)
 
 void	cub_mouse_move(t_cub *cub, int x, int y)
 {
-	mlx_mouse_move(cub->mlx, cub->win, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+	mlx_mouse_move(cub->mlx, cub->win, x, y);
 }
 
 void	cub_mouse_show(t_cub *cub)
