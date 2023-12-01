@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/24 15:44:17 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 11:20:58 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,54 @@ int	set_texture_id_and_x(size_t *texture_x, \
 			*texture_x = (int)((ray_collision.y - (int)(ray_collision.y)) \
 								* cub->textures[texture_id].width);
 		}
-		return texture_id;
+		return (texture_id);
 	}
 	return (set_n_s_textures(texture_x, ray_collision, cub, angle));
 }
 
-void	set_door_texture(int *texture_id, size_t *texture_x, t_position ray_collision, t_cub *cub)
+t_door	*get_door(t_position ray_collision, double angle, t_cub *cub)
 {
+	t_iposition	door_index;
+	size_t		i;
 
+	door_index = get_door_index(ray_collision, angle, cub);
+	i = 0;
+	while (42)
+	{
+		if (cub->doors_status[i].x == door_index.x && cub->doors_status[i].y == door_index.y)
+			return (&cub->doors_status[i]);
+		i++;
+	}
+}
+
+void	set_door_texture(int *texture_id, size_t *texture_x, int x, t_cub *cub)
+{
+	t_door	*door;
+	size_t 	texture_x_offset;
+
+	door = get_door(cub->doors[x]->portal->position, cub->doors[x]->portal->angle, cub);
+	if (door->is_open && cub->data->map[door->y][door->x] == 'd')
+		return ;
+	*texture_id = 11;
+	set_custom_texture(*texture_id, texture_x, cub->doors[x]->portal->position, cub);
+	if (!door->is_open && cub->data->map[door->y][door->x] == 'D')
+		return ;
+	texture_x_offset = (size_t)(cub->textures[*texture_id].width * door->opening_percent);
+	if (texture_x_offset >= *texture_x)
+		*texture_id = -1;
+	else
+		*texture_x -= texture_x_offset;
+//	if (!*texture_x || !x)
+//	{
+//		if (cub->data->map[door->y][door->x] == 'd')
+//			door->opening_percent += 0.005;
+//		else
+//			door->opening_percent -= 0.005;
+//		if (door->opening_percent > 1)
+//			door->opening_percent = 1;
+//		else if (door->opening_percent < 0)
+//			door->opening_percent = 0;
+//	}
 }
 
 int cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision)
@@ -123,7 +163,7 @@ int cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_coll
 	t_iposition texture;
 
 	texture_id = -1;
-	set_door_texture(&texture_id, &texture.x, ray_collision, cub);
+	set_door_texture(&texture_id, &texture.x, x, cub);
 	if (texture_id == -1)
 		return (1);
 	screen_wall_height = wall_height;

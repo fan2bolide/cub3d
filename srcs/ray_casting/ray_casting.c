@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/29 13:41:08 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/30 11:49:38 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 		collision_point = cub->data->map[(int)ray->y - \
 		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)][(int)ray->x \
 		- ((int) ray->x && ray->x == (int)ray->x &&(cos(*angle) < 0))];
-		if (collision_point == '1' || collision_point == 'D')
+		if (collision_point == '1')
 		{
 			*distance += compute_distance(ray_start, *ray);
 			return (1);
@@ -147,7 +147,7 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 			ray_start.x = ray->x;
 			ray_start.y = ray->y;
 		}
-		if (collision_point == 'd')
+		if (collision_point == 'd' || collision_point == 'D')
 		{
 			door = malloc(sizeof (t_portal));
 			if (!door)
@@ -164,7 +164,6 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 			*distance += compute_distance(ray_start, *ray);
 			ray_start.x = ray->x;
 			ray_start.y = ray->y;
-//			return (1);
 		}
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_mini_map.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 02:50:04 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/22 01:56:13 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 10:52:27 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
 	t_position	ray_dup;
 	t_position	ray_adjustment;
 	int			i;
+	t_prtl_list *door;
 
 	ray_adjustment.x = -(cub->player_position->x * MINIMAP_SCALE) \
 						+ (MINIMAP_SIZE) + MINIMAP_OFFSET;
@@ -46,10 +47,22 @@ void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
 	i = 0;
 	while (i < cub->win_size[WIDTH])
 	{
+		door = cub->doors[i];
+		while (door && get_door(door->portal->position, door->portal->angle, cub)->is_open)
+			door = door->next;
 		if (!cub->portals[i])
 		{
-			ray_dup.x = ray[i].x * MINIMAP_SCALE + ray_adjustment.x;
-			ray_dup.y = ray[i++].y * MINIMAP_SCALE + ray_adjustment.y;
+			if (door)
+			{
+				ray_dup.x = door->portal->position.x * MINIMAP_SCALE + ray_adjustment.x;
+				ray_dup.y = door->portal->position.y * MINIMAP_SCALE + ray_adjustment.y;
+				i++;
+			}
+			else
+			{
+				ray_dup.x = ray[i].x * MINIMAP_SCALE + ray_adjustment.x;
+				ray_dup.y = ray[i++].y * MINIMAP_SCALE + ray_adjustment.y;
+			}
 		}
 		else
 		{

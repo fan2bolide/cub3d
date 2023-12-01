@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 11:25:56 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/29 13:45:26 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 11:11:28 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ int init_doors(t_cub *cub)
 		while (cub->data->map[i][j])
 			if (cub->data->map[i][j++] == 'D')
 				doors_count++;
+		i++;
 	}
-	doors = ft_calloc(doors_count, sizeof(t_door));
+	doors = ft_calloc(doors_count + 1, sizeof(t_door));
 	if (!doors)
 		return (0);
 	doors_count = 0;
@@ -42,9 +43,13 @@ int init_doors(t_cub *cub)
 			{
 				doors[doors_count].x = j - 1;
 				doors[doors_count].y = i;
+				doors[doors_count++].is_open = false;
 			}
 		}
+		i++;
 	}
+	doors[doors_count].x = 0;
+	cub->doors_status = doors;
 	return (1);
 }
 
@@ -95,12 +100,11 @@ void	open_door(t_cub *cub)
 {
 	t_iposition	door_index;
 	t_position	ray_door;
+	t_door 		*door;
 	double 		door_angle;
 
-	printf("j'y file \n");
 	if (cub->doors[cub->win_size[WIDTH] / 2])
 	{
-		printf("la\n");
 		ray_door = cub->doors[cub->win_size[WIDTH] / 2]->portal->position;
 		door_angle = cub->doors[cub->win_size[WIDTH] / 2]->portal->angle;
 	}
@@ -113,11 +117,19 @@ void	open_door(t_cub *cub)
 	|| compute_distance(*cub->player_position, ray_door) > DOOR_MAX_OPENING)
 		return ;
 	door_index = get_door_index(ray_door, door_angle, cub);
+	door = get_door(ray_door, door_angle, cub);
 	if (cub->data->map[door_index.y][door_index.x] == 'D')
+	{
 		cub->data->map[door_index.y][door_index.x] = 'd';
+		if (door->opening_percent > 0 && door->opening_percent < 1)
+			door->is_open = false;
+		door->opening_percent += 0.005;
+	}
 	else
+	{
 		cub->data->map[door_index.y][door_index.x] = 'D';
-	int i = 0;
-	while (cub->data->map[i])
-		printf("%s\n", cub->data->map[i++]);
+		if (door->opening_percent > 0 && door->opening_percent < 1)
+			door->is_open = true;
+		door->opening_percent-= 0.005;
+	}
 }

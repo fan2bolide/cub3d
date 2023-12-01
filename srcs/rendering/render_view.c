@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/28 11:05:41 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/30 14:03:33 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,18 @@ int	cub_textures_render(t_cub *cub, int wall_height, int x,
 		cub->data->baj->last_moove = get_time();
 	}
 	cub_texture_put(x, cub, wall_height, ray_collision);
-	if (!cub->portals[x] && !cub->doors[x])
-		return (1);
+	if (cub->doors[x])
+	{
+		cub->doors[x] = (t_prtl_list *) ft_dblstlast((t_dblist *) cub->doors[x]);
+		cub_door_texture_put(x, cub, cub->doors[x]->portal->height, \
+                                    cub->doors[x]->portal->position);
+		while (cub->doors[x]->prev)
+		{
+			cub->doors[x] = cub->doors[x]->prev;
+			cub_door_texture_put(x, cub, cub->doors[x]->portal->height, \
+                                        cub->doors[x]->portal->position);
+		}
+	}
 	if (cub->portals[x])
 	{
 		cub->portals[x] = (t_prtl_list *)ft_dblstlast((t_dblist *)cub->portals[x]);
@@ -35,18 +45,6 @@ int	cub_textures_render(t_cub *cub, int wall_height, int x,
 			cub->portals[x] = cub->portals[x]->prev;
 			cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, \
 										cub->portals[x]->portal->position);
-		}
-	}
-	if (cub->doors[x])
-	{
-		cub->portals[x] = (t_prtl_list *) ft_dblstlast((t_dblist *) cub->portals[x]);
-		cub_door_texture_put(x, cub, cub->doors[x]->portal->height, \
-                                    cub->doors[x]->portal->position);
-		while (cub->portals[x]->prev)
-		{
-			cub->portals[x] = cub->portals[x]->prev;
-			cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, \
-                                        cub->portals[x]->portal->position);
 		}
 	}
 	return (1);

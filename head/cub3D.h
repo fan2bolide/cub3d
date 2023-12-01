@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/29 13:04:46 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/11/30 11:03:35 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@
 # define CHECK			"textures/check.xpm"
 # define CURSOR			"textures/cursor.xpm"
 # define RESET			"textures/reset.xpm"
+# define DOOR			"textures/wolfenstein/wood.xpm"
 
 // X11 events
 # define KEY_PRESS			2
@@ -326,7 +327,8 @@ typedef struct s_position
 
 typedef struct s_door
 {
-	double opening_status;
+	double opening_percent;
+	bool	is_open;
 	size_t x;
 	size_t y;
 }	t_door;
@@ -356,7 +358,7 @@ typedef struct s_cub
 	int				keys_states[65509];
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[11];
+	t_image			textures[12];
 	t_position		*player_position;
 	double			view_angle;
 	double			fov;
@@ -435,6 +437,8 @@ void		init_reseters(int coords[4], t_cursor *reseters);
 # define	DOOR_MAX_OPENING 2
 void		open_door(t_cub *cub);
 int			init_doors(t_cub *cub);
-
+t_iposition	get_door_index(t_position pos, double angle, t_cub *cub);
+int			cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision);
+t_door		*get_door(t_position ray_collision, double angle, t_cub *cub);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/29 13:47:04 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 11:28:41 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_position	*get_position(char **map)
 void	convert_path_to_mlx_img(t_cub *cub)
 {
 	int i;
-	static char	*custom_path[7] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P};
+	static char	*custom_path[8] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR};
 
 	i = -1;
 	while (++i < 4)
@@ -89,7 +89,7 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
-	while (i < 11)
+	while (i < 12)
 	{
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, custom_path[i - 4], &cub->textures[i].width,
 													 &cub->textures[i].height);
@@ -213,6 +213,32 @@ void	remove_load_screen(t_cub *cub)
 	cub->load_screen.img = NULL;
 }
 
+void	cub_update_doors(t_cub *cub)
+{
+	size_t	i;
+
+	i = 0;
+	while (cub->doors_status[i].x)
+	{
+		if (cub->doors_status[i].opening_percent > 0 && cub->doors_status[i].opening_percent < 1)
+		{
+			if (cub->doors_status[i].is_open)
+				cub->doors_status[i].opening_percent -= 0.05;
+			else
+				cub->doors_status[i].opening_percent += 0.05;
+			if (cub->doors_status[i].opening_percent < 0)
+				cub->doors_status[i].opening_percent = 0;
+			else if (cub->doors_status[i].opening_percent > 1)
+				cub->doors_status[i].opening_percent = 1;
+			if (cub->doors_status[i].opening_percent == 1)
+				cub->doors_status[i].is_open = true;
+			else if (cub->doors_status[i].opening_percent == 0)
+				cub->doors_status[i].is_open = false;
+		}
+		i++;
+	}
+}
+
 int	perform_actions(t_cub *cub)
 {
 	int x, y;
@@ -245,6 +271,7 @@ int	perform_actions(t_cub *cub)
 		cub->sensivity = 0.017;
 		cub->menu.cursors[SENSI].x = (int) cub->menu.cursors[SENSI].initial_pos.x;
 	}
+	cub_update_doors(cub);
 	if ((cub->menu.cross_hair == 2 && cub->cross_hair > 0) || (cub->menu.cross_hair == 1 && cub->cross_hair < 0))
 		cub->cross_hair *= -1;
 	if (cub->keys_states[KEY_ESC])
@@ -314,6 +341,9 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 			handle_menu(cub);
 		else
 			cub->keys_states[keycode] = PRESSED;
+//		int i = 0;
+//		while (cub->doors_status[i].x)
+//			printf("%f\n", cub->doors_status[i++].opening_percent);
 	}
 	if (keycode == KEY_ESC)
 		return (close_window(cub));
@@ -467,7 +497,7 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 	if (cub->data->map[(int)new_y][(int) cub->player_position->x] == '1' \
 	&& cub->data->map[(int)cub->player_position->y][(int)new_x] == '1')
 		return ;
-	if (cub->data->map[(int)new_y][(int)new_x] == '1')
+	if (ft_isset(cub->data->map[(int)new_y][(int)new_x], "1D"))
 		return (report_movement(new_y, new_x, cub));
 	else if (cub->data->map[(int)new_y][(int)new_x] == 'O')
 		teleport_player(new_x, new_y, 'O', cub);
@@ -475,8 +505,8 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		teleport_player(new_x, new_y, 'B', cub);
 	else
 	{
-	cub->player_position->y = new_y;
-	cub->player_position->x = new_x;
+		cub->player_position->y = new_y;
+		cub->player_position->x = new_x;
 	}
 }
 
@@ -505,7 +535,7 @@ int close_window(t_cub *cub)
 	int	i;
 
 	i = 0;
-	while (i <= 10)
+	while (i <= 11)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
