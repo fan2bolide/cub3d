@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_put.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/24 15:44:17 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 14:18:37 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	set_texture_id_and_x(size_t *texture_x, \
 			*texture_x = (int)((ray_collision.y - (int)(ray_collision.y)) \
 								* cub->textures[texture_id].width);
 		}
-		return texture_id;
+		return (texture_id);
 	}
 	return (set_n_s_textures(texture_x, ray_collision, cub, angle));
 }
@@ -118,7 +118,8 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	int			texture_id;
 	t_iposition	texture;
 
-	texture_id = set_texture_id_and_x(&texture.x, ray_collision, cub, cub->angles[x]);
+	texture_id = set_texture_id_and_x(&texture.x, ray_collision, \
+										cub, cub->angles[x]);
 	screen_wall_height = wall_height;
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];
@@ -139,7 +140,8 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	return (y);
 }
 
-int	put_outline_texture(int x, t_cub *cub, int wall_height, t_position ray_collision)
+int	put_outline_texture(int x, t_cub *cub, int wall_height, \
+						t_position ray_collision)
 {
 	int			i;
 	int			y;

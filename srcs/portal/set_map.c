@@ -20,7 +20,8 @@ static void	set_east_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 		other_ptrl_id = 'B';
 	else
 		other_ptrl_id = 'O';
-	if (cub->data->map[(int)middle_ray.y][(int)middle_ray.x - 1] == other_ptrl_id)
+	if (cub->data->map[(int)middle_ray.y][(int)middle_ray.x - 1] \
+															== other_ptrl_id)
 	{
 		if (other_ptrl_id == 'O')
 			cub->orange_prtl = '-';
@@ -64,7 +65,8 @@ static void	set_north_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 		other_ptrl_id = 'B';
 	else
 		other_ptrl_id = 'O';
-	if (cub->data->map[(int)middle_ray.y - 1][(int)middle_ray.x] == other_ptrl_id)
+	if (cub->data->map[(int)middle_ray.y - 1][(int)middle_ray.x] \
+															== other_ptrl_id)
 	{
 		if (other_ptrl_id == 'O')
 			cub->orange_prtl = '-';
@@ -98,12 +100,11 @@ static void	set_south_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 		cub->orange_prtl = 'N';
 	else
 		cub->blue_prtl = 'N';
-
 }
 
 void	set_portal_on_map(t_cub *cub, char prtl_id)
 {
-	t_position 	middle_ray;
+	t_position	middle_ray;
 	size_t		i;
 	size_t		j;
 

@@ -12,9 +12,9 @@
 
 #include "cub3D.h"
 
-void	*render_thread_routine(void *attr);
+void	*render_thread_routine(t_render_thread *attr);
 
-void delete_threads(t_cub *cub, int last_thread)
+void	delete_threads(t_cub *cub, int last_thread)
 {
 	int	i;
 
@@ -28,16 +28,17 @@ void delete_threads(t_cub *cub, int last_thread)
 
 int	create_threads(t_cub *cub)
 {
-	int	i;
+	int				i;
+	t_render_thread	render_thread[NB_THREADS];
 
 	i = 0;
 	cub->threads = malloc(sizeof(pthread_t) * NB_THREADS);
-	t_render_thread renderThread[NB_THREADS];
 	while (i < NB_THREADS)
 	{
-		renderThread[i].cub = cub;
-		renderThread[i].id = i;
-		if (pthread_create(cub->threads + i, NULL, render_thread_routine, &renderThread[i]))
+		render_thread[i].cub = cub;
+		render_thread[i].id = i;
+		if (pthread_create(cub->threads + i, NULL, \
+		(void *(*)(void *))render_thread_routine, &render_thread[i]))
 			return (delete_threads(cub, i), 0);
 		i++;
 	}

@@ -25,42 +25,46 @@ static int	get_ray_index(t_cub *cub)
 	return (i);
 }
 
-void	*render_thread_routine(void *attr)
+void	tell_rendering_is_finished(int id, t_cub *cub)
 {
-	t_cub	*cub;
+	pthread_mutex_lock(&cub->finished_mutex);
+	cub->threads_finished_rendering[id] = true;
+	pthread_mutex_unlock(&cub->finished_mutex);
+	usleep(100);
+}
+
+void	render_thread_end_program(t_cub *cub)
+{
+	pthread_mutex_lock(&cub->program_ends_mutex);
+	cub->program_ends = 1;
+	pthread_mutex_unlock(&cub->program_ends_mutex);
+}
+
+void	*render_thread_routine(t_render_thread *attr)
+{
 	int		i;
 	double	segments_size;
 
-	cub = ((t_render_thread *)attr)->cub;
-	segments_size = 2 * tan(cub->fov / 2) / (cub->win_size[1] - 1);
+	segments_size = 2 * tan(attr->cub->fov / 2) / (attr->cub->win_size[1] - 1);
 	while (1)
 	{
-		if (cub->program_ends)
+		if (attr->cub->program_ends)
 			return (NULL);
-		i = get_ray_index(cub);
-		if (i < cub->win_size[WIDTH])
+		i = get_ray_index(attr->cub);
+		if (i < attr->cub->win_size[WIDTH])
 		{
-			if (!compute_ray(cub, i, segments_size))
+			if (!compute_ray(attr->cub, i, segments_size))
 			{
-				pthread_mutex_lock(&cub->program_ends_mutex);
-				cub->program_ends = 1;
-				pthread_mutex_unlock(&cub->program_ends_mutex);
+				render_thread_end_program(attr->cub);
 				continue ;
 			}
-			render_column(cub, i);
-			pthread_mutex_lock(&cub->ray_mutex);
-			if (cub->next_ray_to_compute == cub->win_size[WIDTH])
-			{
-				cub->is_frame_rendered = true;
-			}
-			pthread_mutex_unlock(&cub->ray_mutex);
+			render_column(attr->cub, i);
+			pthread_mutex_lock(&attr->cub->ray_mutex);
+			if (attr->cub->next_ray_to_compute == attr->cub->win_size[WIDTH])
+				attr->cub->is_frame_rendered = true;
+			pthread_mutex_unlock(&attr->cub->ray_mutex);
 		}
 		else
-		{
-			pthread_mutex_lock(&cub->finished_mutex);
-			cub->threads_finished_rendering[((t_render_thread *)attr)->id] = true;
-			pthread_mutex_unlock(&cub->finished_mutex);
-			usleep(100);
-		}
+			tell_rendering_is_finished(attr->id, attr->cub);
 	}
 }

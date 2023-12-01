@@ -14,7 +14,7 @@
 
 t_position	get_prtl_pos(t_cub *cub, char portal)
 {
-	t_position result;
+	t_position	result;
 
 	result.y = 0;
 	while (cub->data->map[(int)result.y])
@@ -36,9 +36,9 @@ t_position	get_prtl_pos(t_cub *cub, char portal)
 char	get_prtl_or(t_cub *cub, char portal)
 {
 	if (portal == 'B')
-		return cub->blue_prtl;
+		return (cub->blue_prtl);
 	else
-		return cub->orange_prtl;
+		return (cub->orange_prtl);
 }
 
 char	get_other_portal(char portal)
@@ -48,7 +48,8 @@ char	get_other_portal(char portal)
 	return ('B');
 }
 
-int	add_new_portal_to_ray(t_cub *cub, double distance, t_position *ray, double *angle)
+int	add_new_portal_to_ray(t_cub *cub, double distance, t_position *ray, \
+																double *angle)
 {
 	t_portal	*portal;
 	t_prtl_list	*new;
@@ -64,6 +65,7 @@ int	add_new_portal_to_ray(t_cub *cub, double distance, t_position *ray, double *
 	new = (t_prtl_list *)ft_dblstnew(portal);
 	if (!new)
 		return (free(portal), 0);
-	ft_dblstadd_back((t_dblist **)&cub->portals[angle - cub->angles], (t_dblist *)new);
+	ft_dblstadd_back((t_dblist **)&cub->portals[angle - cub->angles], \
+															(t_dblist *)new);
 	return (1);
 }

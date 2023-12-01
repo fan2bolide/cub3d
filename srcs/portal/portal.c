@@ -14,8 +14,8 @@
 
 static void	cross(t_cub *cub)
 {
-	t_iposition map_center;
-	t_iposition cross_corner;
+	t_iposition	map_center;
+	t_iposition	cross_corner;
 
 	map_center.x = cub->win_size[WIDTH] / 2;
 	map_center.y = cub->win_size[HEIGHT] / 2;
@@ -25,8 +25,12 @@ static void	cross(t_cub *cub)
 		cross_corner.x = map_center.x - 10;
 		while (cross_corner.x <= map_center.x + 10)
 		{
-			if (cross_corner.x == map_center.x || cross_corner.x == map_center.x + 1 || cross_corner.y == map_center.y || cross_corner.y == map_center.y + 1)
-				cub_pixel_put(&cub->img, cross_corner.x, cross_corner.y, 0x778899);
+			if (cross_corner.x == map_center.x \
+				|| cross_corner.x == map_center.x + 1 \
+				|| cross_corner.y == map_center.y \
+				|| cross_corner.y == map_center.y + 1)
+				cub_pixel_put(&cub->img, cross_corner.x, cross_corner.y, \
+																0x778899);
 			cross_corner.x++;
 		}
 		cross_corner.y++;
@@ -35,11 +39,11 @@ static void	cross(t_cub *cub)
 
 static void	point(t_cub *cub)
 {
-	t_iposition map_center;
-	int	i;
-	int	j;
-	double	cos_calc;
-	double	sin_calc;
+	t_iposition	map_center;
+	int			i;
+	int			j;
+	double		cos_calc;
+	double		sin_calc;
 
 	map_center.x = cub->win_size[WIDTH] / 2;
 	map_center.y = cub->win_size[HEIGHT] / 2;
@@ -52,7 +56,7 @@ static void	point(t_cub *cub)
 		while (j <= 5)
 		{
 			cub_pixel_put(&cub->img, map_center.x + j * cos_calc,
-						  map_center.y + j * sin_calc, 0x778899);
+				map_center.y + j * sin_calc, 0x778899);
 			j++;
 		}
 		i++;

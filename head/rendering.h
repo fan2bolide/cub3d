@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:38:30 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/26 10:33:44 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/01 13:23:05 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,8 @@ char		get_other_portal(char portal);
 double		modulo_2_pi(double angle);
 int			add_new_portal_to_ray(t_cub *cub, double distance, \
 									t_position *ray, double *angle);
+struct timeval	get_current_time(void);
+long long	get_timestamp(struct timeval start_time, \
+							struct timeval current_time);
 
 #endif

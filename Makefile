@@ -22,6 +22,7 @@ SRCS		:=	cub3D.c\
 				rendering/graphic_utils.c\
 				rendering/texture_put.c\
 				rendering/render_frame.c\
+				rendering/time.c\
 				portal/portal.c\
 				portal/set_map.c\
 				portal/set_texture.c\
@@ -81,7 +82,7 @@ CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra -pthread
+CFLAGS		=	-Wall -Wextra -Werror -pthread
 
 DFLAGS		:=	-MP -MMD
 

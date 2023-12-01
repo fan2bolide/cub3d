@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   render_frame.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/29 08:07:45 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 13:21:24 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
-#define NB_OF_USECONDS_IN_A_SECOND		1000000
-#define NB_OF_USECONDS_IN_A_MILLISECOND	1000
 
 int	get_wall_height(t_cub *cub, double wall_distance, double ray_angle)
 {
@@ -40,58 +38,24 @@ void	clear_lists(t_cub *cub)
 	}
 }
 
-struct timeval	get_current_time(void)
-{
-	struct timeval	current_time;
-
-	gettimeofday(&current_time, NULL);
-	if (current_time.tv_usec >= NB_OF_USECONDS_IN_A_SECOND)
-	{
-		current_time.tv_sec += current_time.tv_usec \
-								/ NB_OF_USECONDS_IN_A_SECOND;
-		current_time.tv_usec %= NB_OF_USECONDS_IN_A_SECOND;
-	}
-	return (current_time);
-}
-
-long long	get_timestamp(const struct timeval start_time, \
-							const struct timeval current_time)
-{
-	return ((current_time.tv_sec - start_time.tv_sec)
-		* (long long)NB_OF_USECONDS_IN_A_MILLISECOND
-		+ (current_time.tv_usec - start_time.tv_usec)
-		/ NB_OF_USECONDS_IN_A_MILLISECOND);
-}
-
 void	wait_rendering(t_cub *cub, struct timeval start_time)
 {
-	int i;
-	while (1)
-	{
-		pthread_mutex_lock(&cub->ray_mutex);
-//		printf("%d %d\n", cub->next_ray_to_compute, cub->is_frame_rendered);
-		if (cub->next_ray_to_compute >= cub->win_size[WIDTH] && cub->is_frame_rendered)
-		{
-			pthread_mutex_unlock(&cub->ray_mutex);
-			break ;
-		}
-		pthread_mutex_unlock(&cub->ray_mutex);
-		usleep(100);
-	}
-	while (get_timestamp(start_time, get_current_time()) < 5)
-		usleep(100);
+	int		i;
+	bool	thread_has_finished;
+
 	i = 0;
 	while (i < NB_THREADS)
 	{
-		bool test;
 		pthread_mutex_lock(&cub->finished_mutex);
-		test = cub->threads_finished_rendering[i];
+		thread_has_finished = cub->threads_finished_rendering[i];
 		pthread_mutex_unlock(&cub->finished_mutex);
-		if (test)
+		if (thread_has_finished)
 			i++;
 		else
 			usleep(100);
 	}
+	while (get_timestamp(start_time, get_current_time()) < 5)
+		usleep(100);
 }
 
 int	render_frame(t_cub *cub)
