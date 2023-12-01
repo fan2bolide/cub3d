@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "rendering.h"
 
 t_position	get_prtl_pos(t_cub *cub, char portal)
 {
@@ -46,4 +46,24 @@ char	get_other_portal(char portal)
 	if (portal == 'B')
 		return ('O');
 	return ('B');
+}
+
+int	add_new_portal_to_ray(t_cub *cub, double distance, t_position *ray, double *angle)
+{
+	t_portal	*portal;
+	t_prtl_list	*new;
+
+	portal = malloc(sizeof (t_portal));
+	if (!portal)
+		return (0);
+	portal->distance = distance;
+	portal->position.x = ray->x;
+	portal->position.y = ray->y;
+	portal->angle = *angle;
+	portal->height = get_wall_height(cub, portal->distance, portal->angle);
+	new = (t_prtl_list *)ft_dblstnew(portal);
+	if (!new)
+		return (free(portal), 0);
+	ft_dblstadd_back((t_dblist **)&cub->portals[angle - cub->angles], (t_dblist *)new);
+	return (1);
 }

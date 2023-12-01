@@ -98,52 +98,29 @@ static double	compute_distance(t_position player, t_position ray)
  */
 int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 {
-	char 			collision_point;
-	t_position		ray_start;
-	t_prtl_list	*portal_lst;
-	t_portal		*portal;
+	char		collision_point;
+	t_position	ray_start;
 
 	*distance = 0;
 	ray_start.x = cub->player_position.x;
 	ray_start.y = cub->player_position.y;
 	while (1)
 	{
-		apply_minimal_distance(ray, get_delta_to_next_column(*ray, *angle), get_delta_to_next_line(*ray, *angle));
-		if (ray->y < 0 || ray->x < 0)
-			return (1);
-		if (!cub->data->map[(int)ray->y - \
-		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)])
-			printf("y = %d\n", (int)ray->y - \
-		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0));
+		apply_minimal_distance(ray, get_delta_to_next_column(*ray, *angle), \
+			get_delta_to_next_line(*ray, *angle));
 		collision_point = cub->data->map[(int)ray->y - \
 		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)][(int)ray->x \
-		- ((int) ray->x && ray->x == (int)ray->x &&(cos(*angle) < 0))];
+		- ((int)ray->x && ray->x == (int)ray->x && (cos(*angle) < 0))];
 		if (collision_point == '1')
-		{
-			*distance += compute_distance(ray_start, *ray);
-			return (1);
-		}
+			return (*distance += compute_distance(ray_start, *ray), 1);
 		if (collision_point == 'B' || collision_point == 'O')
 		{
-			portal = malloc(sizeof (t_portal));
-			if (!portal)
-				return (0);
-			portal->distance = *distance + compute_distance(ray_start, *ray);
-			portal->position.x = ray->x;
-			portal->position.y = ray->y;
-			portal->angle = *angle;
-			portal->height = get_wall_height(cub, portal->distance, portal->angle);
-			portal_lst = (t_prtl_list *)ft_dblstnew(portal);
-			if (!portal_lst)
-				return (free(portal), 0);
-			ft_dblstadd_back((t_dblist **)&cub->portals[angle - cub->angles], (t_dblist *)portal_lst);
-			if (*distance > 300)
-				return (1);
 			*distance += compute_distance(ray_start, *ray);
-			if (!teleport_ray(cub, ray, angle, collision_point))
+			add_new_portal_to_ray(cub, *distance, ray, angle);
+			if (*distance > 300 || !teleport_ray(cub, ray, angle, \
+												collision_point))
 				return (1);
-			ray_start.x = ray->x;
-			ray_start.y = ray->y;
+			ray_start = *ray;
 		}
 	}
 }

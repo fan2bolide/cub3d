@@ -40,5 +40,7 @@ t_position	get_prtl_pos(t_cub *cub, char portal);
 char		get_prtl_or(t_cub *cub, char portal);
 char		get_other_portal(char portal);
 double		modulo_2_pi(double angle);
+int			add_new_portal_to_ray(t_cub *cub, double distance, \
+									t_position *ray, double *angle);
 
 #endif
