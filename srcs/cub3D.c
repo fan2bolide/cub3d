@@ -193,8 +193,6 @@ int	main(int argc, char **argv)
 	cub = init_game(argc, argv);
 	if (!cub)
 		return (ft_putstr_fd(ALLOC_ERR, 2), 1);
-	cub->player_position.x += 0.5;
-	cub->player_position.y += 0.5;
 	cub->last_mouse_pos = -1;
 	cub->mlx = mlx_init();
 	if (!cub->mlx)
