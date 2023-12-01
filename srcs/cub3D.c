@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/01 11:28:41 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 16:14:31 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_position	*get_position(char **map)
 void	convert_path_to_mlx_img(t_cub *cub)
 {
 	int i;
-	static char	*custom_path[8] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR};
+	static char	*custom_path[9] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR, DOOR_HINT};
 
 	i = -1;
 	while (++i < 4)
@@ -89,7 +89,7 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
-	while (i < 12)
+	while (i < 13)
 	{
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, custom_path[i - 4], &cub->textures[i].width,
 													 &cub->textures[i].height);
@@ -157,7 +157,7 @@ int	main(int argc, char **argv)
 	if (!cub)
 		return (1);
 	cub->data = parsing(argc, argv);
-	if (!cub->data || cub_check_args(argc, argv, cub) || !init_doors(cub))
+	if (!cub->data || cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
 	ft_bzero(cub->keys_states, 65509 * sizeof(int));
 	cub->is_fullscreen = false;
@@ -186,6 +186,8 @@ int	main(int argc, char **argv)
 	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	display_load_screen(cub);
 	load_game_menu(cub);
+	if (!init_doors(cub))
+		return (close_window(cub));
 	cub->fov = M_PI_2;
 	cub->player_speed = 20;
 	cub->sensivity = 0.017;
@@ -237,6 +239,61 @@ void	cub_update_doors(t_cub *cub)
 		}
 		i++;
 	}
+}
+
+void	display_door_hint(t_cub *cub, int texture_y, int display_y)
+{
+	int	display_x;
+	int	texture_x;
+	int	color;
+	int max_x;
+
+	max_x = cub->textures[12].width + cub->door_hint.x;
+	while (display_y > 0 && display_y > cub->door_hint.y)
+	{
+		display_x = cub->door_hint.x;
+		texture_x = 0;
+		while (display_x < max_x && display_x < cub->win_size[WIDTH])
+		{
+			color = *((int *)(cub->textures[12].addr + (texture_y * \
+					cub->textures[12].line_length + texture_x * \
+					(cub->textures[12].bits_per_pixel / 8))));
+			if (color > 0)
+				cub_pixel_put(&cub->img, display_x, display_y, color);
+			display_x++;
+			texture_x++;
+		}
+		display_y--;
+		texture_y--;
+	}
+}
+
+void	cub_display_door_hint(t_cub *cub)
+{
+	t_prtl_list	*door;
+	int 		dir;
+	int 		texture_y;
+	int 		display_y;
+
+	door = cub->doors[cub->win_size[WIDTH] / 2];
+	if (door && cub->menu.x == -cub->menu.menu_bg.width)
+	{
+		while (door->next && get_door(door->portal->position, door->portal->angle, cub)->is_open)
+			door = door->next;
+		dir = (door->portal->distance > DOOR_MAX_OPENING) * -1 + (door->portal->distance <= DOOR_MAX_OPENING);
+		if (dir < 0 && cub->door_hint.y == cub->textures[12].height * -1)
+			return ;
+	}
+	else
+		dir = -1;
+	texture_y = cub->textures[12].height;
+	display_y = cub->door_hint.y + cub->textures[12].height;
+	display_door_hint(cub, texture_y, display_y);
+	cub->door_hint.y += dir * 2;
+	if (cub->door_hint.y > 15)
+		cub->door_hint.y = 15;
+	if (cub->door_hint.y < -cub->textures[12].height)
+		cub->door_hint.y = -cub->textures[12].height;
 }
 
 int	perform_actions(t_cub *cub)
@@ -535,7 +592,7 @@ int close_window(t_cub *cub)
 	int	i;
 
 	i = 0;
-	while (i <= 11)
+	while (i <= 12)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);

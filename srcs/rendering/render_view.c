@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/30 14:03:33 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 13:23:23 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,5 @@ void	render_view(t_cub *cub, t_position *ray_collision, \
 		i++;
 	}
 	display_crosshair(cub);
+	cub_display_door_hint(cub);
 }

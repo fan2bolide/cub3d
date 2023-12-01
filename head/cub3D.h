@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/30 11:03:35 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 12:01:31 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@
 # define CURSOR			"textures/cursor.xpm"
 # define RESET			"textures/reset.xpm"
 # define DOOR			"textures/wolfenstein/wood.xpm"
+# define DOOR_HINT		"textures/hint.xpm"
 
 // X11 events
 # define KEY_PRESS			2
@@ -348,6 +349,13 @@ typedef struct s_prtl_list
 	struct s_prtl_list	*next;
 }	t_prtl_list;
 
+typedef struct s_hint
+{
+	bool	is_displayed;
+	int 	x;
+	int		y;
+}	t_hint;
+
 typedef struct s_cub
 {
 	t_image			load_screen;
@@ -358,7 +366,7 @@ typedef struct s_cub
 	int				keys_states[65509];
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[12];
+	t_image			textures[13];
 	t_position		*player_position;
 	double			view_angle;
 	double			fov;
@@ -376,6 +384,7 @@ typedef struct s_cub
 	t_prtl_list		**portals;
 	t_prtl_list		**doors;
 	t_door			*doors_status;
+	t_hint			door_hint;
 }	t_cub;
 
 //==================== PARSING =====================//
@@ -440,5 +449,6 @@ int			init_doors(t_cub *cub);
 t_iposition	get_door_index(t_position pos, double angle, t_cub *cub);
 int			cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision);
 t_door		*get_door(t_position ray_collision, double angle, t_cub *cub);
+void		cub_display_door_hint(t_cub *cub);
 
 #endif

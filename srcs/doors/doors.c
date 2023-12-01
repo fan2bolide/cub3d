@@ -6,11 +6,18 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 11:25:56 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/01 11:11:28 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/01 16:11:22 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+void init_door_hint(t_cub *cub)
+{
+	cub->door_hint.x = cub->win_size[WIDTH] - cub->textures[12].width - 50;
+	cub->door_hint.y = -cub->textures[12].height;
+	cub->door_hint.is_displayed = false;
+}
 
 int init_doors(t_cub *cub)
 {
@@ -19,6 +26,7 @@ int init_doors(t_cub *cub)
 	size_t j;
 	size_t	doors_count;
 
+	init_door_hint(cub);
 	i = 0;
 	doors_count = 0;
 	while (cub->data->map[i])
@@ -103,16 +111,10 @@ void	open_door(t_cub *cub)
 	t_door 		*door;
 	double 		door_angle;
 
-	if (cub->doors[cub->win_size[WIDTH] / 2])
-	{
-		ray_door = cub->doors[cub->win_size[WIDTH] / 2]->portal->position;
-		door_angle = cub->doors[cub->win_size[WIDTH] / 2]->portal->angle;
-	}
-	else
-	{
-		ray_door = cub->rays[cub->win_size[WIDTH] / 2];
-		door_angle = cub->angles[cub->win_size[WIDTH] / 2];
-	}
+	if (!cub->doors[cub->win_size[WIDTH] / 2])
+		return ;
+	ray_door = cub->doors[cub->win_size[WIDTH] / 2]->portal->position;
+	door_angle = cub->doors[cub->win_size[WIDTH] / 2]->portal->angle;
 	if (!ft_isset(get_tile_type(ray_door, door_angle, cub), "Dd")
 	|| compute_distance(*cub->player_position, ray_door) > DOOR_MAX_OPENING)
 		return ;
