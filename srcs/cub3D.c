@@ -203,7 +203,8 @@ int	main(int argc, char **argv)
 	convert_path_to_mlx_img(cub);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
-	&cub->img.line_length, &cub->img.endian);cub->view_angle = get_orientation(cub->data->map, cub->player_position);
+	&cub->img.line_length, &cub->img.endian);
+	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	display_load_screen(cub);
 	load_game_menu(cub);
 	cub->fov = M_PI_2;

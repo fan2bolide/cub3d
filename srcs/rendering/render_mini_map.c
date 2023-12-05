@@ -33,40 +33,27 @@ void	cub_put_player_on_map(t_cub *cub, t_position player)
 	}
 }
 
-void	adjust_ray_on_minimap(t_cub *cub, t_prtl_list *portal, \
-								t_position og_ray, t_position *ray_to_adjust)
+void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
 {
+	t_position	ray_dup;
 	t_position	ray_adjustment;
+	int			i;
 
 	ray_adjustment.x = -(cub->player_position.x * MINIMAP_SCALE) \
 						+ (MINIMAP_SIZE) + MINIMAP_OFFSET;
 	ray_adjustment.y = -(cub->player_position.y * MINIMAP_SCALE) \
 						+ (MINIMAP_SIZE) + MINIMAP_OFFSET;
-	if (!portal)
-	{
-		pthread_mutex_lock(&cub->ray_mutex);
-		ray_to_adjust->x = og_ray.x * MINIMAP_SCALE + ray_adjustment.x;
-		ray_to_adjust->y = og_ray.y * MINIMAP_SCALE + ray_adjustment.y;
-		pthread_mutex_unlock(&cub->ray_mutex);
-	}
-	else
-	{
-		ray_to_adjust->x = portal->portal->position.x * MINIMAP_SCALE \
-						+ ray_adjustment.x;
-		ray_to_adjust->y = portal->portal->position.y * MINIMAP_SCALE \
-						+ ray_adjustment.y;
-	}
-}
-
-void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
-{
-	t_position	ray_dup;
-	int			i;
-
 	i = 0;
 	while (i < cub->win_size[WIDTH])
 	{
-		adjust_ray_on_minimap(cub, cub->portals[i], *ray, &ray_dup);
+		pthread_mutex_lock(&cub->ray_mutex);
+		if (!cub->portals[i])
+			ray_dup = ray[i];
+		else
+			ray_dup = cub->portals[i]->portal->position;
+		ray_dup.x = ray_dup.x * MINIMAP_SCALE + ray_adjustment.x;
+		ray_dup.y = ray_dup.y * MINIMAP_SCALE + ray_adjustment.y;
+		pthread_mutex_unlock(&cub->ray_mutex);
 		cub_put_line(cub, player, ray_dup, 0xffa2e8);
 		i++;
 	}
@@ -89,8 +76,8 @@ void	put_outer_color(t_cub *cub)
 		while (pixel_x < (MINIMAP_SIZE * 2) + 11)
 		{
 			cub_pixel_put(&cub->img, j, i, colors[pixel_x > 5 \
-					&& pixel_x < (MINIMAP_SIZE * 2 + 10) - 5 && pixel_y > 5 \
-					&& pixel_y < (MINIMAP_SIZE * 2 + 10) - 5]);
+				&& pixel_x < (MINIMAP_SIZE * 2 + 10) - 5 && pixel_y > 5 \
+				&& pixel_y < (MINIMAP_SIZE * 2 + 10) - 5]);
 			pixel_x++;
 			j++;
 		}
