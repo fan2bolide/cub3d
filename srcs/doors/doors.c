@@ -116,7 +116,7 @@ void	open_door(t_cub *cub)
 	ray_door = cub->doors[cub->win_size[WIDTH] / 2]->portal->position;
 	door_angle = cub->doors[cub->win_size[WIDTH] / 2]->portal->angle;
 	if (!ft_isset(get_tile_type(ray_door, door_angle, cub), "Dd")
-	|| compute_distance(*cub->player_position, ray_door) > DOOR_MAX_OPENING)
+	|| cub->doors[cub->win_size[WIDTH] / 2]->portal->distance > DOOR_MAX_OPENING)
 		return ;
 	door_index = get_door_index(ray_door, door_angle, cub);
 	door = get_door(ray_door, door_angle, cub);

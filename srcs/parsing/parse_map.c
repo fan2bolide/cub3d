@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 17:12:38 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/29 09:34:39 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/05 16:30:56 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,47 @@ int	check_wall_surroundment(char **map)
 	return (0);
 }
 
+int check_door_position(char **map)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (map[i])
+	{
+		if (!map[i][0])
+		{
+			i++;
+			continue ;
+		}
+		j = 1;
+		while (map[i][j])
+		{
+			while (map[i][j] && map[i][j] != 'D')
+				j++;
+			if (!map[i][j] || !map[i][j + 1])
+				break ;
+			if (map[i][j - 1] != '1' || map[i][j + 1] != '1')
+			{
+				if (!i || !map[i + 1])
+					break ;
+				if (map[i - 1][j] != '1' || map[i + 1][j] != '1')
+					return (ft_putstr_fd(ERR WRONG_D_POS EOL, 2), 1);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	parse_map(char **map)
 {
 	if (player_count(map) != 1)
 		return (ft_putstr_fd(ERR WRONG_P_N EOL, 2), 1);
 	if (check_wall_surroundment(map))
+		return (1);
+	if (check_door_position(map))
 		return (1);
 	return (0);
 }

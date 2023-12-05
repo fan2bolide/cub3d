@@ -21,6 +21,7 @@
 # define AMB_ASS		"Ambiguous assignation for: "
 # define ILL_CHAR		"Illegal char in map"
 # define WRONG_FORMAT	"Wrong format for: "
+# define WRONG_D_POS	"Doors should be between two walls"
 # define EXP_CUB		" (expected .cub)"
 # define EXP_XPM		" (expected .xpm)"
 # define NO_DEF			"No before map definition of: "

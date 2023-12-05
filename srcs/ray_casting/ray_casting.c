@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/30 11:49:38 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/04 15:24:50 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,8 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 				return (0);
 			ft_dblstadd_back((t_dblist **)&cub->doors[angle - cub->angles], (t_dblist *)door_lst);
 			*distance += compute_distance(ray_start, *ray);
+			if (collision_point == 'D' && get_door(*ray, *angle, cub)->opening_percent == 0)
+				return (1);
 			ray_start.x = ray->x;
 			ray_start.y = ray->y;
 		}

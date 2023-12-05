@@ -427,7 +427,7 @@ t_iposition	get_next_baj(char **w_surr, t_bajeanno *next_one,
 
 void		set_portal_on_map(t_cub *cub, char prtl_id);
 void		set_portal_texture(int *texture_id, size_t *texture_x,
-				t_position ray_collision, t_cub *cub);
+							   int x, t_cub *cub);
 void		display_crosshair(t_cub *cub);
 int			teleport_ray(t_cub *cub, t_position *ray, double *angle,
 				char entry_portal);

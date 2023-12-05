@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:41:56 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/25 01:49:26 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/05 15:04:30 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub, int *texture
 }
 
 void	set_portal_texture(int *texture_id, size_t *texture_x,
-						   t_position ray_collision, t_cub *cub)
+						   int x, t_cub *cub)
 {
-	if (ray_collision.x == 0 && ray_collision.y == 0)
+	if (cub->rays[x].x == 0 && cub->rays[x].y == 0)
 		return ;
-	if (!is_portal_texture(ray_collision, cub, texture_id))
+	if (!is_portal_texture(cub->portals[x]->portal->position, cub, texture_id))
 		return ;
 	if (cub->orange_prtl != '-' && cub->blue_prtl != '-')
 	{
@@ -68,5 +68,5 @@ void	set_portal_texture(int *texture_id, size_t *texture_x,
 		*texture_id = 9;
 	if ((*texture_id == 8 || *texture_id == 6) && cub->menu.outline == 2)
 		*texture_id = 10;
-	set_custom_texture(*texture_id, texture_x, ray_collision, cub);
+	*texture_x = set_custom_texture(*texture_id, cub->portals[x]->portal->angle, cub->portals[x]->portal->position,cub);
 }

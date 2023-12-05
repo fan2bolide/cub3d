@@ -392,7 +392,7 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 			set_portal_on_map(cub, 'B');
 		else if (keycode == KEY_Y)
 			set_portal_on_map(cub, 'O');
-		else if (keycode == KEY_SPACE)
+		else if (keycode == KEY_E)
 			open_door(cub);
 		else if (keycode == KEY_TAB)
 			handle_menu(cub);
