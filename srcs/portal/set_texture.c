@@ -13,45 +13,62 @@
 #include "cub3D.h"
 #include "rendering.h"
 
-static bool	is_portal_texture(t_position ray_collision, t_cub *cub, int *texture_id)
+static bool	is_portal_texture_s_n(t_position ray_collision, t_cub *cub,
+					int *texture_id)
 {
-	if (ray_collision.x == (int) ray_collision.x)
+	if (cub->player_position.y > ray_collision.y && (cub->orange_prtl == 'S'
+			|| cub->blue_prtl == 'S'))
 	{
-		if (cub->player_position.x > ray_collision.x && (cub->orange_prtl == 'E' || cub->blue_prtl == 'E'))
-		{
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1] == 'B' && cub->blue_prtl == 'E')
-				return (*texture_id = 5, true);
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1] == 'O' && cub->orange_prtl == 'E')
-				return (*texture_id = 6, true);
-		}
-		else if (cub->orange_prtl == 'W' || cub->blue_prtl == 'W')
-		{
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] == 'B' && cub->blue_prtl == 'W')
-				return (*texture_id = 5, true);
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] == 'O' && cub->orange_prtl == 'W')
-				return (*texture_id = 6, true);
-		}
-		return (false);
-	}
-	if (cub->player_position.y > ray_collision.y && (cub->orange_prtl == 'S' || cub->blue_prtl == 'S'))
-	{
-		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] == 'B' && cub->blue_prtl == 'S')
+		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] \
+		== 'B' && cub->blue_prtl == 'S')
 			return (*texture_id = 5, true);
-		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] == 'O' && cub->orange_prtl == 'S')
+		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] \
+		== 'O' && cub->orange_prtl == 'S')
 			return (*texture_id = 6, true);
 	}
 	else if (cub->orange_prtl == 'N' || cub->blue_prtl == 'N')
 	{
-		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'B' && cub->blue_prtl == 'N')
+		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'B'
+		&& cub->blue_prtl == 'N')
 			return (*texture_id = 5, true);
-		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'O' && cub->orange_prtl == 'N')
-			return(*texture_id = 6, true);
+		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'O'
+		&& cub->orange_prtl == 'N')
+			return (*texture_id = 6, true);
 	}
 	return (false);
 }
 
+static bool	is_portal_texture(t_position ray_collision, t_cub *cub,
+		int *texture_id)
+{
+	if (ray_collision.x == (int) ray_collision.x)
+	{
+		if (cub->player_position.x > ray_collision.x && (cub->orange_prtl == 'E'
+				|| cub->blue_prtl == 'E'))
+		{
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1]
+			== 'B' && cub->blue_prtl == 'E')
+				return (*texture_id = 5, true);
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1]
+			== 'O' && cub->orange_prtl == 'E')
+				return (*texture_id = 6, true);
+		}
+		else if (cub->orange_prtl == 'W' || cub->blue_prtl == 'W')
+		{
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
+			== 'B' && cub->blue_prtl == 'W')
+				return (*texture_id = 5, true);
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
+			== 'O' && cub->orange_prtl == 'W')
+				return (*texture_id = 6, true);
+		}
+		return (false);
+	}
+	return (is_portal_texture_s_n(ray_collision, cub, texture_id));
+}
+
 void	set_portal_texture(int *texture_id, size_t *texture_x,
-						   int x, t_cub *cub)
+			int x, t_cub *cub)
 {
 	if (cub->rays[x].x == 0 && cub->rays[x].y == 0)
 		return ;

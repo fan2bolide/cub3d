@@ -48,6 +48,22 @@ char	get_other_portal(char portal)
 	return ('B');
 }
 
+void	reset_portal(t_cub *cub, char prtl_id)
+{
+	size_t		i;
+	size_t		j;
+
+	i = 0;
+	while (cub->data->map[i])
+	{
+		j = 0;
+		while (cub->data->map[i][j])
+			if (cub->data->map[i][j++] == prtl_id)
+				cub->data->map[i][j - 1] = '1';
+		i++;
+	}
+}
+
 int	add_new_portal_to_ray(t_cub *cub, double distance, t_position *ray, \
 																double *angle)
 {
