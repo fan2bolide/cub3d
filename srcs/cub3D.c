@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/05 19:02:43 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/06 11:29:14 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ t_cub	*init_game(int argc, char **argv)
 
 	cub = ft_calloc(1, sizeof (t_cub));
 	if (!cub)
-		return (NULL);
+		return (ft_putstr_fd(ALLOC_ERR EOL, 2), NULL);
 	cub->data = parsing(argc, argv);
 	if (!cub->data || cub_check_args(argc, argv, cub))
 		return (free(cub), NULL);
@@ -193,7 +193,7 @@ int	main(int argc, char **argv)
 
 	cub = init_game(argc, argv);
 	if (!cub)
-		return (ft_putstr_fd(ALLOC_ERR, 2), 1);
+		return (1);
 	cub->last_mouse_pos = -1;
 	cub->mlx = mlx_init();
 	if (!cub->mlx)
