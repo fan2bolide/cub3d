@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_mini_map_walls.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 19:51:03 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/23 20:14:08 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/01 10:53:47 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void	put_walls(t_cub *cub)
 				put_wall(cub, i, j, 0x889BF8);
 			if (cub->data->map[i][j] == 'O')
 				put_wall(cub, i, j, 0xf4a460);
+			if (cub->data->map[i][j] == 'D' || cub->data->map[i][j] == 'd')
+				put_wall(cub, i, j, 0x89efca);
 			j++;
 		}
 		i++;

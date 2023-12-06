@@ -48,8 +48,10 @@ void	*render_thread_routine(t_render_thread *attr)
 	segments_size = 2 * tan(attr->cub->fov / 2) / (attr->cub->win_size[1] - 1);
 	while (1)
 	{
+		pthread_mutex_lock(&attr->cub->program_ends_mutex);
 		if (attr->cub->program_ends)
-			return (NULL);
+			return (pthread_mutex_unlock(&attr->cub->program_ends_mutex), NULL);
+		pthread_mutex_unlock(&attr->cub->program_ends_mutex);
 		i = get_ray_index(attr->cub);
 		if (i < attr->cub->win_size[WIDTH])
 		{

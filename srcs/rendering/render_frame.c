@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_frame.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/01 13:21:24 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/05 18:27:32 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ void	clear_lists(t_cub *cub)
 	i = 0;
 	while (i < cub->win_size[WIDTH])
 	{
-		ft_lstclear((t_list **)(cub->portals + i), free);
+		ft_lstclear((t_list **) (cub->portals + i), free);
 		cub->portals[i] = NULL;
-		i++;
+		ft_lstclear((t_list **) (cub->doors + i), free);
+		cub->doors[i++] = NULL;
 	}
 }
 
@@ -77,9 +78,9 @@ int	render_frame(t_cub *cub)
 		return (0);
 	pthread_mutex_unlock(&cub->program_ends_mutex);
 	wait_rendering(cub, start_time);
+	cub_display_door_hint(cub);
 	if (!cub->menu.on_screen && cub->menu.x + cub->menu.menu_bg.width == 0)
 		render_mini_map(cub, cub->rays);
-	clear_lists(cub);
 	display_crosshair(cub);
 	summon_game_menu(cub, cub->menu.on_screen + (!cub->menu.on_screen * -1));
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);

@@ -33,6 +33,7 @@ SRCS		:=	cub3D.c\
 				game_menu/color_setters.c\
 				multithreading/create_threads.c\
 				multithreading/threads_routine.c\
+				doors/doors.c\
 
 
 SRCS_D		:=	srcs/
@@ -82,12 +83,13 @@ CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra -Werror -pthread
+CFLAGS		=	-Wall -Wextra
 
 DFLAGS		:=	-MP -MMD
 
 #=========================DEBUG==============================#
 ASAN_F		:=	-g3 -fsanitize=address
+TSAN_F		:=	-g3 -fsanitize=thread
 
 ENV			:=	env -i
 
@@ -118,6 +120,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)portal
 			@mkdir -p $(OBJS_D)multithreading
 			@mkdir -p $(OBJS_D)game_menu
+			@mkdir -p $(OBJS_D)doors
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)
@@ -146,6 +149,14 @@ rfsan_a		: fclean fsan_a
 lib_fsan_a:
 			make fsan_a -C $(LIB_D)
 
+fsan_t		:	CFLAGS += $(TSAN_F)
+fsan_t		:	lib_fsan_t $(NAME)
+
+rfsan_t		: fclean fsan_t
+
+lib_fsan_t:
+			make fsan_t -C $(LIB_D)
+
 re			:	fclean all
 
-.PHONY		:	all clean fclean re leaks env_leaks fsan_a rfsan_a lib_fsan_a
+.PHONY		:	all clean fclean re leaks env_leaks fsan_a rfsan_a lib_fsan_a fsan_t rfsan_t lib_fsan_t

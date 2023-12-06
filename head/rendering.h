@@ -31,8 +31,8 @@ int			get_color_of_wall(int x, int y);
 void		render_view(t_cub *cub, t_position *ray_collision, \
 									const int *wall_height);
 void		render_column(t_cub *cub, int column);
-void		set_custom_texture(int texture_id, size_t *texture_x,
-				t_position ray_collision, t_cub *cub);
+int			set_custom_texture(int texture_id, double angle,
+					   t_position ray_collision, t_cub *cub);
 int			cub_portal_texture_put(int x, t_cub *cub, int wall_height,
 				t_position ray_collision);
 int			get_wall_height(t_cub *cub, double wall_distance, double ray_angle);

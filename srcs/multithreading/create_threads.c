@@ -29,7 +29,7 @@ void	delete_threads(t_cub *cub, int last_thread)
 int	create_threads(t_cub *cub)
 {
 	int				i;
-	t_render_thread	render_thread[NB_THREADS];
+	static t_render_thread	render_thread[NB_THREADS];
 
 	i = 0;
 	cub->threads = malloc(sizeof(pthread_t) * NB_THREADS);

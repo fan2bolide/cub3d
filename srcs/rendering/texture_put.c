@@ -3,36 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   texture_put.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/01 14:18:37 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/06 10:52:37 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-void	set_custom_texture(int texture_id, size_t *texture_x,
-							t_position ray_collision, t_cub *cub)
+int set_custom_texture(int texture_id, double angle,
+					   t_position ray_collision, t_cub *cub)
 {
+	int	texture_x;
+
+	texture_x = 0;
 	if (ray_collision.x == (int)ray_collision.x)
 	{
-		if (cub->player_position.x > ray_collision.x)
-			*texture_x = (int)(((int)(ray_collision.y) + 1 - ray_collision.y)
-					* cub->textures[texture_id].width);
+		if (cos(angle) < 0)
+			texture_x = (int)(((int)(ray_collision.y) + 1 - ray_collision.y)
+						   * cub->textures[texture_id].width);
 		else
-			*texture_x = (int)((ray_collision.y - (int)(ray_collision.y))
-					* cub->textures[texture_id].width);
+			texture_x = (int)((ray_collision.y - (int)(ray_collision.y))
+						   * cub->textures[texture_id].width);
 	}
 	else
 	{
-		if (cub->player_position.y > ray_collision.y)
-			*texture_x = (int)((ray_collision.x - ((int) ray_collision.x))
-					* cub->textures[texture_id].width);
+		if (sin(angle) < 0)
+			texture_x = (int)((ray_collision.x - ((int) ray_collision.x))
+						   * cub->textures[texture_id].width);
 		else
-			*texture_x = (int)((((int)ray_collision.x) + 1 - ray_collision.x)
-					* cub->textures[texture_id].width);
+			texture_x = (int)((((int)ray_collision.x) + 1 - ray_collision.x)
+						   * cub->textures[texture_id].width);
 	}
+	return (texture_x);
 }
 
 bool	is_bajeanno_tile(t_position ray_collision, t_cub *cub)
@@ -89,7 +93,7 @@ int	set_texture_id_and_x(size_t *texture_x, \
 	int	texture_id;
 
 	if (cub->data->baj->is_activated && is_bajeanno_tile(ray_collision, cub))
-		return (set_custom_texture(4, texture_x, ray_collision, cub), 4);
+		return (*texture_x = set_custom_texture(4, angle, ray_collision, cub), 4);
 	if (ray_collision.x == (int) ray_collision.x)
 	{
 		if (cos(angle) < 0)
@@ -109,6 +113,77 @@ int	set_texture_id_and_x(size_t *texture_x, \
 	return (set_n_s_textures(texture_x, ray_collision, cub, angle));
 }
 
+t_door	*get_door(t_position ray_collision, double angle, t_cub *cub)
+{
+	t_iposition	door_index;
+	size_t		i;
+
+	door_index = get_door_index(ray_collision, angle, cub);
+	i = 0;
+	while (42)
+	{
+		if (cub->doors_status[i].x == door_index.x && cub->doors_status[i].y == door_index.y)
+			return (&cub->doors_status[i]);
+		i++;
+	}
+}
+
+void	set_door_texture(int *texture_id, size_t *texture_x, int x, t_cub *cub)
+{
+	t_door	*door;
+	size_t 	texture_x_offset;
+
+	door = get_door(cub->doors[x]->portal->position, cub->doors[x]->portal->angle, cub);
+	if (door->is_open && cub->data->map[door->y][door->x] == 'd')
+		return ;
+	*texture_id = 11;
+	*texture_x = set_custom_texture(*texture_id, cub->doors[x]->portal->angle, cub->doors[x]->portal->position, cub);
+	if (!door->is_open && cub->data->map[door->y][door->x] == 'D')
+		return ;
+	texture_x_offset = (size_t)(cub->textures[*texture_id].width * door->opening_percent);
+	if (texture_x_offset >= *texture_x)
+		*texture_id = -1;
+	else
+		*texture_x -= texture_x_offset;
+}
+
+int cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision)
+{
+	int i;
+	int y;
+	int screen_wall_height;
+	int texture_id;
+	t_iposition texture;
+
+	texture_id = -1;
+	set_door_texture(&texture_id, &texture.x, x, cub);
+	if (texture_id == -1)
+		return (1);
+	screen_wall_height = wall_height;
+	if (wall_height > cub->win_size[0])
+		screen_wall_height = cub->win_size[0];
+	y = cub->win_size[0] / 2 - screen_wall_height / 2;
+	i = 0;
+	while (i < screen_wall_height)
+	{
+		texture.y = (i + (wall_height - screen_wall_height) / 2) \
+* cub->textures[texture_id].height / wall_height;
+		int color = *((int *) (cub->textures[texture_id].addr + (texture.y * \
+		cub->textures[texture_id].line_length + texture.x * \
+		(cub->textures[texture_id].bits_per_pixel / 8))));
+		if (color < 0)
+		{
+			y++;
+			i++;
+			continue;
+		}
+		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
+			cub_pixel_put(&cub->img, x, y, color);
+		y++;
+		i++;
+	}
+	return (y);
+}
 int	cub_texture_put(int x, t_cub *cub, int wall_height,
 			t_position ray_collision)
 {
@@ -140,6 +215,26 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	return (y);
 }
 
+bool	not_portal_side(t_position ray_collision, double angle, t_cub *cub)
+{
+	t_iposition	portal_index;
+	char		prtl;
+	char 		prtl_or;
+
+	portal_index = get_door_index(ray_collision, angle, cub);
+	prtl = cub->data->map[portal_index.y][portal_index.x];
+	prtl_or = get_prtl_or(cub, prtl);
+	if (ray_collision.x == (int) ray_collision.x)
+	{
+		if ((cos(angle) < 0 && prtl_or == 'E') || (cos(angle > 0) && prtl_or == 'W'))
+			return (false);
+	}
+	else
+		if ((sin(angle) < 0 && prtl_or == 'S') || (sin(angle > 0 && prtl_or == 'N')))
+			return (false);
+	return (true);
+}
+
 int	put_outline_texture(int x, t_cub *cub, int wall_height, \
 						t_position ray_collision)
 {
@@ -149,8 +244,9 @@ int	put_outline_texture(int x, t_cub *cub, int wall_height, \
 	int			texture_id;
 	t_iposition	texture;
 
-	texture_id = set_texture_id_and_x(&texture.x, ray_collision, cub,
-	((t_prtl_list *)ft_dblstlast((t_dblist *)cub->portals[x]))->portal->angle);
+	if (not_portal_side(ray_collision, cub->portals[x]->portal->angle, cub))
+		return (0);
+	texture_id = set_texture_id_and_x(&texture.x, ray_collision, cub, cub->portals[x]->portal->angle);
 	screen_wall_height = wall_height;
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];
@@ -190,7 +286,7 @@ int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
 	texture_id = -1;
 	if (cub->menu.outline == 1)
 		put_outline_texture(x, cub, wall_height, ray_collision);
-	set_portal_texture(&texture_id, &texture.x, ray_collision, cub);
+	set_portal_texture(&texture_id, &texture.x, x, cub);
 	if (texture_id == -1)
 		return (1);
 	screen_wall_height = wall_height;

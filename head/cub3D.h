@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/28 15:39:59 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/01 12:01:31 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@
 # define CHECK			"textures/check.xpm"
 # define CURSOR			"textures/cursor.xpm"
 # define RESET			"textures/reset.xpm"
+# define DOOR			"textures/wolfenstein/wood.xpm"
+# define DOOR_HINT		"textures/hint.xpm"
 
 # ifndef NB_THREADS
 #  define NB_THREADS	16
@@ -329,6 +331,14 @@ typedef struct s_position
 	double	y;
 }	t_position;
 
+typedef struct s_door
+{
+	double opening_percent;
+	bool	is_open;
+	size_t x;
+	size_t y;
+}	t_door;
+
 typedef struct s_portal
 {
 	t_position	position;
@@ -344,6 +354,13 @@ typedef struct s_prtl_list
 	struct s_prtl_list	*next;
 }	t_prtl_list;
 
+typedef struct s_hint
+{
+	bool	is_displayed;
+	int 	x;
+	int		y;
+}	t_hint;
+
 typedef struct s_cub
 {
 	t_image			load_screen;
@@ -355,7 +372,7 @@ typedef struct s_cub
 	int				last_mouse_pos;
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[11];
+	t_image			textures[13];
 	t_position		player_position;
 	double			view_angle;
 	double			fov;
@@ -371,6 +388,9 @@ typedef struct s_cub
 	double			sensivity;
 	t_menu			menu;
 	t_prtl_list		**portals;
+	t_prtl_list		**doors;
+	t_door			*doors_status;
+	t_hint			door_hint;
 	bool			program_ends;
 	pthread_mutex_t	program_ends_mutex;
 	pthread_mutex_t	ray_mutex;
@@ -388,6 +408,9 @@ typedef struct s_render_thread
 }	t_render_thread;
 
 //==================== PARSING =====================//
+# define ALLOWED_CHARS		"NSEW01D "
+# define NOT_WALLS_CHARS	"NSEWD0"
+# define ALLOWED_IN_FILE	"10NSEWD \n"
 t_data		*parsing(int argc, char **argv);
 int			parse_textures(t_data *data, t_list *file);
 t_data		*get_data(char **argv);
@@ -400,6 +423,7 @@ char		**get_map_from_file(t_list *file);
 t_list		*list_from_file(char *file_path);
 
 //================= RAY RELATIVES ==================//
+void		clear_lists(t_cub *cub);
 
 //===================== UTILS ======================//
 void		destroy_data(t_data *data);
@@ -425,12 +449,13 @@ t_iposition	get_next_baj(char **w_surr, \
 						t_bajeanno *next_one,
 						t_iposition *cur_pos);
 void		set_portal_on_map(t_cub *cub, char prtl_id);
-void		set_portal_texture(int *texture_id, size_t *texture_x, \
-								t_position ray_collision, t_cub *cub);
+void		set_portal_texture(int *texture_id, size_t *texture_x,
+							   int x, t_cub *cub);
 void		display_crosshair(t_cub *cub);
 int			teleport_ray(t_cub *cub, t_position *ray, double *angle,
 				char entry_portal);
 int			close_window(t_cub *cub);
+double		compute_distance(t_position player, t_position ray);
 
 //===================== MENU ======================//
 void		summon_game_menu(t_cub *cub, int dir);
@@ -445,5 +470,14 @@ void		cub_mouse_show(t_cub *cub);
 void		cub_mouse_hide(t_cub *cub);
 int			compute_ray(t_cub *cub, int ray_id, double segments_size);
 int			create_threads(t_cub *cub);
+
+//===================== DOORS ======================//
+# define	DOOR_MAX_OPENING 2
+void		open_door(t_cub *cub);
+int			init_doors(t_cub *cub);
+t_iposition	get_door_index(t_position pos, double angle, t_cub *cub);
+int			cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision);
+t_door		*get_door(t_position ray_collision, double angle, t_cub *cub);
+void		cub_display_door_hint(t_cub *cub);
 
 #endif

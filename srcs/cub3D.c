@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/29 12:34:08 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/05 19:02:43 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_position	get_position(char **map)
 void	convert_path_to_mlx_img(t_cub *cub)
 {
 	int i;
-	static char	*custom_path[7] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P};
+	static char	*custom_path[9] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR, DOOR_HINT};
 
 	i = -1;
 	while (++i < 4)
@@ -91,7 +91,7 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
-	while (i < 11)
+	while (i < 13)
 	{
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, custom_path[i - 4], &cub->textures[i].width,
 													 &cub->textures[i].height);
@@ -174,8 +174,9 @@ t_cub	*init_game(int argc, char **argv)
 	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
 	cub->wall_distance = malloc(sizeof(double) * cub->win_size[1]);
 	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
-	if (!cub->rays || !cub->angles || !cub->wall_heights || !cub->portals)
-		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), free(cub->portals), free(cub), NULL);
+	cub->doors = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
+	if (!cub->rays || !cub->angles || !cub->wall_heights)
+		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), NULL);
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position.x += 0.5;
 	cub->player_position.y += 0.5;
@@ -207,6 +208,8 @@ int	main(int argc, char **argv)
 	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	display_load_screen(cub);
 	load_game_menu(cub);
+	if (!init_doors(cub))
+		return (close_window(cub));
 	cub->fov = M_PI_2;
 	cub->player_speed = 20;
 	cub->sensivity = 0.017;
@@ -235,6 +238,87 @@ void	remove_load_screen(t_cub *cub)
 	cub->load_screen.img = NULL;
 	cub->menu.on_screen = false;
 	cub_mouse_hide(cub);
+}
+
+void	cub_update_doors(t_cub *cub)
+{
+	size_t	i;
+
+	i = 0;
+	while (cub->doors_status[i].x)
+	{
+		if (cub->doors_status[i].opening_percent > 0 && cub->doors_status[i].opening_percent < 1)
+		{
+			if (cub->doors_status[i].is_open)
+				cub->doors_status[i].opening_percent -= 0.05;
+			else
+				cub->doors_status[i].opening_percent += 0.05;
+			if (cub->doors_status[i].opening_percent < 0)
+				cub->doors_status[i].opening_percent = 0;
+			else if (cub->doors_status[i].opening_percent > 1)
+				cub->doors_status[i].opening_percent = 1;
+			if (cub->doors_status[i].opening_percent == 1)
+				cub->doors_status[i].is_open = true;
+			else if (cub->doors_status[i].opening_percent == 0)
+				cub->doors_status[i].is_open = false;
+		}
+		i++;
+	}
+}
+
+void	display_door_hint(t_cub *cub, int texture_y, int display_y)
+{
+	int	display_x;
+	int	texture_x;
+	int	color;
+	int max_x;
+
+	max_x = cub->textures[12].width + cub->door_hint.x;
+	while (display_y > 0 && display_y > cub->door_hint.y)
+	{
+		display_x = cub->door_hint.x;
+		texture_x = 0;
+		while (display_x < max_x && display_x < cub->win_size[WIDTH])
+		{
+			color = *((int *)(cub->textures[12].addr + (texture_y * \
+					cub->textures[12].line_length + texture_x * \
+					(cub->textures[12].bits_per_pixel / 8))));
+			if (color > 0)
+				cub_pixel_put(&cub->img, display_x, display_y, color);
+			display_x++;
+			texture_x++;
+		}
+		display_y--;
+		texture_y--;
+	}
+}
+
+void	cub_display_door_hint(t_cub *cub)
+{
+	t_prtl_list	*door;
+	int 		dir;
+	int 		texture_y;
+	int 		display_y;
+
+	door = cub->doors[cub->win_size[WIDTH] / 2];
+	if (door && cub->menu.x == -cub->menu.menu_bg.width)
+	{
+		while (door->next && get_door(door->portal->position, door->portal->angle, cub)->is_open)
+			door = door->next;
+		dir = (door->portal->distance > DOOR_MAX_OPENING) * -1 + (door->portal->distance <= DOOR_MAX_OPENING);
+		if (dir < 0 && cub->door_hint.y == cub->textures[12].height * -1)
+			return ;
+	}
+	else
+		dir = -1;
+	texture_y = cub->textures[12].height;
+	display_y = cub->door_hint.y + cub->textures[12].height;
+	display_door_hint(cub, texture_y, display_y);
+	cub->door_hint.y += dir * 2;
+	if (cub->door_hint.y > 15)
+		cub->door_hint.y = 15;
+	if (cub->door_hint.y < -cub->textures[12].height)
+		cub->door_hint.y = -cub->textures[12].height;
 }
 
 int	perform_actions(t_cub *cub)
@@ -271,6 +355,7 @@ int	perform_actions(t_cub *cub)
 		cub->sensivity = 0.017;
 		cub->menu.cursors[SENSI].x = (int) cub->menu.cursors[SENSI].initial_pos.x;
 	}
+	cub_update_doors(cub);
 	if ((cub->menu.cross_hair == 2 && cub->cross_hair > 0) || (cub->menu.cross_hair == 1 && cub->cross_hair < 0))
 		cub->cross_hair *= -1;
 	if (cub->keys_states[KEY_ESC])
@@ -308,6 +393,7 @@ int	perform_actions(t_cub *cub)
 			cub->data->baj->is_activated = 1;
 		}
 	}
+	clear_lists(cub);
 	return (render_frame(cub));
 }
 
@@ -334,6 +420,8 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 			set_portal_on_map(cub, 'B');
 		else if (keycode == KEY_Y)
 			set_portal_on_map(cub, 'O');
+		else if (keycode == KEY_E)
+			open_door(cub);
 		else if (keycode == KEY_TAB)
 			handle_menu(cub);
 		else
@@ -347,8 +435,8 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 int cub_handle_mouse_release(int button, int x, int y, t_cub *cub)
 {
 	(void)button;
-	(void)y;
 	(void)x;
+	(void)y;
 	if (cub->menu.cursors[SPEED].is_pressed)
 		cub->menu.cursors[SPEED].is_pressed = false;
 	if (cub->menu.cursors[SENSI].is_pressed)
@@ -507,7 +595,7 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 	if (cub->data->map[(int)new_y][(int) cub->player_position.x] == '1' \
 	&& cub->data->map[(int)cub->player_position.y][(int)new_x] == '1')
 		return ;
-	if (cub->data->map[(int)new_y][(int)new_x] == '1')
+	if (ft_isset(cub->data->map[(int)new_y][(int)new_x], "1D"))
 		return (report_movement(new_y, new_x, cub));
 	else if (cub->data->map[(int)new_y][(int)new_x] == 'O')
 		teleport_player(new_x, new_y, 'O', cub);
@@ -593,7 +681,18 @@ int close_window(t_cub *cub)
 	int	i;
 
 	i = 0;
-	while (i <= 10)
+	pthread_mutex_lock(&cub->program_ends_mutex);
+	cub->program_ends = true;
+	pthread_mutex_unlock(&cub->program_ends_mutex);
+	usleep(1000);
+	while (i < NB_THREADS)
+		pthread_join(cub->threads[i++], NULL);
+	pthread_mutex_destroy(&cub->finished_mutex);
+	pthread_mutex_destroy(&cub->program_ends_mutex);
+	pthread_mutex_destroy(&cub->ray_mutex);
+	free(cub->threads);
+	i = 0;
+	while (i <= 12)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
