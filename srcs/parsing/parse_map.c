@@ -73,21 +73,16 @@ int	check_wall_surroundment(char **map)
 	return (0);
 }
 
-int check_door_position(char **map)
+int	check_door_position(char **map)
 {
-	size_t	i;
-	size_t	j;
+	int		i;
+	int		j;
 
-	i = 0;
-	while (map[i])
+	i = -1;
+	while (map[++i])
 	{
-		if (!map[i][0])
-		{
-			i++;
-			continue ;
-		}
-		j = 1;
-		while (map[i][j])
+		j = -1;
+		while (map[i][++j])
 		{
 			while (map[i][j] && map[i][j] != 'D')
 				j++;
@@ -100,9 +95,7 @@ int check_door_position(char **map)
 				if (map[i - 1][j] != '1' || map[i + 1][j] != '1')
 					return (ft_putstr_fd(ERR WRONG_D_POS EOL, 2), 1);
 			}
-			j++;
 		}
-		i++;
 	}
 	return (0);
 }
