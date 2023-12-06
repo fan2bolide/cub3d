@@ -34,6 +34,7 @@ SRCS		:=	cub3D.c\
 				multithreading/create_threads.c\
 				multithreading/threads_routine.c\
 				doors/doors.c\
+				doors/init_doors.c\
 
 
 SRCS_D		:=	srcs/
