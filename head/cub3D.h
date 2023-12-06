@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/01 12:01:31 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/06 14:42:52 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,6 +361,15 @@ typedef struct s_hint
 	int		y;
 }	t_hint;
 
+typedef struct s_ray_shoot
+{
+	t_position	*ray;
+	t_position	ray_start;
+	char		collision_point;
+	double		*angle;
+	double		*distance;
+}	t_ray_shoot;
+
 typedef struct s_cub
 {
 	t_image			load_screen;
@@ -424,6 +433,10 @@ t_list		*list_from_file(char *file_path);
 
 //================= RAY RELATIVES ==================//
 void		clear_lists(t_cub *cub);
+int			shoot_door_ray(t_ray_shoot *ray_attr, t_cub *cub);
+int			shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub);
+void		init_ray_attr(t_cub *cub, t_position *ray, double *angle,
+				t_ray_shoot *ray_attr);
 
 //===================== UTILS ======================//
 void		destroy_data(t_data *data);

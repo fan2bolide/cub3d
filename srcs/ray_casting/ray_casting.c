@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/04 15:24:50 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/06 14:42:52 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,22 @@ void	apply_minimal_distance(t_position *ray, t_position delta_x, \
 	ray->y += delta_y.y;
 }
 
-/**
- * @param player
- * @param ray
- * @return the distance between the player and the ray
- */
-double	compute_distance(t_position player, t_position ray)
+void	update_ray_attr(t_ray_shoot *ray_attr, t_cub *cub)
 {
-	return (sqrt((ray.x - player.x) * (ray.x - player.x) \
-				+ (ray.y - player.y) * (ray.y - player.y)));
+	t_position	*ray;
+	double		*angle;
+
+	ray = ray_attr->ray;
+	angle = ray_attr->angle;
+	apply_minimal_distance(ray, get_delta_to_next_column(*ray, *angle), \
+			get_delta_to_next_line(*ray, *angle));
+	ray_attr->collision_point = cub->data->map[(int)ray->y - \
+		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)][(int)ray->x \
+		- ((int)ray->x && ray->x == (int)ray->x && (cos(*angle) < 0))];
 }
 
 /**
- * shoots a ray until it collides with a wall (or a portal)
+ * shoots a ray until it collides with a wall (or a portal/door)
  * @param ray
  * @param cub
  * @param angle
@@ -98,51 +101,29 @@ double	compute_distance(t_position player, t_position ray)
  */
 int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 {
-	char		collision_point;
-	t_position	ray_start;
-	t_prtl_list	*door_lst;
-	t_portal	*door;
+	t_ray_shoot	ray_attr;
+	int			return_value;
 
+	init_ray_attr(cub, ray, angle, &ray_attr);
+	ray_attr.distance = distance;
 	*distance = 0;
-	ray_start.x = cub->player_position.x;
-	ray_start.y = cub->player_position.y;
 	while (1)
 	{
-		apply_minimal_distance(ray, get_delta_to_next_column(*ray, *angle), \
-			get_delta_to_next_line(*ray, *angle));
-		collision_point = cub->data->map[(int)ray->y - \
-		((int)ray->y && ray->y == (int)ray->y && sin(*angle) < 0)][(int)ray->x \
-		- ((int)ray->x && ray->x == (int)ray->x && (cos(*angle) < 0))];
-		if (collision_point == '1')
-			return (*distance += compute_distance(ray_start, *ray), 1);
-		if (collision_point == 'B' || collision_point == 'O')
+		update_ray_attr(&ray_attr, cub);
+		if (ray_attr.collision_point == '1')
+			return (*ray_attr.distance += compute_distance(ray_attr.ray_start,
+					*ray_attr.ray), 1);
+		if (ray_attr.collision_point == 'B' || ray_attr.collision_point == 'O')
 		{
-			*distance += compute_distance(ray_start, *ray);
-			add_new_portal_to_ray(cub, *distance, ray, angle);
-			if (*distance > 300 || !teleport_ray(cub, ray, angle, \
-												collision_point))
-				return (1);
-			ray_start = *ray;
+			return_value = shoot_portal_ray(&ray_attr, cub);
+			if (return_value)
+				return (return_value);
 		}
-		if (collision_point == 'd' || collision_point == 'D')
+		if (ray_attr.collision_point == 'd' || ray_attr.collision_point == 'D')
 		{
-			door = malloc(sizeof (t_portal));
-			if (!door)
-				return (0);
-			door->distance = *distance + compute_distance(ray_start, *ray);
-			door->position.x = ray->x;
-			door->position.y = ray->y;
-			door->angle = *angle;
-			door->height = get_wall_height(cub, door->distance, door->angle);
-			door_lst = (t_prtl_list *)ft_dblstnew(door);
-			if (!door_lst)
-				return (0);
-			ft_dblstadd_back((t_dblist **)&cub->doors[angle - cub->angles], (t_dblist *)door_lst);
-			*distance += compute_distance(ray_start, *ray);
-			if (collision_point == 'D' && get_door(*ray, *angle, cub)->opening_percent == 0)
-				return (1);
-			ray_start.x = ray->x;
-			ray_start.y = ray->y;
+			return_value = shoot_door_ray(&ray_attr, cub);
+			if (return_value)
+				return (return_value);
 		}
 	}
 }
