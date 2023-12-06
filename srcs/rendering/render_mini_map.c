@@ -33,12 +33,29 @@ void	cub_put_player_on_map(t_cub *cub, t_position player)
 	}
 }
 
+t_position	set_ray_dup(t_cub *cub, t_position *ray, t_prtl_list *door, int i)
+{
+	t_position	ray_dup;
+
+	if (!cub->portals[i])
+	{
+		ray_dup = ray[i];
+		if (door)
+			ray_dup = door->portal->position;
+		else
+			ray_dup = ray[i];
+	}
+	else
+		ray_dup = cub->portals[i]->portal->position;
+	return (ray_dup);
+}
+
 void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
 {
 	t_position	ray_dup;
 	t_position	ray_adjustment;
 	int			i;
-	t_prtl_list *door;
+	t_prtl_list	*door;
 
 	ray_adjustment.x = -(cub->player_position.x * MINIMAP_SCALE) \
 						+ (MINIMAP_SIZE) + MINIMAP_OFFSET;
@@ -49,18 +66,10 @@ void	cub_put_ray_on_minimap(t_cub *cub, t_position player, t_position *ray)
 	{
 		pthread_mutex_lock(&cub->ray_mutex);
 		door = cub->doors[i];
-		while (door && get_door(door->portal->position, door->portal->angle, cub)->is_open)
+		while (door && get_door(door->portal->position,
+				door->portal->angle, cub)->is_open)
 			door = door->next;
-		if (!cub->portals[i])
-		{
-			ray_dup = ray[i];
-			if (door)
-				ray_dup = door->portal->position;
-			else
-				ray_dup = ray[i];
-		}
-		else
-			ray_dup = cub->portals[i]->portal->position;
+		ray_dup = set_ray_dup(cub, ray, door, i);
 		ray_dup.x = ray_dup.x * MINIMAP_SCALE + ray_adjustment.x;
 		ray_dup.y = ray_dup.y * MINIMAP_SCALE + ray_adjustment.y;
 		pthread_mutex_unlock(&cub->ray_mutex);

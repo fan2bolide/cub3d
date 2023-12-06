@@ -275,7 +275,7 @@ int	put_outline_texture(int x, t_cub *cub, int wall_height, \
 }
 
 int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
-					   t_position ray_collision)
+		t_position ray_collision)
 {
 	int			i;
 	int			y;
