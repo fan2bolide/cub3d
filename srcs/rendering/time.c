@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/time.h>
+#include "cub3D.h"
 
-#define NULL							(void *)0
 #define NB_OF_USECONDS_IN_A_SECOND		1000000
 #define NB_OF_USECONDS_IN_A_MILLISECOND	1000
 
