@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/06 11:29:14 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/07 21:29:23 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_position	get_position(char **map)
 void	convert_path_to_mlx_img(t_cub *cub)
 {
 	int i;
-	static char	*custom_path[9] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR, DOOR_HINT};
+	static char	*custom_path[11] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR, DOOR_HINT, PORTAL_GUN, RICKS_GUN};
 
 	i = -1;
 	while (++i < 4)
@@ -91,8 +91,9 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
-	while (i < 13)
+	while (i < 14)
 	{
+		//todo secure those paths
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, custom_path[i - 4], &cub->textures[i].width,
 													 &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel,
@@ -692,7 +693,7 @@ int close_window(t_cub *cub)
 	pthread_mutex_destroy(&cub->ray_mutex);
 	free(cub->threads);
 	i = 0;
-	while (i <= 12)
+	while (i <= 13)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
@@ -719,6 +720,9 @@ int	close_window(t_cub *cub)
 	pthread_mutex_destroy(&cub->program_ends_mutex);
 	pthread_mutex_destroy(&cub->ray_mutex);
 	free(cub->threads);
+	i = 0;
+	while (i <= 13)
+		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
 	free(cub->angles);

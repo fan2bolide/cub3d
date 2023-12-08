@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_frame.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/05 18:27:32 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/07 20:42:14 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	render_frame(t_cub *cub)
 	if (!cub->menu.on_screen && cub->menu.x + cub->menu.menu_bg.width == 0)
 		render_mini_map(cub, cub->rays);
 	display_crosshair(cub);
+	display_portal_gun(cub);
 	summon_game_menu(cub, cub->menu.on_screen + (!cub->menu.on_screen * -1));
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	return (1);

@@ -36,6 +36,7 @@ SRCS		:=	cub3D.c\
 				multithreading/threads_routine.c\
 				doors/doors.c\
 				doors/init_doors.c\
+				guns/guns.c\
 
 
 SRCS_D		:=	srcs/
@@ -123,6 +124,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)multithreading
 			@mkdir -p $(OBJS_D)game_menu
 			@mkdir -p $(OBJS_D)doors
+			@mkdir -p $(OBJS_D)guns
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)

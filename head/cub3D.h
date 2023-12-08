@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/06 14:42:52 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/08 14:44:43 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@
 # define RESET			"textures/reset.xpm"
 # define DOOR			"textures/wolfenstein/wood.xpm"
 # define DOOR_HINT		"textures/hint.xpm"
+# define PORTAL_GUN		"textures/portal_gun.xpm"
+# define RICKS_GUN		"textures/rick_portal_gun.xpm"
 
 # ifndef NB_THREADS
 #  define NB_THREADS	16
@@ -381,7 +383,7 @@ typedef struct s_cub
 	int				last_mouse_pos;
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[13];
+	t_image			textures[14];
 	t_position		player_position;
 	double			view_angle;
 	double			fov;
@@ -408,6 +410,7 @@ typedef struct s_cub
 	pthread_t		*threads;
 	bool			threads_finished_rendering[NB_THREADS];
 	bool 			is_frame_rendered;
+	double			gun_movement;
 }	t_cub;
 
 typedef struct s_render_thread
@@ -492,5 +495,8 @@ t_iposition	get_door_index(t_position pos, double angle, t_cub *cub);
 int			cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision);
 t_door		*get_door(t_position ray_collision, double angle, t_cub *cub);
 void		cub_display_door_hint(t_cub *cub);
+
+//===================== GUNS =======================//
+int	display_portal_gun(t_cub *cub);
 
 #endif
