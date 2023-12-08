@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/08 14:44:43 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/08 14:49:29 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,6 +411,8 @@ typedef struct s_cub
 	bool			threads_finished_rendering[NB_THREADS];
 	bool 			is_frame_rendered;
 	double			gun_movement;
+	t_iposition		gun_position;
+	t_iposition		gun_size;
 }	t_cub;
 
 typedef struct s_render_thread

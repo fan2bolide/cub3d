@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/07 21:29:23 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/08 16:08:22 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,15 @@ void display_load_screen(t_cub *cub)
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->load_screen.img, x, y);
 }
 
+t_iposition get_gun_position(t_cub *cub)
+{
+	t_iposition result;
+
+	result.x = 45 * cub->win_size[WIDTH] / 100;
+	result.y = 45 * cub->win_size[HEIGHT] / 100;
+	return result;
+}
+
 t_cub	*init_game(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -181,6 +190,7 @@ t_cub	*init_game(int argc, char **argv)
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position.x += 0.5;
 	cub->player_position.y += 0.5;
+	cub->gun_position = get_gun_position(cub);
 	cub->next_ray_to_compute = cub->win_size[WIDTH];
 	pthread_mutex_init(&cub->ray_mutex, NULL);
 	pthread_mutex_init(&cub->program_ends_mutex, NULL);
