@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/08 14:49:29 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/09 00:57:59 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@
 # define RESET			"textures/reset.xpm"
 # define DOOR			"textures/wolfenstein/wood.xpm"
 # define DOOR_HINT		"textures/hint.xpm"
-# define PORTAL_GUN		"textures/portal_gun.xpm"
+# define PORTAL_GUN_B	"textures/portal_gun_b.xpm"
+# define PORTAL_GUN_O	"textures/portal_gun_o.xpm"
 # define RICKS_GUN		"textures/rick_portal_gun.xpm"
 
 # ifndef NB_THREADS
@@ -383,8 +384,9 @@ typedef struct s_cub
 	int				last_mouse_pos;
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[14];
+	t_image			textures[16];
 	t_position		player_position;
+	t_position		last_player_pos;
 	double			view_angle;
 	double			fov;
 	size_t			last_frame_time;
@@ -393,6 +395,7 @@ typedef struct s_cub
 	double			*angles;
 	char			orange_prtl;
 	char			blue_prtl;
+	char			rick_prtl;
 	int				*wall_heights;
 	char			cross_hair;
 	int				player_speed;
@@ -413,6 +416,9 @@ typedef struct s_cub
 	double			gun_movement;
 	t_iposition		gun_position;
 	t_iposition		gun_size;
+	char			last_portal_placed;
+	t_position		random_position;
+	double			random_angle;
 }	t_cub;
 
 typedef struct s_render_thread

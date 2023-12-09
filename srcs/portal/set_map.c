@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_map.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:09:33 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/05 17:11:46 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/09 00:16:22 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ void	set_portal_on_map(t_cub *cub, char prtl_id)
 {
 	t_position	middle_ray;
 
+	cub->last_portal_placed = prtl_id;
 	if (cub->portals[cub->win_size[WIDTH] / 2])
 		middle_ray = cub->portals[cub->win_size[WIDTH] / 2]->portal->position;
 	else

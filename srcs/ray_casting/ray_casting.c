@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/06 14:42:52 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/09 00:47:09 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 	while (1)
 	{
 		update_ray_attr(&ray_attr, cub);
-		if (ray_attr.collision_point == '1')
+		if (ray_attr.collision_point == '1' || ray_attr.collision_point == 'R')
 			return (*ray_attr.distance += compute_distance(ray_attr.ray_start,
 					*ray_attr.ray), 1);
 		if (ray_attr.collision_point == 'B' || ray_attr.collision_point == 'O')

@@ -6,16 +6,50 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 21:38:36 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/08 16:18:38 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/09 00:44:06 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-void update_gun_pos(t_cub *cub)
+double get_player_speed(t_cub *cub)
 {
-	if (cub->keys_states[KEY_S] || cub->keys_states[KEY_D] || cub->keys_states[KEY_A] || cub->keys_states[KEY_W])
-		cub->gun_movement += 0.1;
+	t_position player;
+	t_position last;
+
+	player = cub->player_position;
+	player.x *= 1000;
+	player.y *= 1000;
+	last = cub->last_player_pos;
+	last.x *= 1000;
+	last.y *= 1000;
+	return (compute_distance(player, last));
+}
+
+void	update_gun_pos(t_cub *cub)
+{
+	double moving_speed = get_player_speed(cub);
+
+	if (cub->keys_states[KEY_W] || cub->keys_states[KEY_A] \
+		|| cub->keys_states[KEY_S] || cub->keys_states[KEY_D])
+		cub->gun_movement += moving_speed / 500;
+	else
+	{
+		if (sin(cub->gun_movement) > 0)
+		{
+			if (cos(cub->gun_movement) > 0)
+				cub->gun_movement -= 0.05;
+			else
+				cub->gun_movement += 0.05;
+		}
+		else
+		{
+			if (cos(cub->gun_movement) > 0)
+				cub->gun_movement += 0.05;
+			else
+				cub->gun_movement -= 0.05;
+		}
+	}
 }
 
 int	display_portal_gun(t_cub *cub)
@@ -27,7 +61,12 @@ int	display_portal_gun(t_cub *cub)
 
 	gun_size.x = (cub->win_size[WIDTH] - cub->gun_position.x) * 1;
 	gun_size.y = (cub->win_size[HEIGHT] - cub->gun_position.y) * 1.5;
-	texture_id = 13;
+	if (cub->last_portal_placed == 'B')
+		texture_id = 13;
+	if (cub->last_portal_placed == 'O')
+		texture_id = 14;
+	if (cub->last_portal_placed == 'R')
+		texture_id = 15;
 	update_gun_pos(cub);
 	int sin_movement = sin(cub->gun_movement) * 15;
 	int y = (int)cub->gun_position.y;

@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/08 16:08:22 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/09 02:13:19 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_position	get_position(char **map)
 void	convert_path_to_mlx_img(t_cub *cub)
 {
 	int i;
-	static char	*custom_path[11] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR, DOOR_HINT, PORTAL_GUN, RICKS_GUN};
+	static char	*custom_path[12] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR, DOOR_HINT, PORTAL_GUN_B, PORTAL_GUN_O, RICKS_GUN};
 
 	i = -1;
 	while (++i < 4)
@@ -91,7 +91,7 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
-	while (i < 14)
+	while (i < 16)
 	{
 		//todo secure those paths
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, custom_path[i - 4], &cub->textures[i].width,
@@ -178,6 +178,7 @@ t_cub	*init_game(int argc, char **argv)
 	cub->cross_hair = 'C';
 	cub->blue_prtl = '-';
 	cub->orange_prtl = '-';
+	cub->rick_prtl = '-';
 	cub->win_size[1] = cub->win_size[0] * 16 / 10;
 	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
 	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
@@ -190,7 +191,10 @@ t_cub	*init_game(int argc, char **argv)
 	cub->player_position = get_position(cub->data->map);
 	cub->player_position.x += 0.5;
 	cub->player_position.y += 0.5;
+	cub->last_player_pos.x = cub->player_position.x;
+	cub->last_player_pos.y = cub->player_position.y;
 	cub->gun_position = get_gun_position(cub);
+	cub->last_portal_placed = 'B';
 	cub->next_ray_to_compute = cub->win_size[WIDTH];
 	pthread_mutex_init(&cub->ray_mutex, NULL);
 	pthread_mutex_init(&cub->program_ends_mutex, NULL);
@@ -416,6 +420,83 @@ int	cub_handle_key_release(int keycode, t_cub *cub)
 	return (1);
 }
 
+bool	is_in_map(t_cub *cub, int x, int y)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (cub->data->map[i] && i <= y)
+	{
+		j = 0;
+		while (cub->data->map[i][j] && j <= x)
+		{
+			if (i == y && j == x && cub->data->map[i][j] == '0')
+				return (true);
+			j++;
+		}
+		i++;
+	}
+	return (false);
+}
+
+unsigned int	get_map_height(t_cub *cub)
+{
+	unsigned int i;
+
+	i = 0;
+	while (cub->data->map[i])
+		i++;
+	return (i);
+}
+
+unsigned int get_map_width(t_cub *cub)
+{
+	unsigned int	i;
+	unsigned int	j;
+	unsigned int	max;
+
+	i = 0;
+	max = 0;
+	while (cub->data->map[i])
+	{
+		j = 0;
+		while (cub->data->map[i][j])
+			j++;
+		if (j > max)
+			max = j;
+		i++;
+	}
+	return (max);
+}
+
+void set_random_position(t_cub *cub)
+{
+	unsigned int	i;
+	unsigned int	j;
+
+	i = 0;
+	cub->random_position.x = 0;
+	while (cub->random_position.x == 0)
+	{
+		j = 0;
+		cub->random_position.y = 0;
+		while (cub->random_position.y == 0)
+		{
+			srand(i + j);
+			cub->random_position.y = arc4random() % get_map_height(cub) + 0.5;
+			cub->random_position.x = arc4random() % get_map_width(cub) + 0.5;
+			if (is_in_map(cub, (int)cub->random_position.x, \
+								(int)cub->random_position.y))
+				return (cub->random_angle = arc4random() % 300, (void)0);
+			cub->random_position.y = 0;
+			j++;
+		}
+		cub->random_position.x = 0;
+		i++;
+	}
+}
+
 int cub_handle_key_press(int keycode, t_cub *cub)
 {
 	if (keycode && keycode > 65508)
@@ -431,6 +512,11 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 			set_portal_on_map(cub, 'B');
 		else if (keycode == KEY_Y)
 			set_portal_on_map(cub, 'O');
+		else if (keycode == KEY_R)
+		{
+			set_portal_on_map(cub, 'R');
+			set_random_position(cub);
+		}
 		else if (keycode == KEY_E)
 			open_door(cub);
 		else if (keycode == KEY_TAB)
@@ -579,6 +665,8 @@ void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)
 		new_pos.y = (int)new_y;
 	else
 		new_pos.y = new_y;
+	if (prtl_id == 'R')
+		return (cub->player_position = cub->random_position, cub->view_angle = cub->random_angle, set_random_position(cub), (void)0);
 	if (cub->keys_states[KEY_S])
 		walk_angle = cub->view_angle + M_PI;
 	else if (cub->keys_states[KEY_A])
@@ -601,6 +689,8 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 	double	new_y;
 	double	new_x;
 
+	cub->last_player_pos.x = cub->player_position.x;
+	cub->last_player_pos.y = cub->player_position.y;
 	new_y = cub->player_position.y + y_change;
 	new_x = cub->player_position.x + x_change;
 	if (cub->data->map[(int)new_y][(int) cub->player_position.x] == '1' \
@@ -610,6 +700,8 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 		return (report_movement(new_y, new_x, cub));
 	else if (cub->data->map[(int)new_y][(int)new_x] == 'O')
 		teleport_player(new_x, new_y, 'O', cub);
+	else if (cub->data->map[(int)new_y][(int)new_x] == 'R')
+		teleport_player(new_x, new_y, 'R', cub);
 	else if (cub->data->map[(int)new_y][(int)new_x] == 'B')
 		teleport_player(new_x, new_y, 'B', cub);
 	else
