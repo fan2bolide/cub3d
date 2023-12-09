@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/09 02:13:19 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/09 20:18:30 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -483,12 +483,16 @@ void set_random_position(t_cub *cub)
 		cub->random_position.y = 0;
 		while (cub->random_position.y == 0)
 		{
-			srand(i + j);
-			cub->random_position.y = arc4random() % get_map_height(cub) + 0.5;
-			cub->random_position.x = arc4random() % get_map_width(cub) + 0.5;
+			struct timeval time;
+			gettimeofday(&time, NULL);
+			srand(time.tv_usec);
+			cub->random_position.y = rand() % get_map_height(cub) + 0.5;
+			gettimeofday(&time, NULL);
+			srand(time.tv_usec);
+			cub->random_position.x = rand() % get_map_width(cub) + 0.5;
 			if (is_in_map(cub, (int)cub->random_position.x, \
 								(int)cub->random_position.y))
-				return (cub->random_angle = arc4random() % 300, (void)0);
+				return (gettimeofday(&time, NULL), srand(time.tv_usec), cub->random_angle = rand() % 300, (void)0);
 			cub->random_position.y = 0;
 			j++;
 		}
