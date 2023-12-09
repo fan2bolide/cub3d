@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/08 14:49:29 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/09 19:45:57 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -500,5 +500,10 @@ void		cub_display_door_hint(t_cub *cub);
 
 //===================== GUNS =======================//
 int	display_portal_gun(t_cub *cub);
+
+
+
+
+void put_pixel_transparent(t_image *data, int x, int y, unsigned int color);
 
 #endif

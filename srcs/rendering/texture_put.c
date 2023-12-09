@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/06 10:52:37 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/09 19:37:49 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,19 @@ bool	not_portal_side(t_position ray_collision, double angle, t_cub *cub)
 	return (true);
 }
 
+void put_transparency(t_cub *cub, int x, int y, int texture_id)
+{
+	size_t	texture_x;
+
+	if (texture_id != 7 && texture_id != 9 && texture_id != 8 && texture_id != 10)
+		set_portal_texture(&texture_id, &texture_x, x, cub);
+	if (texture_id == 7 || texture_id == 9)
+		put_pixel_transparent(&cub->img, x, y, 0x703399ff);
+	else if (texture_id == 8 || texture_id == 10)
+		put_pixel_transparent(&cub->img, x, y, 0x70ff6600);
+
+}
+
 int	put_outline_texture(int x, t_cub *cub, int wall_height, \
 						t_position ray_collision)
 {
@@ -258,12 +271,8 @@ int	put_outline_texture(int x, t_cub *cub, int wall_height, \
 				* cub->textures[texture_id].height / wall_height;
 		if (((int)texture.x > cub->textures[texture_id].width / 5 && (int)texture.x < cub->textures[texture_id].width - cub->textures[texture_id].width / 5)
 			&& ((int)texture.y > cub->textures[texture_id].height / 5 && (int)texture.y < cub->textures[texture_id].height - cub->textures[texture_id].width / 5))
-		{
-			y++;
-			i++;
-			continue ;
-		}
-		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
+			put_transparency(cub, x, y, texture_id);
+		else if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
 			cub_pixel_put(&cub->img, x, y, \
 			*((int *)(cub->textures[texture_id].addr + (texture.y * \
 			cub->textures[texture_id].line_length + texture.x * \
@@ -275,7 +284,7 @@ int	put_outline_texture(int x, t_cub *cub, int wall_height, \
 }
 
 int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
-		t_position ray_collision)
+							  t_position ray_collision)
 {
 	int			i;
 	int			y;
@@ -298,6 +307,8 @@ int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
 	{
 		texture.y = (i + (wall_height - screen_wall_height) / 2) \
 				* cub->textures[texture_id].height / wall_height;
+		if (cub->menu.outline == 2)
+			put_transparency(cub, x, y, texture_id);
 		int color = *((int *)(cub->textures[texture_id].addr + (texture.y * \
 			cub->textures[texture_id].line_length + texture.x * \
 			(cub->textures[texture_id].bits_per_pixel / 8))));

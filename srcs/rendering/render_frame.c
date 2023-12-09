@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_frame.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/07 20:42:14 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/09 19:45:57 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,29 @@ void	wait_rendering(t_cub *cub, struct timeval start_time)
 	}
 	while (get_timestamp(start_time, get_current_time()) < 5)
 		usleep(100);
+}
+
+void put_pixel_transparent(t_image *data, int x, int y, unsigned int color)
+{
+	int		old_color;
+	t_color old_color_rgb;
+	t_color new_color;
+	t_color final_color;
+	char *dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	old_color = *(int *) dst;
+	old_color_rgb.blue = old_color & 0xFF;
+	old_color_rgb.green = (old_color >> 8) & 0xFF;
+	old_color_rgb.red = (old_color >> 16) & 0xFF;
+	new_color.blue = color & 0xFF;
+	new_color.green = (color >> 8) & 0xFF;
+	new_color.red = (color >> 16) & 0xFF;
+	new_color.transparency = (color >> 24) & 0xFF;
+	final_color.red = (new_color.red * new_color.transparency + old_color_rgb.red * (255 - new_color.transparency)) / 255;
+	final_color.green = (new_color.green * new_color.transparency + old_color_rgb.green * (255 - new_color.transparency)) / 255;
+	final_color.blue = (new_color.blue * new_color.transparency + old_color_rgb.blue * (255 - new_color.transparency)) / 255;
+	cub_pixel_put(data, x, y, *(int *) (&final_color));
 }
 
 int	render_frame(t_cub *cub)
