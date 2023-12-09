@@ -35,6 +35,8 @@ int			set_custom_texture(int texture_id, double angle,
 					   t_position ray_collision, t_cub *cub);
 int			cub_portal_texture_put(int x, t_cub *cub, int wall_height,
 				t_position ray_collision);
+int cub_glass_texture_put(int c, t_cub *cub, int wall_height, t_position ray_collision);
+
 int			get_wall_height(t_cub *cub, double wall_distance, double ray_angle);
 t_position	get_prtl_pos(t_cub *cub, char portal);
 char		get_prtl_or(t_cub *cub, char portal);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/08 16:08:22 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/09 21:32:32 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_position	get_position(char **map)
 void	convert_path_to_mlx_img(t_cub *cub)
 {
 	int i;
-	static char	*custom_path[11] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR, DOOR_HINT, PORTAL_GUN, RICKS_GUN};
+	static char	*custom_path[12] = {BJ_PATH, BLUE_PATH, ORG_PATH, BLUE_TR_PATH, ORG_TR_PATH, BLUE_OUT_P, OR_OUT_P, DOOR, DOOR_HINT, PORTAL_GUN, MC_GLASS, RICKS_GUN};
 
 	i = -1;
 	while (++i < 4)
@@ -91,7 +91,7 @@ void	convert_path_to_mlx_img(t_cub *cub)
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, cub->data->texture[i], &cub->textures[i].width, &cub->textures[i].height);
 		cub->textures[i].addr = mlx_get_data_addr(cub->textures[i].img, &cub->textures[i].bits_per_pixel, &cub->textures[i].line_length, &cub->textures[i].endian);
 	}
-	while (i < 14)
+	while (i < 15)
 	{
 		//todo secure those paths
 		cub->textures[i].img = mlx_xpm_file_to_image(cub->mlx, custom_path[i - 4], &cub->textures[i].width,
@@ -185,6 +185,7 @@ t_cub	*init_game(int argc, char **argv)
 	cub->wall_distance = malloc(sizeof(double) * cub->win_size[1]);
 	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
 	cub->doors = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
+	cub->glass = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
 	if (!cub->rays || !cub->angles || !cub->wall_heights)
 		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), NULL);
 	cub->player_position = get_position(cub->data->map);
@@ -603,10 +604,10 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 
 	new_y = cub->player_position.y + y_change;
 	new_x = cub->player_position.x + x_change;
-	if (ft_isset(cub->data->map[(int)new_y][(int) cub->player_position.x],"1D") \
-	&& ft_isset(cub->data->map[(int)cub->player_position.y][(int)new_x], "1D"))
+	if (ft_isset(cub->data->map[(int)new_y][(int) cub->player_position.x],"1DG") \
+	&& ft_isset(cub->data->map[(int)cub->player_position.y][(int)new_x], "1DG"))
 		return ;
-	if (ft_isset(cub->data->map[(int)new_y][(int)new_x], "1D"))
+	if (ft_isset(cub->data->map[(int)new_y][(int)new_x], "1DG"))
 		return (report_movement(new_y, new_x, cub));
 	else if (cub->data->map[(int)new_y][(int)new_x] == 'O')
 		teleport_player(new_x, new_y, 'O', cub);
@@ -703,7 +704,7 @@ int close_window(t_cub *cub)
 	pthread_mutex_destroy(&cub->ray_mutex);
 	free(cub->threads);
 	i = 0;
-	while (i <= 13)
+	while (i <= 14)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);

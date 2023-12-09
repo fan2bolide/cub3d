@@ -12,6 +12,31 @@
 
 #include "rendering.h"
 
+int shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub)
+{
+	t_prtl_list	*glass_list;
+	t_portal	*glass;
+
+	glass = malloc(sizeof (t_portal));
+	if (!glass)
+		return (-1);
+	glass->distance = *ray_attr->distance + \
+		compute_distance(ray_attr->ray_start, *ray_attr->ray);
+	glass->position = *ray_attr->ray;
+	glass->angle = *ray_attr->angle;
+	glass->height = get_wall_height(cub, glass->distance, glass->angle);
+	glass_list = (t_prtl_list *)ft_dblstnew(glass);
+	if (!glass_list)
+		return (-1);
+	ft_dblstadd_back((t_dblist **)&cub->glass[ray_attr->angle - cub->angles],
+					 (t_dblist *)glass_list);
+	*ray_attr->distance += compute_distance(ray_attr->ray_start,
+											*ray_attr->ray);
+	ray_attr->ray_start.x = ray_attr->ray->x;
+	ray_attr->ray_start.y = ray_attr->ray->y;
+	return (0);
+}
+
 int	shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub)
 {
 	double		*distance;

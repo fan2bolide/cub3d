@@ -125,5 +125,11 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 			if (return_value)
 				return (return_value);
 		}
+		if (ray_attr.collision_point == 'G')
+		{
+			return_value = shoot_glass_ray(&ray_attr, cub);
+			if (return_value)
+				return (return_value);
+		}
 	}
 }

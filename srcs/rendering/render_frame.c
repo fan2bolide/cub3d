@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/09 19:45:57 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/09 21:18:28 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,11 @@ void	clear_lists(t_cub *cub)
 	{
 		ft_lstclear((t_list **)(cub->portals + i), free);
 		cub->portals[i] = NULL;
+		ft_lstclear((t_list **)(cub->glass + i), free);
+		cub->glass[i] = NULL;
 		ft_lstclear((t_list **)(cub->doors + i), free);
 		cub->doors[i++] = NULL;
+
 	}
 }
 

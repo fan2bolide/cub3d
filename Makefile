@@ -37,6 +37,7 @@ SRCS		:=	cub3D.c\
 				doors/doors.c\
 				doors/init_doors.c\
 				guns/guns.c\
+				glass/glass.c\
 
 
 SRCS_D		:=	srcs/
@@ -125,6 +126,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)game_menu
 			@mkdir -p $(OBJS_D)doors
 			@mkdir -p $(OBJS_D)guns
+			@mkdir -p $(OBJS_D)glass
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)

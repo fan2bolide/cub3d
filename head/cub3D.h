@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/09 19:45:57 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/09 21:28:35 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@
 # define DOOR_HINT		"textures/hint.xpm"
 # define PORTAL_GUN		"textures/portal_gun.xpm"
 # define RICKS_GUN		"textures/rick_portal_gun.xpm"
+# define MC_GLASS		"textures/minecraft_glass.xpm"
 
 # ifndef NB_THREADS
 #  define NB_THREADS	16
@@ -383,7 +384,7 @@ typedef struct s_cub
 	int				last_mouse_pos;
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[14];
+	t_image			textures[15];
 	t_position		player_position;
 	double			view_angle;
 	double			fov;
@@ -400,6 +401,7 @@ typedef struct s_cub
 	t_menu			menu;
 	t_prtl_list		**portals;
 	t_prtl_list		**doors;
+	t_prtl_list		**glass;
 	t_door			*doors_status;
 	t_hint			door_hint;
 	bool			program_ends;
@@ -422,9 +424,9 @@ typedef struct s_render_thread
 }	t_render_thread;
 
 //==================== PARSING =====================//
-# define ALLOWED_CHARS		"NSEW01D "
-# define NOT_WALLS_CHARS	"NSEWD0"
-# define ALLOWED_IN_FILE	"10NSEWD \n"
+# define ALLOWED_CHARS		"NSEW01DG "
+# define NOT_WALLS_CHARS	"NSEWD0G"
+# define ALLOWED_IN_FILE	"10NSEWDG \n"
 t_data		*parsing(int argc, char **argv);
 int			parse_textures(t_data *data, t_list *file);
 t_data		*get_data(char **argv);
@@ -440,6 +442,7 @@ t_list		*list_from_file(char *file_path);
 void		clear_lists(t_cub *cub);
 int			shoot_door_ray(t_ray_shoot *ray_attr, t_cub *cub);
 int			shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub);
+int			shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub);
 void		init_ray_attr(t_cub *cub, t_position *ray, double *angle,
 				t_ray_shoot *ray_attr);
 
