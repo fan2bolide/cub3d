@@ -505,7 +505,7 @@ t_door		*get_door(t_position ray_collision, double angle, t_cub *cub);
 void		cub_display_door_hint(t_cub *cub);
 
 //===================== GUNS =======================//
-int	display_portal_gun(t_cub *cub);
+void display_portal_gun(t_cub *cub);
 
 
 

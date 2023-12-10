@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 21:38:36 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/09 00:44:06 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/10 01:20:44 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ double get_player_speed(t_cub *cub)
 	return (compute_distance(player, last));
 }
 
+/**
+ * updates the gun position on the image
+ * -makes it move as the sinus of cub->gun_movement if the player moves
+ * -reset the position if the player don't move
+ * @param cub
+ */
 void	update_gun_pos(t_cub *cub)
 {
 	double moving_speed = get_player_speed(cub);
@@ -52,7 +58,11 @@ void	update_gun_pos(t_cub *cub)
 	}
 }
 
-int	display_portal_gun(t_cub *cub)
+/**
+ *
+ * @param cub
+ */
+void display_portal_gun(t_cub *cub)
 {
 	t_iposition gun_size;
 	t_iposition texture;
@@ -86,5 +96,4 @@ int	display_portal_gun(t_cub *cub)
 		}
 		y++;
 	}
-	return (1);
 }

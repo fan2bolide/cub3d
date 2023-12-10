@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/09 20:18:30 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/09 21:41:42 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -799,7 +799,7 @@ int close_window(t_cub *cub)
 	pthread_mutex_destroy(&cub->ray_mutex);
 	free(cub->threads);
 	i = 0;
-	while (i <= 13)
+	while (i <= 15)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
@@ -827,7 +827,7 @@ int	close_window(t_cub *cub)
 	pthread_mutex_destroy(&cub->ray_mutex);
 	free(cub->threads);
 	i = 0;
-	while (i <= 13)
+	while (i <= 15)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
