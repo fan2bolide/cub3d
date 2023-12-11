@@ -371,6 +371,7 @@ typedef struct s_ray_shoot
 	char		collision_point;
 	double		*angle;
 	double		*distance;
+	bool		is_in_glass;
 }	t_ray_shoot;
 
 typedef struct s_cub

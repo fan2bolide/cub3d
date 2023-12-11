@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/06 14:42:52 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/11 17:29:56 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 	while (1)
 	{
 		update_ray_attr(&ray_attr, cub);
+		if (ray_attr.collision_point == '0')
+			ray_attr.is_in_glass = false;
 		if (ray_attr.collision_point == '1')
 			return (*ray_attr.distance += compute_distance(ray_attr.ray_start,
 					*ray_attr.ray), 1);
