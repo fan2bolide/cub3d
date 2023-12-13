@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 23:49:00 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/13 18:13:50 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/13 18:51:05 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,10 @@ t_cub	*init_game(int argc, char **argv)
 	cub = ft_calloc(1, sizeof (t_cub));
 	if (!cub)
 		return (ft_putstr_fd(ALLOC_ERR EOL, 2), NULL);
+	if (cub_check_args(argc, argv, cub))
+		return (free(cub), NULL);
 	cub->data = parsing(argc, argv);
-	if (!cub->data || cub_check_args(argc, argv, cub))
+	if (!cub->data)
 		return (free(cub), NULL);
 	ft_bzero(cub->keys_states, 65509 * sizeof(int));
 	cub->cross_hair = 'C';
