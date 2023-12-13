@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 21:38:36 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/13 01:03:03 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/13 01:33:41 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,45 @@ void	update_gun_pos(t_cub *cub)
 	}
 }
 
+static bool	is_pixel_valid(t_cub *cub, int x, int y, int color)
+{
+	return (color >= 0 \
+		&& x < cub->win_size[WIDTH] \
+		&& y < cub->win_size[HEIGHT]);
+}
+
+void	display_gun(t_cub *cub,
+					t_iposition gun_size,
+					t_iposition texture,
+					int texture_id)
+{
+	int	sin_movement;
+	int	x;
+	int	y;
+	int	color;
+
+	y = cub->gun_position.y;
+	sin_movement = sin(cub->gun_movement) * 15;
+	while (y < (int)(gun_size.y + cub->gun_position.y))
+	{
+		texture.y = (y - cub->gun_position.y) * \
+			cub->textures[texture_id].height / gun_size.y;
+		x = (int)cub->gun_position.x;
+		while (x < cub->win_size[WIDTH])
+		{
+			texture.x = (x - cub->gun_position.x) * \
+				cub->textures[texture_id].width / gun_size.x;
+			color = *((int *)(cub->textures[texture_id].addr + (texture.y * \
+				cub->textures[texture_id].line_length + texture.x * \
+				(cub->textures[texture_id].bits_per_pixel / 8))));
+			if (is_pixel_valid(cub, x, y + sin_movement, color))
+				cub_pixel_put(&cub->img, x, y + sin_movement, color);
+			x++;
+		}
+		y++;
+	}
+}
+
 /**
  *
  * @param cub
@@ -67,7 +106,6 @@ void	display_portal_gun(t_cub *cub)
 {
 	t_iposition	gun_size;
 	t_iposition	texture;
-	int			color;
 	int			texture_id;
 
 	gun_size.x = (cub->win_size[WIDTH] - cub->gun_position.x) * 1;
@@ -79,22 +117,5 @@ void	display_portal_gun(t_cub *cub)
 	if (cub->last_portal_placed == 'R')
 		texture_id = 15;
 	update_gun_pos(cub);
-	int sin_movement = sin(cub->gun_movement) * 15;
-	int y = (int)cub->gun_position.y;
-	while (y < (int)(gun_size.y + cub->gun_position.y))
-	{
-		texture.y = (y - cub->gun_position.y) * cub->textures[texture_id].height / gun_size.y;
-		int x = (int)cub->gun_position.x;
-		while (x < cub->win_size[WIDTH])
-		{
-			texture.x = (x - cub->gun_position.x) * cub->textures[texture_id].width / gun_size.x;
-			color = *((int *) (cub->textures[texture_id].addr + (texture.y * \
-				cub->textures[texture_id].line_length + texture.x * \
-				(cub->textures[texture_id].bits_per_pixel / 8))));
-			if (color >= 0 && x < cub->win_size[WIDTH] && (y + sin_movement) < cub->win_size[HEIGHT])
-				cub_pixel_put(&cub->img, x, y + sin_movement, color);
-			x++;
-		}
-		y++;
-	}
+	display_gun(cub, gun_size, texture, texture_id);
 }
