@@ -100,7 +100,7 @@ CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra
+CFLAGS		=	-Wall -Wextra # -Ofast -flto
 
 DFLAGS		:=	-MP -MMD
 
@@ -126,7 +126,7 @@ $(MLX)		:
 			$(MAKE) -C $(MLX_D)
 
 $(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.c $(HEAD_A) $(LIB_H)libft.h $(MLX_D)/mlx.h
-			$(CC) $(CFLAGS) $(DFLAGS) -Ofast -flto -I$(HEAD_D) -I$(LIB_H) -I$(MLX_D) -c $< -o $@
+			$(CC) $(CFLAGS) $(DFLAGS) -I$(HEAD_D) -I$(LIB_H) -I$(MLX_D) -c $< -o $@
 
 $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)
