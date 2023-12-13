@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/13 00:19:06 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/13 17:45:11 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,7 +377,6 @@ typedef struct s_cub
 {
 	t_image			load_screen;
 	t_data			*data;
-	bool			is_fullscreen;
 	void			*mlx;
 	void			*win;
 	int				keys_states[65509];
@@ -389,7 +388,6 @@ typedef struct s_cub
 	t_position		last_player_pos;
 	double			view_angle;
 	double			fov;
-	size_t			last_frame_time;
 	double			*wall_distance;
 	t_position		*rays;
 	double			*angles;
@@ -529,5 +527,6 @@ int		close_window(t_cub *cub);
 void	cub_update_player_position(int keycode, t_cub *cub);
 void	cub_update_view_angle(int keycode, t_cub *cub);
 void	convert_path_to_mlx_img(t_cub *cub);
+int		init_mutex(t_cub *cub);
 
 #endif

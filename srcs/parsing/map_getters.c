@@ -15,7 +15,7 @@
 /**
  *
  * @param map
- * @return the position of the player at the start aof the game
+ * @return the position of the player at the start of the game
  */
 t_position	get_position(char **map)
 {

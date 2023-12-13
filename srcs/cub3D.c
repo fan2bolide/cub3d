@@ -6,13 +6,13 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/13 00:55:37 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/13 18:11:07 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-//todo see if it can't b e replaced with time.c functions
+//todo see if it can't be replaced with time.c functions
 size_t	get_time(void)
 {
 	struct timeval	time;

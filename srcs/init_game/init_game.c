@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 23:49:00 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/13 00:11:04 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/13 18:13:50 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,48 @@ static t_iposition	get_gun_position(t_cub *cub)
 	return result;
 }
 
+/**
+ * \brief
+ * \param cub the game
+ * \return
+ */
+int init_portals(t_cub *cub)
+{
+	cub->blue_prtl = '-';
+	cub->orange_prtl = '-';
+	cub->rick_prtl = '-';
+	cub->last_portal_placed = 'B';
+	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
+	cub->doors = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
+	return (cub->portals != NULL && cub->doors != NULL);
+}
+
+int check_allocations(t_cub *cub)
+{
+	if (!cub->rays || !cub->angles || !cub->wall_heights \
+			|| !cub->wall_distance || !init_portals(cub) \
+			|| !init_mutex(cub)) {
+		free(cub->rays);
+		free(cub->angles);
+		free(cub->wall_heights);
+		free(cub->wall_distance);
+		free(cub->portals);
+		free(cub->doors);
+		free(cub);
+		return (0);
+	}
+	return (1);
+}
+
+void	init_player(t_cub *cub)
+{
+	cub->player_position = get_position(cub->data->map);
+	cub->player_position.x += 0.5;
+	cub->player_position.y += 0.5;
+	cub->last_player_pos.x = cub->player_position.x;
+	cub->last_player_pos.y = cub->player_position.y;
+}
+
 t_cub	*init_game(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -49,32 +91,17 @@ t_cub	*init_game(int argc, char **argv)
 	if (!cub->data || cub_check_args(argc, argv, cub))
 		return (free(cub), NULL);
 	ft_bzero(cub->keys_states, 65509 * sizeof(int));
-	cub->is_fullscreen = false;
-	cub->last_frame_time = get_time();
-	cub->win_size[0] = 900;
 	cub->cross_hair = 'C';
-	cub->blue_prtl = '-';
-	cub->orange_prtl = '-';
-	cub->rick_prtl = '-';
-	cub->win_size[1] = cub->win_size[0] * 16 / 10;
-	cub->rays = malloc(sizeof(t_position) * cub->win_size[1]);
-	cub->angles = malloc(sizeof(double) * cub->win_size[1]);
-	cub->wall_heights = malloc(sizeof(int) * cub->win_size[1]);
-	cub->wall_distance = malloc(sizeof(double) * cub->win_size[1]);
-	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
-	cub->doors = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
-	if (!cub->rays || !cub->angles || !cub->wall_heights)
-		return (free(cub->rays), free(cub->angles), free(cub->wall_heights), NULL);
-	cub->player_position = get_position(cub->data->map);
-	cub->player_position.x += 0.5;
-	cub->player_position.y += 0.5;
-	cub->last_player_pos.x = cub->player_position.x;
-	cub->last_player_pos.y = cub->player_position.y;
+	cub->win_size[HEIGHT] = 900;
+	cub->win_size[WIDTH] = cub->win_size[0] * 16 / 10;
+	cub->rays = malloc(sizeof(t_position) * cub->win_size[WIDTH]);
+	cub->angles = malloc(sizeof(double) * cub->win_size[WIDTH]);
+	cub->wall_heights = malloc(sizeof(int) * cub->win_size[WIDTH]);
+	cub->wall_distance = malloc(sizeof(double) * cub->win_size[WIDTH]);
+	init_player(cub);
 	cub->gun_position = get_gun_position(cub);
-	cub->last_portal_placed = 'B';
 	cub->next_ray_to_compute = cub->win_size[WIDTH];
-	pthread_mutex_init(&cub->ray_mutex, NULL);
-	pthread_mutex_init(&cub->program_ends_mutex, NULL);
-	pthread_mutex_init(&cub->finished_mutex, NULL);
+	if (!check_allocations(cub))
+		return (NULL);
 	return (cub);
 }
