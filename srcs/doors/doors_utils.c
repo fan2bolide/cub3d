@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 23:45:01 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/12 23:45:01 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/13 19:55:57 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	display_door_hint(t_cub *cub, int texture_y, int display_y)
 		texture_x = 0;
 		while (display_x < max_x && display_x < cub->win_size[WIDTH])
 		{
+
 			color = *((int *)(cub->textures[12].addr + (texture_y * \
 					cub->textures[12].line_length + texture_x * \
 					(cub->textures[12].bits_per_pixel / 8))));
@@ -83,8 +84,8 @@ void	cub_display_door_hint(t_cub *cub)
 	}
 	else
 		dir = -1;
-	texture_y = cub->textures[12].height;
-	display_y = cub->door_hint.y + cub->textures[12].height;
+	texture_y = cub->textures[12].height - 1;
+	display_y = cub->door_hint.y + texture_y;
 	display_door_hint(cub, texture_y, display_y);
 	cub->door_hint.y += dir * 2;
 	if (cub->door_hint.y > 15)
