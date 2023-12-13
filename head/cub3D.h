@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/09 19:45:57 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/13 00:19:06 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -503,13 +503,31 @@ t_iposition	get_door_index(t_position pos, double angle, t_cub *cub);
 int			cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision);
 t_door		*get_door(t_position ray_collision, double angle, t_cub *cub);
 void		cub_display_door_hint(t_cub *cub);
+void		cub_update_doors(t_cub *cub);
 
 //===================== GUNS =======================//
 void display_portal_gun(t_cub *cub);
 
+//=================== HANDLERS =====================//
+int	cub_handle_mouse_move(int x, int y, t_cub *cub);
+int	cub_handle_mouse(int button, int x, int y, t_cub *cub);
+int cub_handle_mouse_release(int button, int x, int y, t_cub *cub);
+int cub_handle_key_press(int keycode, t_cub *cub);
+int	cub_handle_key_release(int keycode, t_cub *cub);
+int	perform_actions(t_cub *cub);
 
-
-
+void set_random_position(t_cub *cub);
 void put_pixel_transparent(t_image *data, int x, int y, unsigned int color);
+
+t_cub	*init_game(int argc, char **argv);
+double	get_orientation(char **map, const t_position pos);
+void display_load_screen(t_cub *cub);
+void	remove_load_screen(t_cub *cub);
+void	cub_mlx_config(t_cub *cub);
+int		cub_handle_key_press(int keycode, t_cub *cub);
+int		close_window(t_cub *cub);
+void	cub_update_player_position(int keycode, t_cub *cub);
+void	cub_update_view_angle(int keycode, t_cub *cub);
+void	convert_path_to_mlx_img(t_cub *cub);
 
 #endif

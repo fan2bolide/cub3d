@@ -6,16 +6,16 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 21:38:36 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/10 01:20:44 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/13 01:03:03 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-double get_player_speed(t_cub *cub)
+double	get_player_speed(t_cub *cub)
 {
-	t_position player;
-	t_position last;
+	t_position	player;
+	t_position	last;
 
 	player = cub->player_position;
 	player.x *= 1000;
@@ -34,8 +34,9 @@ double get_player_speed(t_cub *cub)
  */
 void	update_gun_pos(t_cub *cub)
 {
-	double moving_speed = get_player_speed(cub);
+	double	moving_speed;
 
+	moving_speed = get_player_speed(cub);
 	if (cub->keys_states[KEY_W] || cub->keys_states[KEY_A] \
 		|| cub->keys_states[KEY_S] || cub->keys_states[KEY_D])
 		cub->gun_movement += moving_speed / 500;
@@ -62,11 +63,11 @@ void	update_gun_pos(t_cub *cub)
  *
  * @param cub
  */
-void display_portal_gun(t_cub *cub)
+void	display_portal_gun(t_cub *cub)
 {
-	t_iposition gun_size;
-	t_iposition texture;
-	int 		color;
+	t_iposition	gun_size;
+	t_iposition	texture;
+	int			color;
 	int			texture_id;
 
 	gun_size.x = (cub->win_size[WIDTH] - cub->gun_position.x) * 1;

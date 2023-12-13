@@ -1,5 +1,11 @@
 #===========================VARIABLE===============================#
 SRCS		:=	cub3D.c\
+				close_window.c\
+				init_textures.c\
+				mouse/mouse_utils_linux.c\
+				mouse/mouse_utils_apple.c\
+				player/player_handling.c\
+				player/view_handling.c\
 				parsing/parsing.c\
 				parsing/bajeanno.c\
 				parsing/wall_surroundment.c\
@@ -10,9 +16,11 @@ SRCS		:=	cub3D.c\
 				parsing/file_path_checking.c\
 				parsing/list_from_file.c\
 				parsing/map_from_list.c\
+				parsing/map_getters.c\
 				utils/free_data.c\
 				utils/refactor_spaces.c\
 				utils/utils.c\
+				utils/mlx_config.c\
 				utils/texture_utils.c\
 				ray_casting/ray_casting.c\
 				ray_casting/compute_ray.c\
@@ -29,14 +37,20 @@ SRCS		:=	cub3D.c\
 				portal/set_texture.c\
 				portal/teleport_ray.c\
 				portal/portal_utils.c\
+				portal/set_random_position.c\
 				game_menu/game_menu.c\
 				game_menu/init.c\
 				game_menu/color_setters.c\
+				game_menu/menu_mouse_handling.c\
 				multithreading/create_threads.c\
 				multithreading/threads_routine.c\
 				doors/doors.c\
 				doors/init_doors.c\
+				doors/doors_utils.c\
 				guns/guns.c\
+				init_game/init_game.c\
+				load_screen/load_screen.c\
+				key_handlers/key_handlers.c\
 
 
 SRCS_D		:=	srcs/
@@ -125,6 +139,11 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)game_menu
 			@mkdir -p $(OBJS_D)doors
 			@mkdir -p $(OBJS_D)guns
+			@mkdir -p $(OBJS_D)mouse
+			@mkdir -p $(OBJS_D)load_screen
+			@mkdir -p $(OBJS_D)init_game
+			@mkdir -p $(OBJS_D)player
+			@mkdir -p $(OBJS_D)key_handlers
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)
