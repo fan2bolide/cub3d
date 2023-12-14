@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/14 15:54:58 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/14 16:00:16 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,11 +322,6 @@ int cub_glass_texture_put(int x, t_cub *cub, int wall_height, t_position ray_col
 	{
 		texture.y = (i + (wall_height - screen_wall_height) / 2) \
 				* cub->textures[texture_id].height / wall_height;
-		if (texture.x > (size_t)cub->textures[texture_id].width || texture.y > (size_t)cub->textures[texture_id].height)
-		{
-			printf("%lu %lu\n", texture.x, texture.y);
-			printf("%i %i %i\n", cub->textures[texture_id].height, wall_height, i);
-		}
 		int color = *((int *)(cub->textures[texture_id].addr + (texture.y * \
 			cub->textures[texture_id].line_length + texture.x * \
 			(cub->textures[texture_id].bits_per_pixel / 8))));
