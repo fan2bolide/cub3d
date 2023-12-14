@@ -91,10 +91,10 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 	cub->last_player_pos.y = cub->player_position.y;
 	new_y = cub->player_position.y + y_change;
 	new_x = cub->player_position.x + x_change;
-	if (ft_isset(cub->data->map[(int)new_y][(int) cub->player_position.x],"1D") \
-	&& ft_isset(cub->data->map[(int)cub->player_position.y][(int)new_x], "1D"))
+	if (ft_isset(cub->data->map[(int)new_y][(int) cub->player_position.x],"1DG") \
+	&& ft_isset(cub->data->map[(int)cub->player_position.y][(int)new_x], "1DG"))
 		return ;
-	if (ft_isset(cub->data->map[(int)new_y][(int)new_x], "1D"))
+	if (ft_isset(cub->data->map[(int)new_y][(int)new_x], "1DG"))
 		return (report_movement(new_y, new_x, cub));
 	else if (cub->data->map[(int)new_y][(int)new_x] == 'O')
 		teleport_player(new_x, new_y, 'O', cub);

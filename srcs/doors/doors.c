@@ -73,7 +73,8 @@ void	open_door(t_cub *cub)
 	double		door_angle;
 
 	if (!cub->doors[cub->win_size[WIDTH] / 2]
-		|| init_door_attributes(&ray_door, &door_angle, cub))
+		|| init_door_attributes(&ray_door, &door_angle, cub)
+		|| cub->glass[cub->win_size[WIDTH / 2]])
 		return ;
 	door_index = get_door_index(ray_door, door_angle, cub);
 	door = get_door(ray_door, door_angle, cub);

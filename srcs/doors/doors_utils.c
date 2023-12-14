@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doors_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 23:45:01 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/13 19:55:57 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/14 15:07:34 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	cub_display_door_hint(t_cub *cub)
 	int 		display_y;
 
 	door = cub->doors[cub->win_size[WIDTH] / 2];
-	if (door && cub->menu.x == -cub->menu.menu_bg.width)
+	if (door && cub->menu.x == -cub->menu.menu_bg.width && !cub->glass[cub->win_size[WIDTH] / 2])
 	{
 		while (door->next && get_door(door->portal->position, door->portal->angle, cub)->is_open)
 			door = door->next;

@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/09 21:48:22 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/14 15:54:58 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,14 +314,19 @@ int cub_glass_texture_put(int x, t_cub *cub, int wall_height, t_position ray_col
 	texture_id = 16;
 	texture.x = set_custom_texture(texture_id, cub->glass[x]->portal->angle, ray_collision, cub);
 	screen_wall_height = wall_height;
-	if (wall_height > cub->win_size[0])
-		screen_wall_height = cub->win_size[0];
+	if (wall_height > cub->win_size[HEIGHT])
+		screen_wall_height = cub->win_size[HEIGHT];
 	y = cub->win_size[0] / 2 - screen_wall_height / 2;
 	i = 0;
 	while (i < screen_wall_height)
 	{
 		texture.y = (i + (wall_height - screen_wall_height) / 2) \
 				* cub->textures[texture_id].height / wall_height;
+		if (texture.x > (size_t)cub->textures[texture_id].width || texture.y > (size_t)cub->textures[texture_id].height)
+		{
+			printf("%lu %lu\n", texture.x, texture.y);
+			printf("%i %i %i\n", cub->textures[texture_id].height, wall_height, i);
+		}
 		int color = *((int *)(cub->textures[texture_id].addr + (texture.y * \
 			cub->textures[texture_id].line_length + texture.x * \
 			(cub->textures[texture_id].bits_per_pixel / 8))));

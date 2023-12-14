@@ -22,6 +22,8 @@ int	get_wall_height(t_cub *cub, double wall_distance, double ray_angle)
 		view_angle = modulo_2_pi(view_angle + M_PI_2);
 	wall_distance *= cos(ray_angle - view_angle);
 	wall_height = (SCREEN_DISTANCE * cub->win_size[0] / wall_distance);
+	if (wall_height > 10000000)
+		wall_height = 10000000;
 	return ((int)wall_height);
 }
 
