@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
 /*   Updated: 2023/12/13 17:45:11 by bajeanno         ###   ########.fr       */
@@ -85,6 +85,7 @@
 # define PORTAL_GUN_B	"textures/portal_gun_b.xpm"
 # define PORTAL_GUN_O	"textures/portal_gun_o.xpm"
 # define RICKS_GUN		"textures/rick_portal_gun.xpm"
+# define MC_GLASS		"textures/minecraft_glass.xpm"
 
 # ifndef NB_THREADS
 #  define NB_THREADS	16
@@ -371,6 +372,7 @@ typedef struct s_ray_shoot
 	char		collision_point;
 	double		*angle;
 	double		*distance;
+	bool		is_in_glass;
 }	t_ray_shoot;
 
 typedef struct s_cub
@@ -383,7 +385,7 @@ typedef struct s_cub
 	int				last_mouse_pos;
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[16];
+	t_image			textures[17];
 	t_position		player_position;
 	t_position		last_player_pos;
 	double			view_angle;
@@ -401,6 +403,7 @@ typedef struct s_cub
 	t_menu			menu;
 	t_prtl_list		**portals;
 	t_prtl_list		**doors;
+	t_prtl_list		**glass;
 	t_door			*doors_status;
 	t_hint			door_hint;
 	bool			program_ends;
@@ -426,9 +429,9 @@ typedef struct s_render_thread
 }	t_render_thread;
 
 //==================== PARSING =====================//
-# define ALLOWED_CHARS		"NSEW01D "
-# define NOT_WALLS_CHARS	"NSEWD0"
-# define ALLOWED_IN_FILE	"10NSEWD \n"
+# define ALLOWED_CHARS		"NSEW01DG "
+# define NOT_WALLS_CHARS	"NSEWD0G"
+# define ALLOWED_IN_FILE	"10NSEWDG \n"
 t_data		*parsing(int argc, char **argv);
 int			parse_textures(t_data *data, t_list *file);
 t_data		*get_data(char **argv);
@@ -444,6 +447,7 @@ t_list		*list_from_file(char *file_path);
 void		clear_lists(t_cub *cub);
 int			shoot_door_ray(t_ray_shoot *ray_attr, t_cub *cub);
 int			shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub);
+int			shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub);
 void		init_ray_attr(t_cub *cub, t_position *ray, double *angle,
 				t_ray_shoot *ray_attr);
 

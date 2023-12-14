@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/09 19:37:49 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/09 21:48:22 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,6 +277,56 @@ int	put_outline_texture(int x, t_cub *cub, int wall_height, \
 			*((int *)(cub->textures[texture_id].addr + (texture.y * \
 			cub->textures[texture_id].line_length + texture.x * \
 			(cub->textures[texture_id].bits_per_pixel / 8)))));
+		y++;
+		i++;
+	}
+	return (y);
+}
+
+void	glass_put_transparency(int x, t_cub *cub, int wall_height)
+{
+	int			i;
+	int			y;
+	int			screen_wall_height;
+	screen_wall_height = wall_height;
+	if (wall_height > cub->win_size[0])
+		screen_wall_height = cub->win_size[0];
+	y = cub->win_size[0] / 2 - screen_wall_height / 2;
+	i = 0;
+	while (i < screen_wall_height)
+	{
+		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
+			put_pixel_transparent(&cub->img, x, y, 0x50f0f5f5);
+		y++;
+		i++;
+	}
+}
+
+int cub_glass_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision)
+{
+	int			i;
+	int			y;
+	int			screen_wall_height;
+	int			texture_id;
+	t_iposition	texture;
+
+	glass_put_transparency(x, cub, wall_height);
+	texture_id = 16;
+	texture.x = set_custom_texture(texture_id, cub->glass[x]->portal->angle, ray_collision, cub);
+	screen_wall_height = wall_height;
+	if (wall_height > cub->win_size[0])
+		screen_wall_height = cub->win_size[0];
+	y = cub->win_size[0] / 2 - screen_wall_height / 2;
+	i = 0;
+	while (i < screen_wall_height)
+	{
+		texture.y = (i + (wall_height - screen_wall_height) / 2) \
+				* cub->textures[texture_id].height / wall_height;
+		int color = *((int *)(cub->textures[texture_id].addr + (texture.y * \
+			cub->textures[texture_id].line_length + texture.x * \
+			(cub->textures[texture_id].bits_per_pixel / 8))));
+		if (color >= 0 && y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
+			cub_pixel_put(&cub->img, x, y, color);
 		y++;
 		i++;
 	}

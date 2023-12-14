@@ -6,20 +6,61 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/09 18:10:29 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/09 22:09:20 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
+int	max_distance(double f_dist, double s_dist, double t_dist)
+{
+	if (f_dist >= s_dist && f_dist >= t_dist)
+		return (0);
+	if (s_dist >= f_dist && s_dist >= t_dist)
+		return (1);
+	return (2);
+}
+
+int get_furthest(t_prtl_list **customs[3])
+{
+	int max_dist;
+
+	if ((*customs[0]) && !(*customs[1]) && !(*customs[2]))
+		return (0);
+	if ((*customs[1]) && !(*customs[2]) && !(*customs[0]))
+		return (1);
+	if ((*customs[2]) && !(*customs[1]) && !(*customs[0]))
+		return (2);
+	if ((*customs[0]) && (*customs[1]) && (*customs[2]))
+	{
+		max_dist = max_distance((*customs[0])->portal->distance, (*customs[1])->portal->distance, (*customs[2])->portal->distance);
+		return (max_dist);
+	}
+	if ((*customs[0]) && (*customs[1]))
+		return (max_distance((*customs[0])->portal->distance, (*customs[1])->portal->distance, 0));
+	if ((*customs[1]) && (*customs[2]))
+		return (max_distance(0, (*customs[1])->portal->distance, (*customs[2])->portal->distance));
+	if ((*customs[2]) && (*customs[0]))
+		return (max_distance((*customs[0])->portal->distance, 0, (*customs[2])->portal->distance));
+	return (-1);
+}
+
 int	cub_textures_render(t_cub *cub, int wall_height, int x,
 					t_position ray_collision)
 {
-	t_prtl_list	*save_portal;
-	t_prtl_list	*save_door;
+	int			curr;
+	t_prtl_list **customs[3];
+	void(*functions[3])(int x, t_cub *cub, int wall_height,
+						t_position ray_collision);
+	t_prtl_list *save_door;
+	t_prtl_list *save_portals;
+	t_prtl_list *save_glass;
 
 	save_door = cub->doors[x];
-	save_portal = cub->portals[x];
+	save_portals = cub->portals[x];
+	save_glass = cub->glass[x];
+	ft_memcpy(customs, (t_prtl_list **[3]){&cub->doors[x], &cub->portals[x], &cub->glass[x]}, sizeof(t_prtl_list **) * 3);
+	ft_memcpy(functions, (void *[3]){cub_door_texture_put, cub_portal_texture_put, cub_glass_texture_put}, sizeof(void*) * 3);
 	if (cub->data->baj->is_activated \
  && get_time() - cub->data->baj->last_move > cub->data->baj->speed)
 	{
@@ -28,53 +69,22 @@ int	cub_textures_render(t_cub *cub, int wall_height, int x,
 		cub->data->baj->last_move = get_time();
 	}
 	cub_texture_put(x, cub, wall_height, ray_collision);
-	if (cub->doors[x] && cub->portals[x])
-	{
+	if (cub->doors[x])
 		cub->doors[x] = (t_prtl_list *) ft_dblstlast((t_dblist *) cub->doors[x]);
+	if (cub->portals[x])
 		cub->portals[x] = (t_prtl_list *)ft_dblstlast((t_dblist *)cub->portals[x]);
-		while (cub->portals[x] && cub->doors[x])
-		{
-			if (cub->doors[x]->portal->distance > cub->portals[x]->portal->distance)
-			{
-				cub_door_texture_put(x, cub, cub->doors[x]->portal->height, \
-                                    cub->doors[x]->portal->position);
-				cub->doors[x] = cub->doors[x]->prev;
-			}
-			else
-			{
-				cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, \
-                                    cub->portals[x]->portal->position);
-				cub->portals[x] = cub->portals[x]->prev;
-			}
-		}
-
-	}
-	if (cub->portals[x] && !cub->doors[x])
+	if (cub->glass[x])
+		cub->glass[x] = (t_prtl_list *)ft_dblstlast((t_dblist *)cub->glass[x]);
+	curr = get_furthest(customs);
+	while (curr >= 0)
 	{
-		cub->portals[x] = (t_prtl_list *)ft_dblstlast((t_dblist *)cub->portals[x]);
-		cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, \
-									cub->portals[x]->portal->position);
-		while (cub->portals[x]->prev)
-		{
-			cub->portals[x] = cub->portals[x]->prev;
-			cub_portal_texture_put(x, cub, cub->portals[x]->portal->height, \
-										cub->portals[x]->portal->position);
-		}
+		functions[curr](x, cub, (*customs[curr])->portal->height, (*customs[curr])->portal->position);
+		(*customs[curr]) = (*customs[curr])->prev;
+		curr = get_furthest(customs);
 	}
-	if (cub->doors[x] && !cub->portals[x])
-	{
-		cub->doors[x] = (t_prtl_list *) ft_dblstlast((t_dblist *) cub->doors[x]);
-		cub_door_texture_put(x, cub, cub->doors[x]->portal->height, \
-                                    cub->doors[x]->portal->position);
-		while (cub->doors[x]->prev)
-		{
-			cub->doors[x] = cub->doors[x]->prev;
-			cub_door_texture_put(x, cub, cub->doors[x]->portal->height, \
-                                        cub->doors[x]->portal->position);
-		}
-	}
-	cub->portals[x] = save_portal;
 	cub->doors[x] = save_door;
+	cub->portals[x] = save_portals;
+	cub->glass[x] = save_glass;
 	return (1);
 }
 

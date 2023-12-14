@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/09 00:47:09 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/14 14:48:53 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 	while (1)
 	{
 		update_ray_attr(&ray_attr, cub);
+		if (ray_attr.collision_point == '0')
+			ray_attr.is_in_glass = false;
 		if (ray_attr.collision_point == '1' || ray_attr.collision_point == 'R')
 			return (*ray_attr.distance += compute_distance(ray_attr.ray_start,
 					*ray_attr.ray), 1);
@@ -122,6 +124,12 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 		if (ray_attr.collision_point == 'd' || ray_attr.collision_point == 'D')
 		{
 			return_value = shoot_door_ray(&ray_attr, cub);
+			if (return_value)
+				return (return_value);
+		}
+		if (ray_attr.collision_point == 'G')
+		{
+			return_value = shoot_glass_ray(&ray_attr, cub);
 			if (return_value)
 				return (return_value);
 		}

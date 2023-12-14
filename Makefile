@@ -51,6 +51,7 @@ SRCS		:=	cub3D.c\
 				init_game/init_game.c\
 				load_screen/load_screen.c\
 				key_handlers/key_handlers.c\
+				glass/glass.c\
 
 
 SRCS_D		:=	srcs/
@@ -100,7 +101,7 @@ CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra # -Ofast -flto
+CFLAGS		=	-Wall -Wextra -Ofast -flto
 
 DFLAGS		:=	-MP -MMD
 
@@ -120,7 +121,7 @@ PARAMETERS	:= test.cub
 all			:	$(NAME)
 
 $(NAME)		:	$(LIB_A) $(OBJS_D) $(OBJS) $(MLX)
-			$(CC) $(CFLAGS) -Ofast -flto -o $(NAME) $(OBJS) $(LIB_A) $(MLX) $(MLX_FLAGS)
+			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB_A) $(MLX) $(MLX_FLAGS)
 
 $(MLX)		:
 			$(MAKE) -C $(MLX_D)
@@ -144,6 +145,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)init_game
 			@mkdir -p $(OBJS_D)player
 			@mkdir -p $(OBJS_D)key_handlers
+			@mkdir -p $(OBJS_D)glass
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)

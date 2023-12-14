@@ -51,7 +51,8 @@ int init_portals(t_cub *cub)
 	cub->last_portal_placed = 'B';
 	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
 	cub->doors = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
-	return (cub->portals != NULL && cub->doors != NULL);
+	cub->glass = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
+	return (cub->portals != NULL && cub->doors != NULL && cub->glass);
 }
 
 int check_allocations(t_cub *cub)
