@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:42:29 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/11 17:31:29 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/16 03:21:27 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub)
 	return (0);
 }
 
-int	shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub)
+int	shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub, char prtl_id)
 {
 	double		*distance;
 	double		*angle;
@@ -86,6 +86,8 @@ int	shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub)
 		return (-1);
 	if (*distance > 300 || !teleport_ray(cub, ray, angle, \
 								ray_attr->collision_point))
+		return (1);
+	if (prtl_id == 'R')
 		return (1);
 	ray_attr->ray_start.x = ray->x;
 	ray_attr->ray_start.y = ray->y;

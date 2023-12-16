@@ -30,7 +30,7 @@ int close_window(t_cub *cub)
 	pthread_mutex_destroy(&cub->ray_mutex);
 	free(cub->threads);
 	i = 0;
-	while (i <= 16)
+	while (i <= 17)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);
@@ -58,7 +58,7 @@ int	close_window(t_cub *cub)
 	pthread_mutex_destroy(&cub->ray_mutex);
 	free(cub->threads);
 	i = 0;
-	while (i <= 15)
+	while (i <= 17)
 		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
 	mlx_destroy_image(cub->mlx, cub->img.img);
 	mlx_destroy_window(cub->mlx, cub->win);

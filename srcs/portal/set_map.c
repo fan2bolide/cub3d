@@ -6,9 +6,11 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:09:33 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/09 00:16:22 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/16 02:05:16 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <rendering.h>
 
 #include "cub3D.h"
 
@@ -22,10 +24,7 @@ static void	set_east_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	|| ft_isset(cub->data->map[(int)middle_ray.y][(int)middle_ray.x], "dDG"))
 		return ;
 	reset_portal(cub, prtl_id);
-	if (prtl_id == 'O')
-		other_ptrl_id = 'B';
-	else
-		other_ptrl_id = 'O';
+	other_ptrl_id = get_other_portal(prtl_id);
 	if (cub->data->map[(int)middle_ray.y][(int)middle_ray.x - 1] ==
 	other_ptrl_id)
 	{
@@ -37,8 +36,10 @@ static void	set_east_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	cub->data->map[(int)middle_ray.y][(int)middle_ray.x - 1] = prtl_id;
 	if (prtl_id == 'O')
 		cub->orange_prtl = 'E';
-	else
+	if (prtl_id == 'B')
 		cub->blue_prtl = 'E';
+	if (prtl_id == 'R')
+		cub->rick_prtl = 'E';
 }
 
 static void	set_west_portal(t_cub *cub, t_position middle_ray, char prtl_id)
@@ -49,10 +50,7 @@ static void	set_west_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	|| ft_isset(cub->data->map[(int)middle_ray.y][(int)middle_ray.x - 1], "dDG"))
 		return ;
 	reset_portal(cub, prtl_id);
-	if (prtl_id == 'O')
-		other_ptrl_id = 'B';
-	else
-		other_ptrl_id = 'O';
+	other_ptrl_id = get_other_portal(prtl_id);
 	if (cub->data->map[(int)middle_ray.y][(int)middle_ray.x] == other_ptrl_id)
 	{
 		if (other_ptrl_id == 'O')
@@ -63,8 +61,10 @@ static void	set_west_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	cub->data->map[(int)middle_ray.y][(int)middle_ray.x] = prtl_id;
 	if (prtl_id == 'O')
 		cub->orange_prtl = 'W';
-	else
+	if (prtl_id == 'B')
 		cub->blue_prtl = 'W';
+	if (prtl_id == 'R')
+		cub->rick_prtl = 'W';
 }
 
 static void	set_north_portal(t_cub *cub, t_position middle_ray, char prtl_id)
@@ -75,23 +75,22 @@ static void	set_north_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	|| ft_isset(cub->data->map[(int)middle_ray.y][(int)middle_ray.x], "dDG"))
 		return ;
 	reset_portal(cub, prtl_id);
-	if (prtl_id == 'O')
-		other_ptrl_id = 'B';
-	else
-		other_ptrl_id = 'O';
+	other_ptrl_id = get_other_portal(prtl_id);
 	if (cub->data->map[(int)middle_ray.y - 1][(int)middle_ray.x]
 	== other_ptrl_id)
 	{
 		if (other_ptrl_id == 'O')
 			cub->orange_prtl = '-';
-		else
+		if (other_ptrl_id == 'B')
 			cub->blue_prtl = '-';
 	}
 	cub->data->map[(int)middle_ray.y - 1][(int)middle_ray.x] = prtl_id;
 	if (prtl_id == 'O')
 		cub->orange_prtl = 'S';
-	else
+	if (prtl_id == 'B')
 		cub->blue_prtl = 'S';
+	if (prtl_id == 'R')
+		cub->rick_prtl = 'S';
 }
 
 static void	set_south_portal(t_cub *cub, t_position middle_ray, char prtl_id)
@@ -102,22 +101,21 @@ static void	set_south_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	|| ft_isset(cub->data->map[(int)middle_ray.y - 1][(int)middle_ray.x], "dDG"))
 		return ;
 	reset_portal(cub, prtl_id);
-	if (prtl_id == 'O')
-		other_ptrl_id = 'B';
-	else
-		other_ptrl_id = 'O';
+	other_ptrl_id = get_other_portal(prtl_id);
 	if (cub->data->map[(int)middle_ray.y][(int)middle_ray.x] == other_ptrl_id)
 	{
 		if (other_ptrl_id == 'O')
 			cub->orange_prtl = '-';
-		else
+		if (other_ptrl_id == 'B')
 			cub->blue_prtl = '-';
 	}
 	cub->data->map[(int)middle_ray.y][(int)middle_ray.x] = prtl_id;
 	if (prtl_id == 'O')
 		cub->orange_prtl = 'N';
-	else
+	if (prtl_id == 'B')
 		cub->blue_prtl = 'N';
+	if (prtl_id == 'R')
+		cub->rick_prtl = 'N';
 }
 
 void	set_portal_on_map(t_cub *cub, char prtl_id)

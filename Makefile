@@ -101,13 +101,13 @@ CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra -Ofast -flto
+CFLAGS		=	-Wall -Wextra -g3 -Ofast -flto
 
 DFLAGS		:=	-MP -MMD
 
 #=========================DEBUG==============================#
-ASAN_F		:=	-g3 -fsanitize=address
-TSAN_F		:=	-g3 -fsanitize=thread
+ASAN_F		:=	-fsanitize=address
+TSAN_F		:=	-fsanitize=thread
 
 ENV			:=	env -i
 

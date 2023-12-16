@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 00:02:41 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/24 00:03:01 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/16 01:37:07 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,16 @@ char	get_prtl_or(t_cub *cub, char portal)
 {
 	if (portal == 'B')
 		return (cub->blue_prtl);
-	else
-		return (cub->orange_prtl);
+	return (cub->orange_prtl);
 }
 
 char	get_other_portal(char portal)
 {
 	if (portal == 'B')
 		return ('O');
-	return ('B');
+	if (portal == 'O')
+		return ('B');
+	return ('-');
 }
 
 void	reset_portal(t_cub *cub, char prtl_id)

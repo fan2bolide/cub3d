@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/14 14:48:53 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/16 02:59:18 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,12 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 		update_ray_attr(&ray_attr, cub);
 		if (ray_attr.collision_point == '0')
 			ray_attr.is_in_glass = false;
-		if (ray_attr.collision_point == '1' || ray_attr.collision_point == 'R')
+		if (ray_attr.collision_point == '1')
 			return (*ray_attr.distance += compute_distance(ray_attr.ray_start,
 					*ray_attr.ray), 1);
-		if (ray_attr.collision_point == 'B' || ray_attr.collision_point == 'O')
+		if (ray_attr.collision_point == 'B' || ray_attr.collision_point == 'O' || ray_attr.collision_point == 'R')
 		{
-			return_value = shoot_portal_ray(&ray_attr, cub);
+			return_value = shoot_portal_ray(&ray_attr, cub, ray_attr.collision_point);
 			if (return_value)
 				return (return_value);
 		}
