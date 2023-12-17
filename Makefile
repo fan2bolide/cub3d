@@ -50,6 +50,7 @@ SRCS		:=	cub3D.c\
 				guns/guns.c\
 				init_game/init_game.c\
 				load_screen/load_screen.c\
+				load_screen/valve_guy.c\
 				key_handlers/key_handlers.c\
 				glass/glass.c\
 

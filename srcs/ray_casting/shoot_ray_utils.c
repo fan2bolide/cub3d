@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:42:29 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/16 03:21:27 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/16 03:23:11 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,16 @@ int shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub)
 	t_prtl_list	*glass_list;
 	t_portal	*glass;
 
-	glass = malloc(sizeof (t_portal));
-	if (!glass)
-		return (-1);
-	glass->distance = *ray_attr->distance + \
-		compute_distance(ray_attr->ray_start, *ray_attr->ray);
-	glass->position = *ray_attr->ray;
-	glass->angle = *ray_attr->angle;
-	glass->height = get_wall_height(cub, glass->distance, glass->angle);
 	if (!ray_attr->is_in_glass)
 	{
+		glass = malloc(sizeof (t_portal));
+		if (!glass)
+			return (-1);
+		glass->distance = *ray_attr->distance + \
+			compute_distance(ray_attr->ray_start, *ray_attr->ray);
+		glass->position = *ray_attr->ray;
+		glass->angle = *ray_attr->angle;
+		glass->height = get_wall_height(cub, glass->distance, glass->angle);
 		glass_list = (t_prtl_list *) ft_dblstnew(glass);
 		if (!glass_list)
 			return (-1);
