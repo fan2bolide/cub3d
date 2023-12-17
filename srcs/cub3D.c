@@ -78,13 +78,6 @@ int	perform_actions(t_cub *cub)
 	int	x;
 	int	y;
 
-	if (!cub->rendering) {
-		return (display_valve_guy(cub), 0);
-	}
-	if (cub->rendering == 1) {
-		sleep(1);
-		return (init_game(cub));
-	}
 	mouse_get_pos(cub, &x, &y);
 	if (cub->menu.cursors[SPEED].is_pressed)
 	{

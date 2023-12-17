@@ -76,7 +76,7 @@ int	init_game(t_cub *cub)
 	cub->gun_position = get_gun_position(cub);
 	cub->next_ray_to_compute = cub->win_size[WIDTH];
 	if (!check_allocations(cub))
-		return (0);
+		return (close_window(cub));
 	cub->last_mouse_pos = -1;
 	convert_path_to_mlx_img(cub);
 	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
@@ -88,8 +88,8 @@ int	init_game(t_cub *cub)
 	cub->sensivity = 0.017;
 	display_load_screen(cub);
 	if (!render_frame(cub))
-		return (close_window(cub), 0);
+		return (close_window(cub));
 	create_threads(cub);
-	cub->rendering = 2;
+	mlx_loop_hook(cub->mlx, perform_actions, cub);
 	return (1);
 }

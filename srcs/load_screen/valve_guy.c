@@ -48,5 +48,5 @@ void	display_valve_guy(t_cub *cub)
 		y++;
 	}
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
-	cub->rendering = 1;
+	mlx_loop_hook(cub->mlx, init_game, cub);
 }
