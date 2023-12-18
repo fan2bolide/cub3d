@@ -1,8 +1,7 @@
 #===========================VARIABLE===============================#
 SRCS		:=	cub3D.c\
+				close_window.c\
 				parsing/parsing.c\
-				parsing/bajeanno.c\
-				parsing/wall_surroundment.c\
 				parsing/get_data.c\
 				parsing/parse_map.c\
 				parsing/parse_colors.c\
@@ -20,6 +19,10 @@ SRCS		:=	cub3D.c\
 				rendering/graphic_utils.c\
 				rendering/texture_put.c\
 				rendering/render_frame.c\
+				movement/movement.c\
+				position/position_utils.c\
+				keys_handling/key_handling.c\
+				init/init.c\
 
 
 SRCS_D		:=	srcs/
@@ -101,6 +104,10 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)utils
 			@mkdir -p $(OBJS_D)ray_casting
 			@mkdir -p $(OBJS_D)rendering
+			@mkdir -p $(OBJS_D)movement
+			@mkdir -p $(OBJS_D)position
+			@mkdir -p $(OBJS_D)init
+			@mkdir -p $(OBJS_D)keys_handling
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)

@@ -1,29 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_data.c                                        :+:      :+:    :+:   */
+/*   position_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/30 15:15:18 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/15 13:04:34 by nfaust           ###   ########.fr       */
+/*   Created: 2023/12/18 18:41:52 by nfaust            #+#    #+#             */
+/*   Updated: 2023/12/18 18:54:57 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void	destroy_data(t_data *data)
+t_position	*create_position(double i, double j)
+{
+	t_position	*pos;
+
+	pos = malloc(sizeof(t_position));
+	pos->x = j;
+	pos->y = i;
+	return (pos);
+}
+
+t_position	*get_position(char **map)
 {
 	int	i;
+	int	j;
 
-	if (data)
+	i = 0;
+	while (map[i])
 	{
-		i = 0;
-		while (i < 4)
-			free(data->texture[i++]);
-		free(data->ceiling_color);
-		free(data->floor_color);
-		ft_old_split_destroy(data->map);
-		free(data);
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'N' || map[i][j] == 'E'
+				|| map[i][j] == 'S' || map[i][j] == 'W')
+				return (create_position((double)i, (double)j));
+			j++;
+		}
+		i++;
 	}
+	return (NULL);
 }
