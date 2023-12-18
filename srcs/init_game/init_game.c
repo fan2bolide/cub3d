@@ -26,7 +26,7 @@ static t_iposition	get_gun_position(t_cub *cub)
  * \param cub the game
  * \return
  */
-int	init_portals(t_cub *cub) //TODO peut etre changerr le nom
+int	init_portals(t_cub *cub)
 {
 	cub->blue_prtl = '-';
 	cub->orange_prtl = '-';

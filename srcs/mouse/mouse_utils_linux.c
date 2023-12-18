@@ -31,6 +31,7 @@ void	cub_mouse_show(t_cub *cub)
 
 void	cub_mouse_hide(t_cub *cub)
 {
+	(void) cub;
 	//mlx_mouse_hide(cub->mlx, cub->win);
 }
 
