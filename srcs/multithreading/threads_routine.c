@@ -40,6 +40,18 @@ void	render_thread_end_program(t_cub *cub)
 	pthread_mutex_unlock(&cub->program_ends_mutex);
 }
 
+static int	do_render(t_render_thread *attr, int i, double segments_size)
+{
+	if (!compute_ray(attr->cub, i, segments_size))
+		return (render_thread_end_program(attr->cub), 0);
+	render_column(attr->cub, i);
+	pthread_mutex_lock(&attr->cub->ray_mutex);
+	if (attr->cub->next_ray_to_compute == attr->cub->win_size[WIDTH])
+		attr->cub->is_frame_rendered = true;
+	pthread_mutex_unlock(&attr->cub->ray_mutex);
+	return (1);
+}
+
 void	*render_thread_routine(t_render_thread *attr)
 {
 	int		i;
@@ -55,16 +67,7 @@ void	*render_thread_routine(t_render_thread *attr)
 		i = get_ray_index(attr->cub);
 		if (i < attr->cub->win_size[WIDTH])
 		{
-			if (!compute_ray(attr->cub, i, segments_size))
-			{
-				render_thread_end_program(attr->cub);
-				continue ;
-			}
-			render_column(attr->cub, i);
-			pthread_mutex_lock(&attr->cub->ray_mutex);
-			if (attr->cub->next_ray_to_compute == attr->cub->win_size[WIDTH])
-				attr->cub->is_frame_rendered = true;
-			pthread_mutex_unlock(&attr->cub->ray_mutex);
+			do_render(attr, i, segments_size);
 		}
 		else
 			tell_rendering_is_finished(attr->id, attr->cub);
