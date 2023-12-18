@@ -47,7 +47,7 @@ int	init_mutex(t_cub *cub)
 
 int	create_threads(t_cub *cub)
 {
-	int				i;
+	int						i;
 	static t_render_thread	render_thread[NB_THREADS];
 
 	i = 0;
