@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_texture.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 00:41:56 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/05 15:04:30 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/16 03:11:42 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static bool	is_portal_texture_s_n(t_position ray_collision, t_cub *cub,
 					int *texture_id)
 {
 	if (cub->player_position.y > ray_collision.y && (cub->orange_prtl == 'S'
-			|| cub->blue_prtl == 'S'))
+			|| cub->blue_prtl == 'S' || cub->rick_prtl == 'S'))
 	{
 		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] \
 		== 'B' && cub->blue_prtl == 'S')
@@ -25,8 +25,11 @@ static bool	is_portal_texture_s_n(t_position ray_collision, t_cub *cub,
 		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] \
 		== 'O' && cub->orange_prtl == 'S')
 			return (*texture_id = 6, true);
+		if (cub->data->map[(int) ray_collision.y - 1][(int) ray_collision.x] \
+		== 'R' && cub->rick_prtl == 'S')
+			return (*texture_id = 17, true);
 	}
-	else if (cub->orange_prtl == 'N' || cub->blue_prtl == 'N')
+	else if (cub->orange_prtl == 'N' || cub->blue_prtl == 'N' || cub->rick_prtl == 'N')
 	{
 		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'B'
 		&& cub->blue_prtl == 'N')
@@ -34,6 +37,9 @@ static bool	is_portal_texture_s_n(t_position ray_collision, t_cub *cub,
 		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'O'
 		&& cub->orange_prtl == 'N')
 			return (*texture_id = 6, true);
+		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'R'
+		&& cub->rick_prtl == 'N')
+			return (*texture_id = 17, true);
 	}
 	return (false);
 }
@@ -44,7 +50,7 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub,
 	if (ray_collision.x == (int) ray_collision.x)
 	{
 		if (cub->player_position.x > ray_collision.x && (cub->orange_prtl == 'E'
-				|| cub->blue_prtl == 'E'))
+				|| cub->blue_prtl == 'E' || cub->rick_prtl == 'E'))
 		{
 			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1]
 			== 'B' && cub->blue_prtl == 'E')
@@ -52,8 +58,11 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub,
 			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1]
 			== 'O' && cub->orange_prtl == 'E')
 				return (*texture_id = 6, true);
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x - 1]
+			== 'R' && cub->rick_prtl == 'E')
+				return (*texture_id = 17, true);
 		}
-		else if (cub->orange_prtl == 'W' || cub->blue_prtl == 'W')
+		else if (cub->orange_prtl == 'W' || cub->blue_prtl == 'W' || cub->rick_prtl == 'W')
 		{
 			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
 			== 'B' && cub->blue_prtl == 'W')
@@ -61,6 +70,9 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub,
 			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
 			== 'O' && cub->orange_prtl == 'W')
 				return (*texture_id = 6, true);
+			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
+			== 'R' && cub->rick_prtl == 'W')
+				return (*texture_id = 17, true);
 		}
 		return (false);
 	}
@@ -85,5 +97,5 @@ void	set_portal_texture(int *texture_id, size_t *texture_x,
 		*texture_id = 9;
 	if ((*texture_id == 8 || *texture_id == 6) && cub->menu.outline == 2)
 		*texture_id = 10;
-	*texture_x = set_custom_texture(*texture_id, cub->portals[x]->portal->angle, cub->portals[x]->portal->position,cub);
+	*texture_x = set_custom_texture(*texture_id, cub->portals[x]->portal->angle, cub->portals[x]->portal->position, cub);
 }

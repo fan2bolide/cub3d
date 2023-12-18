@@ -44,7 +44,10 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 		else
 			cub->keys_states[keycode] = PRESSED;
 	}
-	if (keycode == KEY_ESC)
-		return (close_window(cub));
+	if (keycode == KEY_ESC) {
+		if (cub->menu.on_screen)
+			return (handle_menu(cub), 0);
+		return (close_window(cub), 0);
+	}
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_put.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/14 16:00:16 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/16 03:15:01 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int set_custom_texture(int texture_id, double angle,
 {
 	int	texture_x;
 
-	texture_x = 0;
 	if (ray_collision.x == (int)ray_collision.x)
 	{
 		if (cos(angle) < 0)
@@ -196,8 +195,8 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	texture_id = set_texture_id_and_x(&texture.x, ray_collision, \
 										cub, cub->angles[x]);
 	screen_wall_height = wall_height;
-	if (wall_height > cub->win_size[0])
-		screen_wall_height = cub->win_size[0];
+	if (wall_height > cub->win_size[HEIGHT])
+		screen_wall_height = cub->win_size[HEIGHT];
 	y = cub->win_size[0] / 2 - screen_wall_height / 2;
 	i = 0;
 	while (i < screen_wall_height)

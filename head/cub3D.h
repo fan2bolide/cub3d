@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/14 15:42:00 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/16 03:22:11 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@
 # define PORTAL_GUN_O	"textures/portal_gun_o.xpm"
 # define RICKS_GUN		"textures/rick_portal_gun.xpm"
 # define MC_GLASS		"textures/minecraft_glass.xpm"
+# define RICKS_PORTAL	"textures/rick_portal.xpm"
 
 # ifndef NB_THREADS
 #  define NB_THREADS	16
@@ -385,7 +386,7 @@ typedef struct s_cub
 	int				last_mouse_pos;
 	int				win_size[2];
 	t_image			img;
-	t_image			textures[17];
+	t_image			textures[18];
 	t_position		player_position;
 	t_position		last_player_pos;
 	double			view_angle;
@@ -446,7 +447,7 @@ t_list		*list_from_file(char *file_path);
 //================= RAY RELATIVES ==================//
 void		clear_lists(t_cub *cub);
 int			shoot_door_ray(t_ray_shoot *ray_attr, t_cub *cub);
-int			shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub);
+int			shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub, char prtl_id);
 int			shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub);
 void		init_ray_attr(t_cub *cub, t_position *ray, double *angle,
 				t_ray_shoot *ray_attr);
