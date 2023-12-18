@@ -527,7 +527,7 @@ int	cub_handle_mouse(int button, int x, int y, t_cub *cub);
 int cub_handle_mouse_release(int button, int x, int y, t_cub *cub);
 int cub_handle_key_press(int keycode, t_cub *cub);
 int	cub_handle_key_release(int keycode, t_cub *cub);
-int	perform_actions(t_cub *cub);
+int	update_frame(t_cub *cub);
 
 void set_random_position(t_cub *cub);
 void put_pixel_transparent(t_image *data, int x, int y, unsigned int color);
