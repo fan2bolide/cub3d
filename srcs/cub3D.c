@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/17 05:33:40 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 11:51:11 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int argc, char **argv)
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
 	cub->win_size[WIDTH] = cub->win_size[0] * 16 / 10;
-	cub->data = parsing(argc, argv);
+	cub->data = parsing(argv);
 	if (!cub->data)
 		return (free(cub), 1);
 	cub->mlx = mlx_init();

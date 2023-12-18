@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-t_data	*parsing(int argc, char **argv)
+t_data	*parsing(char **argv)
 {
 	t_data	*data;
 
