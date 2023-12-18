@@ -8,8 +8,6 @@ SRCS		:=	cub3D.c\
 				player/view_handling.c\
 				player/teleport_player.c\
 				parsing/parsing.c\
-				parsing/bajeanno.c\
-				parsing/wall_surroundment.c\
 				parsing/get_data.c\
 				parsing/parse_map.c\
 				parsing/parse_colors.c\
@@ -34,6 +32,9 @@ SRCS		:=	cub3D.c\
 				rendering/texture_put.c\
 				rendering/render_frame.c\
 				rendering/time.c\
+				rendering/texture_put_utils.c\
+				rendering/put_wall_slices.c\
+				rendering/more_texture_put_utils.c\
 				portal/portal.c\
 				portal/set_map.c\
 				portal/set_texture.c\

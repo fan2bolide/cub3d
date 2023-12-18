@@ -40,7 +40,6 @@ void	clear_lists(t_cub *cub)
 		cub->glass[i] = NULL;
 		ft_lstclear((t_list **)(cub->doors + i), free);
 		cub->doors[i++] = NULL;
-
 	}
 }
 
@@ -64,13 +63,13 @@ void	wait_rendering(t_cub *cub, struct timeval start_time)
 		usleep(100);
 }
 
-void put_pixel_transparent(t_image *data, int x, int y, unsigned int color)
+void	put_pixel_transparent(t_image *data, int x, int y, unsigned int color)
 {
 	int		old_color;
-	t_color old_color_rgb;
-	t_color new_color;
-	t_color final_color;
-	char *dst;
+	t_color	old_color_rgb;
+	t_color	new_color;
+	t_color	final_color;
+	char	*dst;
 
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	old_color = *(int *) dst;
@@ -81,10 +80,13 @@ void put_pixel_transparent(t_image *data, int x, int y, unsigned int color)
 	new_color.green = (color >> 8) & 0xFF;
 	new_color.red = (color >> 16) & 0xFF;
 	new_color.transparency = (color >> 24) & 0xFF;
-	final_color.red = (new_color.red * new_color.transparency + old_color_rgb.red * (255 - new_color.transparency)) / 255;
-	final_color.green = (new_color.green * new_color.transparency + old_color_rgb.green * (255 - new_color.transparency)) / 255;
-	final_color.blue = (new_color.blue * new_color.transparency + old_color_rgb.blue * (255 - new_color.transparency)) / 255;
-	cub_pixel_put(data, x, y, *(int *) (&final_color));
+	final_color.red = (new_color.red * new_color.transparency
+			+ old_color_rgb.red * (255 - new_color.transparency)) / 255;
+	final_color.green = (new_color.green * new_color.transparency
+			+ old_color_rgb.green * (255 - new_color.transparency)) / 255;
+	final_color.blue = (new_color.blue * new_color.transparency
+			+ old_color_rgb.blue * (255 - new_color.transparency)) / 255;
+	cub_pixel_put(data, x, y, *(int *)(&final_color));
 }
 
 int	render_frame(t_cub *cub)

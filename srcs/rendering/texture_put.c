@@ -6,371 +6,57 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 09:47:52 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/18 13:15:28 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-int set_custom_texture(int texture_id, double angle,
-					   t_position ray_collision, t_cub *cub)
+void	cub_door_texture_put(int x, t_cub *cub, t_position *ray_collision)
 {
-	int	texture_x;
+	int			texture_id;
+	t_iposition	texture;
 
-	if (ray_collision.x == (int)ray_collision.x)
-	{
-		if (cos(angle) < 0)
-			texture_x = (int)(((int)(ray_collision.y) + 1 - ray_collision.y)
-						   * cub->textures[texture_id].width);
-		else
-			texture_x = (int)((ray_collision.y - (int)(ray_collision.y))
-						   * cub->textures[texture_id].width);
-	}
-	else
-	{
-		if (sin(angle) < 0)
-			texture_x = (int)((ray_collision.x - ((int) ray_collision.x))
-						   * cub->textures[texture_id].width);
-		else
-			texture_x = (int)((((int)ray_collision.x) + 1 - ray_collision.x)
-						   * cub->textures[texture_id].width);
-	}
-	return (texture_x);
-}
-
-bool	is_bajeanno_tile(t_position ray_collision, t_cub *cub)
-{
-	size_t		i;
-	static char	orientations[4] = {'N', 'S', 'W', 'E'};
-	int			ray_x_match[2];
-	int			ray_y_match[2];
-	int			ray_glob_cond[4];
-
-	ft_memcpy(ray_x_match, (int [2]){ray_collision.x != (int)ray_collision.x, \
-	ray_collision.x == (int)ray_collision.x}, 2 * sizeof(int));
-	ft_memcpy(ray_y_match, (int [2]){ray_collision.y == (int)ray_collision.y, \
-	ray_collision.y != (int)ray_collision.y}, 2 * sizeof(int));
-	ft_memcpy(ray_glob_cond, (int [4]){(int)ray_collision.y - 1 == \
-	cub->data->baj->y, (int)ray_collision.y == cub->data->baj->y, \
-	(int)ray_collision.x == cub->data->baj->x + 1, \
-	(int)ray_collision.x == cub->data->baj->x}, 4 * sizeof(int));
-	i = 0;
-	while (i++ < 4)
-		if (cub->data->baj->orientation == orientations[i - 1])
-			if ((ft_isset(orientations[i - 1], "NS") && (int)ray_collision.x \
-			== cub->data->baj->x) || (ft_isset(orientations[i - 1], "WE") \
-			&& (int)ray_collision.y == cub->data->baj->y))
-				if (ray_x_match[i - 1 > 1] && ray_y_match[i - 1 > 1]
-					&& ray_glob_cond[i - 1])
-					return (true);
-	return (false);
-}
-
-int	set_n_s_textures(size_t *texture_x,
-					t_position ray_collision, t_cub *cub, double angle)
-{
-	int	texture_id;
-
-	if (sin(angle) < 0)
-	{
-		texture_id = 0;
-		*texture_x = (int)((ray_collision.x - ((int) ray_collision.x)) \
-			* cub->textures[texture_id].width);
-	}
-	else
-	{
-		texture_id = 1;
-		*texture_x = (int)((((int) ray_collision.x) + 1 - ray_collision.x) \
-			* cub->textures[texture_id].width);
-	}
-	return (texture_id);
-}
-
-int	set_texture_id_and_x(size_t *texture_x, \
-							t_position ray_collision, t_cub *cub, double angle)
-{
-	int	texture_id;
-
-	if (cub->data->baj->is_activated && is_bajeanno_tile(ray_collision, cub))
-		return (*texture_x = set_custom_texture(4, angle, ray_collision, cub), 4);
-	if (ray_collision.x == (int) ray_collision.x)
-	{
-		if (cos(angle) < 0)
-		{
-			texture_id = 2;
-			*texture_x = (int)(((int)(ray_collision.y) + 1 - ray_collision.y) \
-								* cub->textures[texture_id].width);
-		}
-		else
-		{
-			texture_id = 3;
-			*texture_x = (int)((ray_collision.y - (int)(ray_collision.y)) \
-								* cub->textures[texture_id].width);
-		}
-		return (texture_id);
-	}
-	return (set_n_s_textures(texture_x, ray_collision, cub, angle));
-}
-
-t_door	*get_door(t_position ray_collision, double angle, t_cub *cub)
-{
-	t_iposition	door_index;
-	size_t		i;
-
-	door_index = get_door_index(ray_collision, angle, cub);
-	i = 0;
-	while (42)
-	{
-		if (cub->doors_status[i].x == door_index.x && cub->doors_status[i].y == door_index.y)
-			return (&cub->doors_status[i]);
-		i++;
-	}
-}
-
-void	set_door_texture(int *texture_id, size_t *texture_x, int x, t_cub *cub)
-{
-	t_door	*door;
-	size_t 	texture_x_offset;
-
-	door = get_door(cub->doors[x]->portal->position, cub->doors[x]->portal->angle, cub);
-	if (door->is_open && cub->data->map[door->y][door->x] == 'd')
-		return ;
-	*texture_id = 11;
-	*texture_x = set_custom_texture(*texture_id, cub->doors[x]->portal->angle, cub->doors[x]->portal->position, cub);
-	if (!door->is_open && cub->data->map[door->y][door->x] == 'D')
-		return ;
-	texture_x_offset = (size_t)(cub->textures[*texture_id].width * door->opening_percent);
-	if (texture_x_offset >= *texture_x)
-		*texture_id = -1;
-	else
-		*texture_x -= texture_x_offset;
-}
-
-int cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision)
-{
-	int i;
-	int y;
-	int screen_wall_height;
-	int texture_id;
-	t_iposition texture;
-
+	(void)ray_collision;
 	texture_id = -1;
 	set_door_texture(&texture_id, &texture.x, x, cub);
 	if (texture_id == -1)
-		return (1);
-	screen_wall_height = wall_height;
-	if (wall_height > cub->win_size[0])
-		screen_wall_height = cub->win_size[0];
-	y = cub->win_size[0] / 2 - screen_wall_height / 2;
-	i = 0;
-	while (i < screen_wall_height)
-	{
-		texture.y = (i + (wall_height - screen_wall_height) / 2) \
-* cub->textures[texture_id].height / wall_height;
-		int color = *((int *) (cub->textures[texture_id].addr + (texture.y * \
-		cub->textures[texture_id].line_length + texture.x * \
-		(cub->textures[texture_id].bits_per_pixel / 8))));
-		if (color < 0)
-		{
-			y++;
-			i++;
-			continue;
-		}
-		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
-			cub_pixel_put(&cub->img, x, y, color);
-		y++;
-		i++;
-	}
-	return (y);
+		return ;
+	put_door_wall_slice(cub, texture_id, x, texture);
 }
-int	cub_texture_put(int x, t_cub *cub, int wall_height,
-			t_position ray_collision)
+
+void	cub_texture_put(int x, t_cub *cub, t_position ray_collision)
 {
-	int			i;
-	int			y;
-	int			screen_wall_height;
 	int			texture_id;
 	t_iposition	texture;
 
 	texture_id = set_texture_id_and_x(&texture.x, ray_collision, \
 										cub, cub->angles[x]);
-	screen_wall_height = wall_height;
-	if (wall_height > cub->win_size[HEIGHT])
-		screen_wall_height = cub->win_size[HEIGHT];
-	y = cub->win_size[0] / 2 - screen_wall_height / 2;
-	i = 0;
-	while (i < screen_wall_height)
-	{
-		texture.y = (i + (wall_height - screen_wall_height) / 2) \
-				* cub->textures[texture_id].height / wall_height;
-		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
-			cub_pixel_put(&cub->img, x, y, \
-			*((int *)(cub->textures[texture_id].addr + (texture.y * \
-			cub->textures[texture_id].line_length + texture.x * \
-			(cub->textures[texture_id].bits_per_pixel / 8)))));
-		y++;
-		i++;
-	}
-	return (y);
+	put_wall_slice(cub, x, texture_id, texture);
 }
 
-bool	not_portal_side(t_position ray_collision, double angle, t_cub *cub)
+void	cub_glass_texture_put(int x, t_cub *cub, t_position ray_collision)
 {
-	t_iposition	portal_index;
-	char		prtl;
-	char 		prtl_or;
-
-	portal_index = get_door_index(ray_collision, angle, cub);
-	prtl = cub->data->map[portal_index.y][portal_index.x];
-	prtl_or = get_prtl_or(cub, prtl);
-	if (ray_collision.x == (int) ray_collision.x)
-	{
-		if ((cos(angle) < 0 && prtl_or == 'E') || (cos(angle > 0) && prtl_or == 'W'))
-			return (false);
-	}
-	else
-		if ((sin(angle) < 0 && prtl_or == 'S') || (sin(angle > 0 && prtl_or == 'N')))
-			return (false);
-	return (true);
-}
-
-void put_transparency(t_cub *cub, int x, int y, int texture_id)
-{
-	size_t	texture_x;
-
-	if (texture_id != 7 && texture_id != 9 && texture_id != 8 && texture_id != 10)
-		set_portal_texture(&texture_id, &texture_x, x, cub);
-	if (texture_id == 7 || texture_id == 9)
-		put_pixel_transparent(&cub->img, x, y, 0x703399ff);
-	else if (texture_id == 8 || texture_id == 10)
-		put_pixel_transparent(&cub->img, x, y, 0x70ff6600);
-
-}
-
-int	put_outline_texture(int x, t_cub *cub, int wall_height, \
-						t_position ray_collision)
-{
-	int			i;
-	int			y;
-	int			screen_wall_height;
 	int			texture_id;
 	t_iposition	texture;
 
-	if (not_portal_side(ray_collision, cub->portals[x]->portal->angle, cub))
-		return (0);
-	texture_id = set_texture_id_and_x(&texture.x, ray_collision, cub, cub->portals[x]->portal->angle);
-	screen_wall_height = wall_height;
-	if (wall_height > cub->win_size[0])
-		screen_wall_height = cub->win_size[0];
-	y = cub->win_size[0] / 2 - screen_wall_height / 2;
-	i = 0;
-	while (i < screen_wall_height)
-	{
-		texture.y = (i + (wall_height - screen_wall_height) / 2) \
-				* cub->textures[texture_id].height / wall_height;
-		if (((int)texture.x > cub->textures[texture_id].width / 5 && (int)texture.x < cub->textures[texture_id].width - cub->textures[texture_id].width / 5)
-			&& ((int)texture.y > cub->textures[texture_id].height / 5 && (int)texture.y < cub->textures[texture_id].height - cub->textures[texture_id].width / 5))
-			put_transparency(cub, x, y, texture_id);
-		else if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
-			cub_pixel_put(&cub->img, x, y, \
-			*((int *)(cub->textures[texture_id].addr + (texture.y * \
-			cub->textures[texture_id].line_length + texture.x * \
-			(cub->textures[texture_id].bits_per_pixel / 8)))));
-		y++;
-		i++;
-	}
-	return (y);
-}
-
-void	glass_put_transparency(int x, t_cub *cub, int wall_height)
-{
-	int			i;
-	int			y;
-	int			screen_wall_height;
-	screen_wall_height = wall_height;
-	if (wall_height > cub->win_size[0])
-		screen_wall_height = cub->win_size[0];
-	y = cub->win_size[0] / 2 - screen_wall_height / 2;
-	i = 0;
-	while (i < screen_wall_height)
-	{
-		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
-			put_pixel_transparent(&cub->img, x, y, 0x50f0f5f5);
-		y++;
-		i++;
-	}
-}
-
-int cub_glass_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision)
-{
-	int			i;
-	int			y;
-	int			screen_wall_height;
-	int			texture_id;
-	t_iposition	texture;
-
-	glass_put_transparency(x, cub, wall_height);
+	glass_put_transparency(x, cub, cub->glass[x]->portal->height);
 	texture_id = 16;
-	texture.x = set_custom_texture(texture_id, cub->glass[x]->portal->angle, ray_collision, cub);
-	screen_wall_height = wall_height;
-	if (wall_height > cub->win_size[HEIGHT])
-		screen_wall_height = cub->win_size[HEIGHT];
-	y = cub->win_size[0] / 2 - screen_wall_height / 2;
-	i = 0;
-	while (i < screen_wall_height)
-	{
-		texture.y = (i + (wall_height - screen_wall_height) / 2) \
-				* cub->textures[texture_id].height / wall_height;
-		int color = *((int *)(cub->textures[texture_id].addr + (texture.y * \
-			cub->textures[texture_id].line_length + texture.x * \
-			(cub->textures[texture_id].bits_per_pixel / 8))));
-		if (color >= 0 && y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
-			cub_pixel_put(&cub->img, x, y, color);
-		y++;
-		i++;
-	}
-	return (y);
+	texture.x = set_custom_texture(texture_id, cub->glass[x]->portal->angle,
+			ray_collision, cub);
+	glass_put_wall_slice(cub, x, texture, texture_id);
 }
 
-int	cub_portal_texture_put(int x, t_cub *cub, int wall_height,
-							  t_position ray_collision)
+void	cub_portal_texture_put(int x, t_cub *cub, t_position ray_collision)
 {
-	int			i;
-	int			y;
-	int			screen_wall_height;
 	int			texture_id;
 	t_iposition	texture;
 
 	texture_id = -1;
 	if (cub->menu.outline == 1)
-		put_outline_texture(x, cub, wall_height, ray_collision);
+		put_outline_texture(x, cub, ray_collision);
 	set_portal_texture(&texture_id, &texture.x, x, cub);
 	if (texture_id == -1)
-		return (1);
-	screen_wall_height = wall_height;
-	if (wall_height > cub->win_size[0])
-		screen_wall_height = cub->win_size[0];
-	y = cub->win_size[0] / 2 - screen_wall_height / 2;
-	i = 0;
-	while (i < screen_wall_height)
-	{
-		texture.y = (i + (wall_height - screen_wall_height) / 2) \
-				* cub->textures[texture_id].height / wall_height;
-		if (cub->menu.outline == 2)
-			put_transparency(cub, x, y, texture_id);
-		int color = *((int *)(cub->textures[texture_id].addr + (texture.y * \
-			cub->textures[texture_id].line_length + texture.x * \
-			(cub->textures[texture_id].bits_per_pixel / 8))));
-		if (color < 0)
-		{
-			y++;
-			i++;
-			continue;
-		}
-		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
-			cub_pixel_put(&cub->img, x, y, color);
-		y++;
-		i++;
-	}
-	return (y);
+		return ;
+	portal_put_wall_slice(cub, x, texture, texture_id);
 }

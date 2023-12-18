@@ -101,3 +101,25 @@ void	cub_display_door_hint(t_cub *cub)
 	cub->door_hint.y += dir * 2;
 	handle_coords_overflow(cub);
 }
+
+void	set_door_texture(int *texture_id, size_t *texture_x, int x, t_cub *cub)
+{
+	t_door	*door;
+	size_t	texture_x_offset;
+
+	door = get_door(cub->doors[x]->portal->position,
+			cub->doors[x]->portal->angle, cub);
+	if (door->is_open && cub->data->map[door->y][door->x] == 'd')
+		return ;
+	*texture_id = 11;
+	*texture_x = set_custom_texture(*texture_id, cub->doors[x]->portal->angle,
+			cub->doors[x]->portal->position, cub);
+	if (!door->is_open && cub->data->map[door->y][door->x] == 'D')
+		return ;
+	texture_x_offset = (size_t)(cub->textures[*texture_id].width
+			* door->opening_percent);
+	if (texture_x_offset >= *texture_x)
+		*texture_id = -1;
+	else
+		*texture_x -= texture_x_offset;
+}

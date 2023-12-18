@@ -27,9 +27,6 @@ void	destroy_data(t_data *data)
 			ft_old_split_destroy(data->map);
 		if (data->wall_sur)
 			ft_old_split_destroy(data->wall_sur);
-		if (data->baj)
-			free(data->baj->cur_pos);
-		free(data->baj);
 		free(data);
 	}
 }

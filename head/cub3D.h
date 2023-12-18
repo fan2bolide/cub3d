@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 08:51:15 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/18 13:10:43 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,22 +276,9 @@ typedef struct s_iposition
 	size_t	y;
 }	t_iposition;
 
-typedef struct s_bajeanno
-{
-	bool			is_activated;
-	t_iposition		*cur_pos;
-	int				x;
-	int				y;
-	char			orientation;
-	size_t			last_activation;
-	size_t			last_move;
-	size_t			speed;
-}	t_bajeanno;
-
 typedef struct s_data{
 	char		**map;
 	char		**wall_sur;
-	t_bajeanno	*baj;
 	char		*texture[4];
 	t_color		*ceiling_color;
 	t_color		*floor_color;
@@ -475,12 +462,7 @@ int			check_format(t_data *data);
 t_position	get_position(char **map);
 int			get_wall_surroundment(t_data *data);
 void		clear_line(char **w_surr, t_iposition *cur_pos);
-int			paint_w_surr(size_t i, t_bajeanno *next_one, \
-						t_iposition *cur_pos, char **w_surr);
 void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
-t_iposition	get_next_baj(char **w_surr, \
-						t_bajeanno *next_one,
-						t_iposition *cur_pos);
 void		set_portal_on_map(t_cub *cub, char prtl_id);
 void		set_portal_texture(int *texture_id, size_t *texture_x,
 							   int x, t_cub *cub);
@@ -489,6 +471,26 @@ int			teleport_ray(t_cub *cub, t_position *ray, double *angle,
 				char entry_portal);
 int			close_window(t_cub *cub);
 double		compute_distance(t_position player, t_position ray);
+
+//============== TEXTURES RENDERING ===============//
+int	get_texture_pixel_color(t_cub *cub, int texture_id, size_t x, size_t y);
+int	set_texture_id_and_x(size_t *texture_x, t_position ray_collision, t_cub *cub, double angle);
+void	set_door_texture(int *texture_id, size_t *texture_x, int x, t_cub *cub);
+int	set_custom_texture(int texture_id, double angle,
+						  t_position ray_collision, t_cub *cub);
+void	portal_put_wall_slice(t_cub *cub, int x, t_iposition texture,
+							  int texture_id);
+void	put_door_wall_slice(t_cub *cub, int texture_id, int x,
+							t_iposition texture);
+void	glass_put_wall_slice(t_cub *cub, int x, t_iposition texture,
+							 int texture_id);
+void	put_outline_wall_slice(t_cub *cub, int x, int texture_id,
+							   t_iposition texture);
+void	put_wall_slice(t_cub *cub, int x, int texture_id, t_iposition texture);
+void	put_transparency(t_cub *cub, int x, int y, int texture_id);
+bool	is_portal_middle(t_cub *cub, t_iposition texture, int texture_id);
+void	glass_put_transparency(int x, t_cub *cub, int wall_height);
+void put_outline_texture(int x, t_cub *cub, t_position ray_collision);
 
 //===================== MENU ======================//
 void		summon_game_menu(t_cub *cub, int dir);
@@ -508,8 +510,8 @@ int			create_threads(t_cub *cub);
 # define	DOOR_MAX_OPENING 2
 void		open_door(t_cub *cub);
 int			init_doors(t_cub *cub);
-t_iposition	get_door_index(t_position pos, double angle, t_cub *cub);
-int			cub_door_texture_put(int x, t_cub *cub, int wall_height, t_position ray_collision);
+t_iposition get_door_index(t_position pos, double angle);
+void cub_door_texture_put(int x, t_cub *cub, t_position *ray_collision);
 t_door		*get_door(t_position ray_collision, double angle, t_cub *cub);
 void		cub_display_door_hint(t_cub *cub);
 void		cub_update_doors(t_cub *cub);

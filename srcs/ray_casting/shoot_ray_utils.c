@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:42:29 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 09:46:16 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/18 13:17:21 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ int	shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub, char prtl_id)
 	*distance += compute_distance(ray_attr->ray_start, *ray);
 	if (!add_new_portal_to_ray(cub, *distance, ray, angle))
 		return (-1);
-	if (*distance > 300 || !teleport_ray(cub, ray, angle, \
-								ray_attr->collision_point))
+	if (ft_dblstsize((t_dblist *)cub->portals[angle - cub->angles]) > 8
+		|| !teleport_ray(cub, ray, angle, ray_attr->collision_point))
 		return (1);
 	if (prtl_id == 'R')
 		return (1);

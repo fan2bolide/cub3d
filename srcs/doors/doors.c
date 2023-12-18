@@ -12,6 +12,22 @@
 
 #include "cub3D.h"
 
+t_door	*get_door(t_position ray_collision, double angle, t_cub *cub)
+{
+	t_iposition	door_index;
+	size_t		i;
+
+	door_index = get_door_index(ray_collision, angle);
+	i = 0;
+	while (42)
+	{
+		if (cub->doors_status[i].x == door_index.x
+			&& cub->doors_status[i].y == door_index.y)
+			return (&cub->doors_status[i]);
+		i++;
+	}
+}
+
 char	get_tile_type(t_position pos, double angle, t_cub *cub)
 {
 	double	x;
@@ -31,7 +47,7 @@ char	get_tile_type(t_position pos, double angle, t_cub *cub)
 	return (cub->data->map[(int)y][(int)x]);
 }
 
-t_iposition	get_door_index(t_position pos, double angle, t_cub *cub)
+t_iposition	get_door_index(t_position pos, double angle)
 {
 	double		x;
 	double		y;
@@ -76,7 +92,7 @@ void	open_door(t_cub *cub)
 		|| init_door_attributes(&ray_door, &door_angle, cub)
 		|| cub->glass[cub->win_size[WIDTH / 2]])
 		return ;
-	door_index = get_door_index(ray_door, door_angle, cub);
+	door_index = get_door_index(ray_door, door_angle);
 	door = get_door(ray_door, door_angle, cub);
 	if (cub->data->map[door_index.y][door_index.x] == 'D')
 	{

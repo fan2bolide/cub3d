@@ -25,17 +25,15 @@ void		put_walls(t_cub *cub);
 int			shoot_ray(t_position *ray, t_cub *cub, double *angle, \
 													double *distance);
 void		cub_put_line(t_cub *cub, t_position a, t_position b, int color);
-int			cub_texture_put(int x, t_cub *cub, int wall_height,
-				t_position ray_collision);
+void cub_texture_put(int x, t_cub *cub, t_position ray_collision);
 int			get_color_of_wall(int x, int y);
 void		render_view(t_cub *cub, t_position *ray_collision, \
 									const int *wall_height);
 void		render_column(t_cub *cub, int column);
 int			set_custom_texture(int texture_id, double angle,
 					   t_position ray_collision, t_cub *cub);
-int			cub_portal_texture_put(int x, t_cub *cub, int wall_height,
-				t_position ray_collision);
-int cub_glass_texture_put(int c, t_cub *cub, int wall_height, t_position ray_collision);
+void cub_portal_texture_put(int x, t_cub *cub, t_position ray_collision);
+void cub_glass_texture_put(int x, t_cub *cub, t_position ray_collision);
 
 int			get_wall_height(t_cub *cub, double wall_distance, double ray_angle);
 t_position	get_prtl_pos(t_cub *cub, char portal);
