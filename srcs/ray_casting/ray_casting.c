@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 23:52:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/16 02:59:18 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 09:43:25 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,23 +115,8 @@ int	shoot_ray(t_position *ray, t_cub *cub, double *angle, double *distance)
 		if (ray_attr.collision_point == '1')
 			return (*ray_attr.distance += compute_distance(ray_attr.ray_start,
 					*ray_attr.ray), 1);
-		if (ray_attr.collision_point == 'B' || ray_attr.collision_point == 'O' || ray_attr.collision_point == 'R')
-		{
-			return_value = shoot_portal_ray(&ray_attr, cub, ray_attr.collision_point);
-			if (return_value)
-				return (return_value);
-		}
-		if (ray_attr.collision_point == 'd' || ray_attr.collision_point == 'D')
-		{
-			return_value = shoot_door_ray(&ray_attr, cub);
-			if (return_value)
-				return (return_value);
-		}
-		if (ray_attr.collision_point == 'G')
-		{
-			return_value = shoot_glass_ray(&ray_attr, cub);
-			if (return_value)
-				return (return_value);
-		}
+		return_value = shoot_special_rays(cub, &ray_attr);
+		if (return_value)
+			return (return_value);
 	}
 }
