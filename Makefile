@@ -17,6 +17,7 @@ SRCS		:=	cub3D.c\
 				ray_casting/ray_casting.c\
 				rendering/render_view.c\
 				rendering/render_mini_map.c\
+				rendering/render_mini_map_utils.c\
 				rendering/graphic_utils.c\
 				rendering/texture_put.c\
 				rendering/render_frame.c\
