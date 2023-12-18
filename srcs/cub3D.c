@@ -39,7 +39,8 @@ int	main(int argc, char **argv)
 	cub->mlx = mlx_init();
 	if (!cub->mlx)
 		return (ft_putstr_fd("Failed to create mlx pointer\n", 2), 1);
-	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0], "cub3D");
+	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0],
+			"cub3D");
 	if (!cub->win)
 		return (ft_putstr_fd("failed to create window\n", 2), 1);
 	convert_path_to_mlx_img(cub);
@@ -74,7 +75,8 @@ int	perform_actions(t_cub *cub)
 		if (x > 1200)
 			x = 1200;
 		cub->menu.cursors[SPEED].x = x;
-		cub->player_speed = 20 + (((int)cub->menu.cursors[SPEED].initial_pos.x - (int)cub->menu.cursors[SPEED].x) / 10);
+		cub->player_speed = 20 + (((int)cub->menu.cursors[SPEED].initial_pos.x
+					- (int)cub->menu.cursors[SPEED].x) / 10);
 	}
 	if (cub->menu.cursors[SENSI].is_pressed)
 	{

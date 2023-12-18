@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   view_handling.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 00:38:44 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/13 00:38:44 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 09:25:06 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 
 int	cub_handle_mouse_move(int x, int y, t_cub *cub)
 {
+	double	view_angle;
+
 	(void)y;
 	if (!cub->menu.on_screen)
 	{
-		double view_angle = cub->view_angle;
+		view_angle = cub->view_angle;
 		if (cub->last_mouse_pos != -1)
 			cub->view_angle += (x - cub->last_mouse_pos) * M_PI / 64 * cub->sensivity;
 		if (fabs(view_angle - cub->view_angle) > 0.001)

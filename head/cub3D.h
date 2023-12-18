@@ -511,6 +511,9 @@ void		cub_update_doors(t_cub *cub);
 //===================== GUNS =======================//
 void display_portal_gun(t_cub *cub);
 
+//==================== PLAYER ======================//
+void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub);
+
 //=================== HANDLERS =====================//
 int	cub_handle_mouse_move(int x, int y, t_cub *cub);
 int	cub_handle_mouse(int button, int x, int y, t_cub *cub);
@@ -521,7 +524,6 @@ int	perform_actions(t_cub *cub);
 
 void set_random_position(t_cub *cub);
 void put_pixel_transparent(t_image *data, int x, int y, unsigned int color);
-
 t_cub	*init_game(int argc, char **argv);
 double	get_orientation(char **map, const t_position pos);
 void display_load_screen(t_cub *cub);

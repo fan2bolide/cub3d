@@ -109,7 +109,8 @@ void	display_portal_gun(t_cub *cub)
 	int			texture_id;
 
 	gun_size.x = (cub->win_size[WIDTH] - cub->gun_position.x) * 1;
-	gun_size.y = (size_t)((double)(cub->win_size[HEIGHT] - (int)cub->gun_position.y) * 1.5);
+	gun_size.y = (size_t)((double)(cub->win_size[HEIGHT]
+				- (int)cub->gun_position.y) * 1.5);
 	if (cub->last_portal_placed == 'B')
 		texture_id = 13;
 	if (cub->last_portal_placed == 'O')

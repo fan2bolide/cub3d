@@ -15,6 +15,7 @@
 
 # define ERR			"Error\n"
 # define WRONG_ARG_N 	"Wrong number of parameters (expected one)"
+# define TXTR_LOAD		"Failed to load one or several textures"
 # define WRONG_P_N		"Wrong number of player on map (expected one)"
 # define E_WALL_SUR		"Map is not surrounded by walls"
 # define MULT_DEF		"Multiple definition of: "

@@ -6,6 +6,7 @@ SRCS		:=	cub3D.c\
 				mouse/mouse_utils_apple.c\
 				player/player_handling.c\
 				player/view_handling.c\
+				player/teleport_player.c\
 				parsing/parsing.c\
 				parsing/bajeanno.c\
 				parsing/wall_surroundment.c\

@@ -54,7 +54,10 @@ void	load_game_menu(t_cub *cub)
 		images[i]->img = mlx_xpm_file_to_image(cub->mlx, filenames[i],
 				&(images[i]->width), &(images[i]->height));
 		if (!images[i]->img)
+		{
+			ft_putstr_fd(ERR TXTR_LOAD EOL, 2);
 			close_window(cub);
+		}
 		images[i]->addr = mlx_get_data_addr(images[i]->img,
 				&images[i]->bits_per_pixel, &images[i]->line_length,
 				&images[i]->endian);

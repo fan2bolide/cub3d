@@ -6,47 +6,47 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:03:52 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/14 17:28:28 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/18 08:34:54 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-#if defined(__linux__)
+static void	destroy_menu_images(t_cub *cub)
+{
+	t_image	*menu_images[6];
+	int		i;
 
-int close_window(t_cub *cub)
+	ft_memcpy(menu_images, (t_image *[6]){cub->menu.button_shadow.img,
+		cub->menu.button.img, cub->menu.checker_plain.img, cub->menu.cursor.img,
+		cub->menu.menu_bg.img, cub->menu.reset.img}, sizeof(t_image *) * 6);
+	i = 0;
+	while (i < 6)
+		if (menu_images[i++])
+			mlx_destroy_image(cub->mlx, menu_images[i - 1]);
+}
+
+static void	cub_destroy_images(t_cub *cub)
 {
 	int	i;
 
 	i = 0;
-	pthread_mutex_lock(&cub->program_ends_mutex);
-	cub->program_ends = true;
-	pthread_mutex_unlock(&cub->program_ends_mutex);
-//	usleep(1000);
-	while (i < NB_THREADS)
-		pthread_join(cub->threads[i++], NULL);
-	pthread_mutex_destroy(&cub->finished_mutex);
-	pthread_mutex_destroy(&cub->program_ends_mutex);
-	pthread_mutex_destroy(&cub->ray_mutex);
-	mlx_loop_end(cub->mlx);
-	free(cub->threads);
-	i = 0;
 	while (i <= 17)
-		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
-	mlx_destroy_image(cub->mlx, cub->menu.button.img);
-	mlx_destroy_image(cub->mlx, cub->menu.button_shadow.img);
-	mlx_destroy_image(cub->mlx, cub->menu.checker_plain.img);
-	mlx_destroy_image(cub->mlx, cub->menu.cursor.img);
-	mlx_destroy_image(cub->mlx, cub->menu.menu_bg.img);
-	mlx_destroy_image(cub->mlx, cub->menu.reset.img);
-	mlx_destroy_image(cub->mlx, cub->img.img);
+		if (cub->textures[i++].img)
+			mlx_destroy_image(cub->mlx, cub->textures[i - 1].img);
+	destroy_menu_images(cub);
 	if (cub->load_screen.img)
 		mlx_destroy_image(cub->mlx, cub->load_screen.img);
-	mlx_destroy_window(cub->mlx, cub->win);
-	mlx_destroy_display(cub->mlx);
-	free(cub->mlx);
+	if (cub->img.img)
+		mlx_destroy_image(cub->mlx, cub->img.img);
+}
+
+static void	free_cub(t_cub *cub)
+{
 	destroy_data(cub->data);
 	clear_lists(cub);
+	free(cub->threads);
+	free(cub->mlx);
 	free(cub->portals);
 	free(cub->doors);
 	free(cub->doors_status);
@@ -56,36 +56,48 @@ int close_window(t_cub *cub)
 	free(cub->wall_heights);
 	free(cub->wall_distance);
 	free(cub);
+}
+
+#if defined(__linux__)
+
+int	close_window(t_cub *cub)
+{
+	int	i;
+
+	i = 0;
+	pthread_mutex_lock(&cub->program_ends_mutex);
+	cub->program_ends = true;
+	pthread_mutex_unlock(&cub->program_ends_mutex);
+	while (cub->threads && i < NB_THREADS)
+		pthread_join(cub->threads[i++], NULL);
+	pthread_mutex_destroy(&cub->finished_mutex);
+	pthread_mutex_destroy(&cub->program_ends_mutex);
+	pthread_mutex_destroy(&cub->ray_mutex);
+	mlx_loop_end(cub->mlx);
+	cub_destroy_images(cub);
+	mlx_destroy_window(cub->mlx, cub->win);
+	mlx_destroy_display(cub->mlx);
+	free_cub(cub);
 	exit(0);
 }
 #elif defined(__APPLE__)
 
 int	close_window(t_cub *cub)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	pthread_mutex_lock(&cub->program_ends_mutex);
 	cub->program_ends = true;
 	pthread_mutex_unlock(&cub->program_ends_mutex);
-	usleep(1000);
 	while (i < NB_THREADS)
 		pthread_join(cub->threads[i++], NULL);
 	pthread_mutex_destroy(&cub->finished_mutex);
 	pthread_mutex_destroy(&cub->program_ends_mutex);
 	pthread_mutex_destroy(&cub->ray_mutex);
-	free(cub->threads);
-	i = 0;
-	while (i <= 17)
-		mlx_destroy_image(cub->mlx, cub->textures[i++].img);
-	mlx_destroy_image(cub->mlx, cub->img.img);
+	cub_destroy_images(cub);
 	mlx_destroy_window(cub->mlx, cub->win);
-	free(cub->angles);
-	free(cub->rays);
-	free(cub->wall_heights);
-	free(cub->mlx);
-	destroy_data(cub->data);
-	free(cub);
+	free_cub(cub);
 	exit(0);
 }
 #endif

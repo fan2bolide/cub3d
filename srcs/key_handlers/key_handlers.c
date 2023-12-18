@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_handlers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 00:57:52 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/13 00:57:52 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 08:42:01 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,8 @@ int	cub_handle_key_release(int keycode, t_cub *cub)
 	return (1);
 }
 
-int cub_handle_key_press(int keycode, t_cub *cub)
+void	handle_special_keys(t_cub *cub, int keycode)
 {
-	if (keycode && keycode > 65508)
-		return (0);
-	if (cub->load_screen.img && keycode == KEY_RETURN)
-		return (remove_load_screen(cub), 1);
 	if (!cub->menu.on_screen || keycode == KEY_TAB)
 	{
 		if (keycode == KEY_T)
@@ -44,7 +40,17 @@ int cub_handle_key_press(int keycode, t_cub *cub)
 		else
 			cub->keys_states[keycode] = PRESSED;
 	}
-	if (keycode == KEY_ESC) {
+}
+
+int	cub_handle_key_press(int keycode, t_cub *cub)
+{
+	if (keycode && keycode > 65508)
+		return (0);
+	if (cub->load_screen.img && keycode == KEY_RETURN)
+		return (remove_load_screen(cub), 1);
+	handle_special_keys(cub, keycode);
+	if (keycode == KEY_ESC)
+	{
 		if (cub->menu.on_screen)
 			return (handle_menu(cub), 0);
 		return (close_window(cub), 0);

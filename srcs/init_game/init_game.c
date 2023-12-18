@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 23:49:00 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/14 16:45:29 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 07:34:01 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 static int	cub_check_args(int argc, char **argv, t_cub *cub)
 {
 	if (argc == 4)
-	{
 		if (ft_strequ(argv[2], "-s"))
 			return (cub->win_size[HEIGHT] = ft_atoi(argv[3]), 0);
 	if (argc != 2)
