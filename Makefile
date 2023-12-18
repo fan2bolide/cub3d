@@ -53,7 +53,9 @@ SRCS		:=	cub3D.c\
 				guns/guns.c\
 				init_game/init_game.c\
 				load_screen/load_screen.c\
+				load_screen/valve_guy.c\
 				key_handlers/key_handlers.c\
+				update_frame/update_frame.c\
 
 SRCS_D		:=	srcs/
 
@@ -148,6 +150,7 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)init_game
 			@mkdir -p $(OBJS_D)player
 			@mkdir -p $(OBJS_D)key_handlers
+			@mkdir -p $(OBJS_D)update_frame
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)

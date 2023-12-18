@@ -1,9 +1,9 @@
-EA                                                                 textures/cub_east.xpm
-NO textures/bajeanno.xpm
+EA                                                                 textures/simonkraft/bookshelf.xpm
+NO textures/simonkraft/bookshelf.xpm
 C 217, 217, 138
 F 217, 217, 138
-WE textures/bajeanno.xpm
-SO   textures/cub_south.xpm
+WE textures/simonkraft/bookshelf.xpm
+SO   textures/simonkraft/bookshelf.xpm
 
            111
            1D1

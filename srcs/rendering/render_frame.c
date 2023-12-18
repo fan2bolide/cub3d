@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 20:59:47 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/09 21:18:28 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/18 14:47:57 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,16 @@ void	wait_rendering(t_cub *cub, struct timeval start_time)
 		usleep(100);
 }
 
+void	compute_color(t_color *final_color, t_color new_color, t_color old_color_rgb)
+{
+	final_color->red = (new_color.red * new_color.transparency
+					   + old_color_rgb.red * (255 - new_color.transparency)) / 255;
+	final_color->green = (new_color.green * new_color.transparency
+						 + old_color_rgb.green * (255 - new_color.transparency)) / 255;
+	final_color->blue = (new_color.blue * new_color.transparency
+						+ old_color_rgb.blue * (255 - new_color.transparency)) / 255;
+
+}
 void	put_pixel_transparent(t_image *data, int x, int y, unsigned int color)
 {
 	int		old_color;
@@ -80,12 +90,7 @@ void	put_pixel_transparent(t_image *data, int x, int y, unsigned int color)
 	new_color.green = (color >> 8) & 0xFF;
 	new_color.red = (color >> 16) & 0xFF;
 	new_color.transparency = (color >> 24) & 0xFF;
-	final_color.red = (new_color.red * new_color.transparency
-			+ old_color_rgb.red * (255 - new_color.transparency)) / 255;
-	final_color.green = (new_color.green * new_color.transparency
-			+ old_color_rgb.green * (255 - new_color.transparency)) / 255;
-	final_color.blue = (new_color.blue * new_color.transparency
-			+ old_color_rgb.blue * (255 - new_color.transparency)) / 255;
+	compute_color(&final_color, new_color, old_color_rgb);
 	cub_pixel_put(data, x, y, *(int *)(&final_color));
 }
 

@@ -87,6 +87,7 @@
 # define RICKS_GUN		"textures/rick_portal_gun.xpm"
 # define MC_GLASS		"textures/minecraft_glass.xpm"
 # define RICKS_PORTAL	"textures/rick_portal.xpm"
+# define VALVE_GUY		"textures/valve_guy.xpm"
 
 # ifndef NB_THREADS
 #  define NB_THREADS	16
@@ -528,13 +529,14 @@ int	cub_handle_mouse(int button, int x, int y, t_cub *cub);
 int cub_handle_mouse_release(int button, int x, int y, t_cub *cub);
 int cub_handle_key_press(int keycode, t_cub *cub);
 int	cub_handle_key_release(int keycode, t_cub *cub);
-int	perform_actions(t_cub *cub);
+int	update_frame(t_cub *cub);
 
 void set_random_position(t_cub *cub);
 void put_pixel_transparent(t_image *data, int x, int y, unsigned int color);
-t_cub	*init_game(int argc, char **argv);
+
+int		init_game(t_cub *cub);
 double	get_orientation(char **map, const t_position pos);
-void display_load_screen(t_cub *cub);
+void	display_load_screen(t_cub *cub);
 void	remove_load_screen(t_cub *cub);
 void	cub_mlx_config(t_cub *cub);
 int		cub_handle_key_press(int keycode, t_cub *cub);
@@ -543,5 +545,6 @@ void	cub_update_player_position(int keycode, t_cub *cub);
 void	cub_update_view_angle(int keycode, t_cub *cub);
 void	convert_path_to_mlx_img(t_cub *cub);
 int		init_mutex(t_cub *cub);
+void	display_valve_guy(t_cub *cub);
 
 #endif
