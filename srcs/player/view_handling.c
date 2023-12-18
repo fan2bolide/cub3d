@@ -21,9 +21,11 @@ int	cub_handle_mouse_move(int x, int y, t_cub *cub)
 	{
 		view_angle = cub->view_angle;
 		if (cub->last_mouse_pos != -1)
-			cub->view_angle += (x - cub->last_mouse_pos) * M_PI / 64 * cub->sensivity;
+			cub->view_angle += (x - cub->last_mouse_pos) \
+								* M_PI / 64 * cub->sensivity;
 		if (fabs(view_angle - cub->view_angle) > 0.001)
-			cub_mouse_move(cub, cub->win_size[WIDTH] / 2, cub->win_size[HEIGHT] / 2);
+			cub_mouse_move(cub, cub->win_size[WIDTH] / 2, \
+								cub->win_size[HEIGHT] / 2);
 		cub->last_mouse_pos = cub->win_size[WIDTH] / 2;
 	}
 	return (1);
