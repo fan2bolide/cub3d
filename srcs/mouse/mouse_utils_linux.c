@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-#if defined (__linux__)
+#ifdef LINUX
 
 void	mouse_get_pos(t_cub *cub, int *x, int *y)
 {

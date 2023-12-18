@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-#if defined (__APPLE__)
+#ifdef MACOS
 
 void	mouse_get_pos(t_cub *cub, int *x, int *y)
 {

@@ -91,6 +91,11 @@
 # ifndef NB_THREADS
 #  define NB_THREADS	16
 # endif
+# if defined (__APPLE__)
+#  define MACOS
+# else
+#  define LINUX
+# endif
 
 // X11 events
 # define KEY_PRESS			2
