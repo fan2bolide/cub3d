@@ -69,7 +69,7 @@ CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra
+CFLAGS		=	-Wall -Wextra -Werror -Ofast -flto
 
 DFLAGS		:=	-MP -MMD
 
@@ -88,13 +88,13 @@ PARAMETERS	:= test.cub
 all			:	$(NAME)
 
 $(NAME)		:	$(LIB_A) $(OBJS_D) $(OBJS) $(MLX)
-			$(CC) $(CFLAGS) -Ofast -o $(NAME) $(OBJS) $(LIB_A) $(MLX) $(MLX_FLAGS)
+			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB_A) $(MLX) $(MLX_FLAGS)
 
 $(MLX)		:
 			$(MAKE) -C $(MLX_D)
 
 $(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.c $(HEAD_A) $(LIB_H)libft.h $(MLX_D)/mlx.h
-			$(CC) $(CFLAGS) $(DFLAGS) -Ofast -I$(HEAD_D) -I$(LIB_H) -I$(MLX_D) -c $< -o $@
+			$(CC) $(CFLAGS) $(DFLAGS) -I$(HEAD_D) -I$(LIB_H) -I$(MLX_D) -c $< -o $@
 
 $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)
