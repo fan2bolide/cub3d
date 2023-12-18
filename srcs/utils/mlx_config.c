@@ -25,5 +25,5 @@ void	cub_mlx_config(t_cub *cub)
 	mlx_mouse_hook(cub->win, cub_handle_mouse, cub);
 	mlx_hook(cub->win, BUTTON_RELEASE, BUTTON_RELEASE_MASK, \
 		cub_handle_mouse_release, cub);
-	mlx_loop_hook(cub->mlx, perform_actions, cub);
+	mlx_loop_hook(cub->mlx, display_valve_guy, cub);
 }
