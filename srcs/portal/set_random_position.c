@@ -6,13 +6,13 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:34:25 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/12 22:24:44 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 15:30:17 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-bool	is_in_map(t_cub *cub, int x, int y)
+static bool	is_in_map(const t_cub *cub, const int x, const int y)
 {
 	int	i;
 	int	j;
@@ -32,9 +32,9 @@ bool	is_in_map(t_cub *cub, int x, int y)
 	return (false);
 }
 
-unsigned int	get_map_height(t_cub *cub)
+static unsigned int	get_map_height(const t_cub *cub)
 {
-	unsigned int i;
+	unsigned int	i;
 
 	i = 0;
 	while (cub->data->map[i])
@@ -42,7 +42,7 @@ unsigned int	get_map_height(t_cub *cub)
 	return (i);
 }
 
-unsigned int get_map_width(t_cub *cub)
+static unsigned int	get_map_width(const t_cub *cub)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -62,33 +62,22 @@ unsigned int get_map_width(t_cub *cub)
 	return (max);
 }
 
-void set_random_position(t_cub *cub)
+void	set_random_position(t_cub *cub)
 {
-	unsigned int	i;
-	unsigned int	j;
+	struct timeval	time;
 
-	i = 0;
+	cub->random_position.y = 0;
 	cub->random_position.x = 0;
-	while (cub->random_position.x == 0)
+	while (1)
 	{
-		j = 0;
-		cub->random_position.y = 0;
-		while (cub->random_position.y == 0)
-		{
-			struct timeval time;
-			gettimeofday(&time, NULL);
-			srand(time.tv_usec);
-			cub->random_position.y = rand() % get_map_height(cub) + 0.5;
-			gettimeofday(&time, NULL);
-			srand(time.tv_usec);
-			cub->random_position.x = rand() % get_map_width(cub) + 0.5;
-			if (is_in_map(cub, (int)cub->random_position.x, \
-								(int)cub->random_position.y))
-				return (gettimeofday(&time, NULL), srand(time.tv_usec), cub->random_angle = rand() % 300, (void)0);
-			cub->random_position.x = 0;
-			j++;
-		}
-		cub->random_position.x = 0;
-		i++;
+		gettimeofday(&time, NULL);
+		srand(time.tv_usec % 1024);
+		cub->random_position.y = rand() % get_map_height(cub) + 0.5;
+		srand(time.tv_usec % 256);
+		cub->random_position.x = rand() % get_map_width(cub) + 0.5;
+		if (is_in_map(cub, (int)cub->random_position.x, \
+							(int)cub->random_position.y))
+			return (gettimeofday(&time, NULL), srand(time.tv_usec), \
+				cub->random_angle = rand() % 300, (void)0);
 	}
 }

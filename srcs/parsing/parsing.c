@@ -12,12 +12,11 @@
 
 #include "cub3D.h"
 
-t_data	*parsing(int argc, char **argv)
+t_data	*parsing(char **argv)
 {
 	t_data	*data;
 
 	data = get_data(argv);
-	(void)argc;
 	if (!data)
 		return (destroy_data(data), NULL);
 	return (data);

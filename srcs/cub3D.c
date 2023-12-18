@@ -29,8 +29,8 @@ size_t	get_time(void)
 }
 
 /**
- * \brief parses the -s option that changes the size of
- * the window at program start
+ * \brief parses the -s option that changes the
+ * size of the window at program start
  * \param argc
  * \param argv
  * \param cub
@@ -57,7 +57,7 @@ int	main(int argc, char **argv)
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
 	cub->win_size[WIDTH] = cub->win_size[0] * 16 / 10;
-	cub->data = parsing(argc, argv);
+	cub->data = parsing(argv);
 	if (!cub->data)
 		return (free(cub), 1);
 	cub->mlx = mlx_init();

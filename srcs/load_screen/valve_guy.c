@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 03:37:29 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/17 05:33:02 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 14:35:40 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	upscale_to_screen_size(t_cub *cub, t_image valve_guy)
 	}
 }
 
-void	display_valve_guy(t_cub *cub)
+int	display_valve_guy(t_cub *cub)
 {
 	t_image	valve_guy;
 
@@ -58,4 +58,5 @@ void	display_valve_guy(t_cub *cub)
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	mlx_destroy_image(cub->mlx, valve_guy.img);
 	mlx_loop_hook(cub->mlx, init_game, cub);
+	return (1);
 }

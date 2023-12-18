@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:14:00 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/18 08:39:08 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/18 15:50:29 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	cub_mouse_show(t_cub *cub)
 
 void	cub_mouse_hide(t_cub *cub)
 {
-	(void) cub;
 	//mlx_mouse_hide(cub->mlx, cub->win);
 }
 

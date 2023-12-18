@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 13:10:43 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/18 14:35:51 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,7 +426,7 @@ typedef struct s_render_thread
 # define ALLOWED_CHARS		"NSEW01DG "
 # define NOT_WALLS_CHARS	"NSEWD0G"
 # define ALLOWED_IN_FILE	"10NSEWDG \n"
-t_data		*parsing(int argc, char **argv);
+t_data		*parsing(char **argv);
 int			parse_textures(t_data *data, t_list *file);
 t_data		*get_data(char **argv);
 t_list		*skip_metadata_in_file(t_list *file);
@@ -512,7 +512,7 @@ int			create_threads(t_cub *cub);
 void		open_door(t_cub *cub);
 int			init_doors(t_cub *cub);
 t_iposition get_door_index(t_position pos, double angle);
-void cub_door_texture_put(int x, t_cub *cub, t_position *ray_collision);
+void	cub_door_texture_put(int x, t_cub *cub, t_position *ray_collision);
 t_door		*get_door(t_position ray_collision, double angle, t_cub *cub);
 void		cub_display_door_hint(t_cub *cub);
 void		cub_update_doors(t_cub *cub);
@@ -545,6 +545,6 @@ void	cub_update_player_position(int keycode, t_cub *cub);
 void	cub_update_view_angle(int keycode, t_cub *cub);
 void	convert_path_to_mlx_img(t_cub *cub);
 int		init_mutex(t_cub *cub);
-void	display_valve_guy(t_cub *cub);
+int	display_valve_guy(t_cub *cub);
 
 #endif
