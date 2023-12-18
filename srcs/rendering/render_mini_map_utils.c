@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 16:56:23 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/18 16:59:59 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 17:00:15 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	put_wall(t_cub *cub, int i, int j, int color)
 		j = j_save;
 		while (pixel_x < MINIMAP_SCALE)
 		{
-			if (pixel_is_in_minimap(cub, i, j))
+			if (pixel_is_in_minimap(cub, j, i))
 				cub_pixel_put(&cub->img, j - (int)(cub->player_position->x \
 					* MINIMAP_SCALE) + MINIMAP_SIZE + MINIMAP_OFFSET, i \
 					- (int)(cub->player_position->y * MINIMAP_SCALE) \
