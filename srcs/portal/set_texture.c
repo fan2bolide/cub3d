@@ -13,6 +13,21 @@
 #include "cub3D.h"
 #include "rendering.h"
 
+static bool	is_n_portal_texture(t_position ray_collision, t_cub *cub,
+		int *texture_id)
+{
+	if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'B'
+		&& cub->blue_prtl == 'N')
+		return (*texture_id = 5, true);
+	if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'O'
+		&& cub->orange_prtl == 'N')
+		return (*texture_id = 6, true);
+	if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'R'
+		&& cub->rick_prtl == 'N')
+		return (*texture_id = 17, true);
+	return (false);
+}
+
 static bool	is_portal_texture_s_n(t_position ray_collision, t_cub *cub,
 					int *texture_id)
 {
@@ -29,18 +44,25 @@ static bool	is_portal_texture_s_n(t_position ray_collision, t_cub *cub,
 		== 'R' && cub->rick_prtl == 'S')
 			return (*texture_id = 17, true);
 	}
-	else if (cub->orange_prtl == 'N' || cub->blue_prtl == 'N' || cub->rick_prtl == 'N')
-	{
-		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'B'
-		&& cub->blue_prtl == 'N')
-			return (*texture_id = 5, true);
-		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'O'
-		&& cub->orange_prtl == 'N')
-			return (*texture_id = 6, true);
-		if (cub->data->map[(int)ray_collision.y][(int)ray_collision.x] == 'R'
-		&& cub->rick_prtl == 'N')
-			return (*texture_id = 17, true);
-	}
+	else if (cub->orange_prtl == 'N' || cub->blue_prtl == 'N'
+		|| cub->rick_prtl == 'N')
+		if (is_n_portal_texture(ray_collision, cub, texture_id))
+			return (true);
+	return (false);
+}
+
+static bool	is_w_portal_texture(t_position ray_collision, t_cub *cub,
+		int *texture_id)
+{
+	if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
+			== 'B' && cub->blue_prtl == 'W')
+		return (*texture_id = 5, true);
+	if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
+			== 'O' && cub->orange_prtl == 'W')
+		return (*texture_id = 6, true);
+	if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
+			== 'R' && cub->rick_prtl == 'W')
+		return (*texture_id = 17, true);
 	return (false);
 }
 
@@ -62,18 +84,10 @@ static bool	is_portal_texture(t_position ray_collision, t_cub *cub,
 			== 'R' && cub->rick_prtl == 'E')
 				return (*texture_id = 17, true);
 		}
-		else if (cub->orange_prtl == 'W' || cub->blue_prtl == 'W' || cub->rick_prtl == 'W')
-		{
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
-			== 'B' && cub->blue_prtl == 'W')
-				return (*texture_id = 5, true);
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
-			== 'O' && cub->orange_prtl == 'W')
-				return (*texture_id = 6, true);
-			if (cub->data->map[(int) ray_collision.y][(int) ray_collision.x] \
-			== 'R' && cub->rick_prtl == 'W')
-				return (*texture_id = 17, true);
-		}
+		else if (cub->orange_prtl == 'W' || cub->blue_prtl == 'W'
+			|| cub->rick_prtl == 'W')
+			if (is_w_portal_texture(ray_collision, cub, texture_id))
+				return (true);
 		return (false);
 	}
 	return (is_portal_texture_s_n(ray_collision, cub, texture_id));
@@ -97,5 +111,6 @@ void	set_portal_texture(int *texture_id, size_t *texture_x,
 		*texture_id = 9;
 	if ((*texture_id == 8 || *texture_id == 6) && cub->menu.outline == 2)
 		*texture_id = 10;
-	*texture_x = set_custom_texture(*texture_id, cub->portals[x]->portal->angle, cub->portals[x]->portal->position, cub);
+	*texture_x = set_custom_texture(*texture_id, cub->portals[x]->portal->angle,
+			cub->portals[x]->portal->position, cub);
 }

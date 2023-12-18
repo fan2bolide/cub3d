@@ -47,7 +47,8 @@ static void	set_west_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	char	other_ptrl_id;
 
 	if (cub->data->map[(int)middle_ray.y][(int)middle_ray.x] != '1'
-	|| ft_isset(cub->data->map[(int)middle_ray.y][(int)middle_ray.x - 1], "dDG"))
+	|| ft_isset(cub->data->map[(int)middle_ray.y][(int)middle_ray.x - 1],
+				"dDG"))
 		return ;
 	reset_portal(cub, prtl_id);
 	other_ptrl_id = get_other_portal(prtl_id);
@@ -98,7 +99,8 @@ static void	set_south_portal(t_cub *cub, t_position middle_ray, char prtl_id)
 	char	other_ptrl_id;
 
 	if (cub->data->map[(int)middle_ray.y][(int)middle_ray.x] != '1'
-	|| ft_isset(cub->data->map[(int)middle_ray.y - 1][(int)middle_ray.x], "dDG"))
+	|| ft_isset(cub->data->map[(int)middle_ray.y - 1][(int)middle_ray.x],
+				"dDG"))
 		return ;
 	reset_portal(cub, prtl_id);
 	other_ptrl_id = get_other_portal(prtl_id);
