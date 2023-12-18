@@ -29,7 +29,8 @@ t_position	get_position(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == 'N' || map[i][j] == 'E' || map[i][j] == 'S' || map[i][j] == 'W')
+			if (map[i][j] == 'N' || map[i][j] == 'E' \
+				|| map[i][j] == 'S' || map[i][j] == 'W')
 			{
 				position.x = j;
 				position.y = i;
