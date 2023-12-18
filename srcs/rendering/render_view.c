@@ -15,13 +15,6 @@
 int	cub_textures_render(t_cub *cub, int wall_height, int x,
 					t_position ray_collision)
 {
-	if (cub->data->baj->is_activated \
-	&& get_time() - cub->data->baj->last_moove > cub->data->baj->speed)
-	{
-		get_next_baj(cub->data->wall_sur, cub->data->baj,
-			cub->data->baj->cur_pos);
-		cub->data->baj->last_moove = get_time();
-	}
 	return (cub_texture_put(x, cub, wall_height, ray_collision));
 }
 

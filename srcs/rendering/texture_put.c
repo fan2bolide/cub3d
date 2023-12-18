@@ -12,58 +12,6 @@
 
 #include "rendering.h"
 
-void	set_bajenno_texture(int *texture_id, size_t *texture_x,
-							t_position ray_collision, t_cub *cub)
-{
-	*texture_id = 4;
-	if (ray_collision.x == (int)ray_collision.x)
-	{
-		if (cub->player_position->x > ray_collision.x)
-			*texture_x = (int)(((int)(ray_collision.y) + 1 - ray_collision.y)
-					* cub->textures[*texture_id].width);
-		else
-			*texture_x = (int)((ray_collision.y - (int)(ray_collision.y))
-					* cub->textures[*texture_id].width);
-	}
-	else
-	{
-		if (cub->player_position->y > ray_collision.y)
-			*texture_x = (int)((ray_collision.x - ((int) ray_collision.x))
-					* cub->textures[*texture_id].width);
-		else
-			*texture_x = (int)((((int)ray_collision.x) + 1 - ray_collision.x)
-					* cub->textures[*texture_id].width);
-	}
-}
-
-bool	is_bajeanno_tile(t_position ray_collision, t_cub *cub)
-{
-	size_t		i;
-	static char	orientations[4] = {'N', 'S', 'W', 'E'};
-	int			ray_x_match[2];
-	int			ray_y_match[2];
-	int			ray_glob_cond[4];
-
-	ft_memcpy(ray_x_match, (int [2]){ray_collision.x != (int)ray_collision.x, \
-	ray_collision.x == (int)ray_collision.x}, 2 * sizeof(int));
-	ft_memcpy(ray_y_match, (int [2]){ray_collision.y == (int)ray_collision.y, \
-	ray_collision.y != (int)ray_collision.y}, 2 * sizeof(int));
-	ft_memcpy(ray_glob_cond, (int [4]){(int)ray_collision.y - 1 == \
-	cub->data->baj->y, (int)ray_collision.y == cub->data->baj->y, \
-	(int)ray_collision.x == cub->data->baj->x + 1, \
-	(int)ray_collision.x == cub->data->baj->x}, 4 * sizeof(int));
-	i = 0;
-	while (i++ < 4)
-		if (cub->data->baj->orientation == orientations[i - 1])
-			if ((ft_isset(orientations[i - 1], "NS") && (int)ray_collision.x \
-			== cub->data->baj->x) || (ft_isset(orientations[i - 1], "WE") \
-			&& (int)ray_collision.y == cub->data->baj->y))
-				if (ray_x_match[i - 1 > 1] && ray_y_match[i - 1 > 1]
-					&& ray_glob_cond[i - 1])
-					return (true);
-	return (false);
-}
-
 void	set_n_s_textures(int *texture_id, size_t *texture_x,
 					t_position ray_collision, t_cub *cub)
 {
@@ -84,8 +32,6 @@ void	set_n_s_textures(int *texture_id, size_t *texture_x,
 void	set_texture_id_and_x(int *texture_id, size_t *texture_x, \
 							t_position ray_collision, t_cub *cub)
 {
-	if (cub->data->baj->is_activated && is_bajeanno_tile(ray_collision, cub))
-		return (set_bajenno_texture(texture_id, texture_x, ray_collision, cub));
 	if (ray_collision.x == (int) ray_collision.x)
 	{
 		if (cub->player_position->x > ray_collision.x)

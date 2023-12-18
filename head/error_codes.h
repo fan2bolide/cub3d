@@ -22,6 +22,7 @@
 # define ILL_CHAR		"Illegal char in map"
 # define WRONG_FORMAT	"Wrong format for: "
 # define EXP_CUB		" (expected .cub)"
+# define TXTR_LOAD		"Failed to load one or several textures"
 # define EXP_XPM		" (expected .xpm)"
 # define NO_DEF			"No before map definition of: "
 # define NO_TXTR		"'North texture'"

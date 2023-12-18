@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/06 03:38:05 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/18 19:03:54 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,8 +250,6 @@ typedef struct s_bajeanno
 
 typedef struct s_data{
 	char	**map;
-	char 	**wall_sur;
-	t_bajeanno	*baj;
 	char	*texture[4];
 	t_color	*ceiling_color;
 	t_color	*floor_color;
@@ -278,7 +276,6 @@ typedef struct s_position
 typedef struct s_cub
 {
 	t_data		*data;
-	bool		is_fullscreen;
 	void		*mlx;
 	void		*win;
 	int			keys_states[65509];
@@ -288,7 +285,6 @@ typedef struct s_cub
 	t_position	*player_position;
 	double		view_angle;
 	double		fov;
-	size_t		last_frame_time;
 	t_position	*rays;
 	double		*angles;
 	int			*wall_heights;
@@ -306,11 +302,29 @@ int		check_for_illegal_char(t_list *file);
 char	**get_map_from_file(t_list *file);
 t_list	*list_from_file(char *file_path);
 
+//==================== MOVEMENT ====================//
+void	cub_update_player_position(int keycode, t_cub *cub);
+void	move_player(double x_change, double y_change, t_cub *cub);
+void	report_movement(double new_y, double new_x, t_cub *cub);
+void	cub_update_view_angle(int keycode, t_cub *cub);
+void	cub_update_fov(int keycode, t_cub *cub);
+
+//===================== KEYS ======================//
+int	cub_handle_key_press(int keycode, t_cub *cub);
+int	cub_handle_key_release(int keycode, t_cub *cub);
+int	perform_actions(t_cub *cub);
+
+
+//==================== POSITION ====================//
+t_position	*create_position(double i, double j);
+t_position	*get_position(char **map);
+
 //===================== UTILS ======================//
 void	destroy_data(t_data *data);
+void	init_cub(t_cub *cub);
 int		refactor_spaces(t_list *list);
 int		ray_casting(t_cub *cub);
-
+int		close_window(t_cub *cub);
 void	render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
 double angle[cub->win_size[1]], int wall_height[cub->win_size[1]]);
 int			render_frame(t_cub *cub);
