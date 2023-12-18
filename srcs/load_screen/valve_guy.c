@@ -29,6 +29,8 @@ void	display_valve_guy(t_cub *cub)
 	int		texture_x;
 
 	valve_guy.img = mlx_xpm_file_to_image(cub->mlx, VALVE_GUY, &valve_guy.width, &valve_guy.height);
+	if (!valve_guy.img)
+		close_window(cub);
 	valve_guy.addr = mlx_get_data_addr(valve_guy.img, &valve_guy.bits_per_pixel, &valve_guy.line_length, &valve_guy.endian);
 	y = 0;
 	while (y < cub->win_size[HEIGHT])
@@ -48,5 +50,6 @@ void	display_valve_guy(t_cub *cub)
 		y++;
 	}
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
+	mlx_destroy_image(cub->mlx , &valve_guy);
 	mlx_loop_hook(cub->mlx, init_game, cub);
 }
