@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 11:51:11 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 15:42:23 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ size_t	get_time(void)
 }
 
 /**
- * \brief parses the -s option that changes the size of the window at program start
+ * \brief parses the -s option that changes the
+ * size of the window at program start
  * \param argc
  * \param argv
  * \param cub
