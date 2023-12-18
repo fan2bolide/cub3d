@@ -427,7 +427,6 @@ typedef struct s_cub
 	char			last_portal_placed;
 	t_position		random_position;
 	double			random_angle;
-	int				rendering;
 }	t_cub;
 
 typedef struct s_render_thread
