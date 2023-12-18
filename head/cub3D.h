@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/16 03:22:11 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 08:51:15 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -456,6 +456,7 @@ int			shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub, char prtl_id);
 int			shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub);
 void		init_ray_attr(t_cub *cub, t_position *ray, double *angle,
 				t_ray_shoot *ray_attr);
+int			shoot_special_rays(t_cub *cub, t_ray_shoot *ray_attr);
 
 //===================== UTILS ======================//
 void		destroy_data(t_data *data);

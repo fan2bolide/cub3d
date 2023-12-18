@@ -3,45 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   shoot_ray_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:42:29 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/16 03:21:27 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 09:46:16 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-int get_glass_aligned(t_cub *cub, t_ray_shoot *ray_attr)
-{
-	int i;
-	t_prtl_list *curr;
-
-	i = 0;
-	curr = cub->glass[ray_attr->angle - cub->angles];
-	while (curr->next)
-	{
-		i++;
-		curr = curr->next;
-	}
-	return (i);
-}
-
-int glass_stick_to_another(t_cub *cub, t_ray_shoot *ray_attr)
-{
-	t_prtl_list	*last_glass;
-
-	last_glass = (t_prtl_list *)ft_dblstlast((t_dblist *) cub->glass[ray_attr->angle - cub->angles]);
-	if (!last_glass)
-		return (0);
-	if (last_glass->portal->position.x == ray_attr->ray_start.x && last_glass->portal->position.y == ray_attr->ray_start.y)
-	{
-		return (1);
-	}
-	return (0);
-}
-
-int shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub)
+int	shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub)
 {
 	t_prtl_list	*glass_list;
 	t_portal	*glass;
@@ -59,17 +30,14 @@ int shoot_glass_ray(t_ray_shoot *ray_attr, t_cub *cub)
 		glass_list = (t_prtl_list *) ft_dblstnew(glass);
 		if (!glass_list)
 			return (-1);
-		ft_dblstadd_back((t_dblist **) &cub->glass[ray_attr->angle - cub->angles],
-						 (t_dblist *) glass_list);
+		ft_dblstadd_back((t_dblist **)&cub->glass[ray_attr->angle
+			- cub->angles], (t_dblist *)glass_list);
 	}
 	*ray_attr->distance += compute_distance(ray_attr->ray_start,
-											*ray_attr->ray);
-	if (get_glass_aligned(cub, ray_attr) > 10)
-		return (1);
+			*ray_attr->ray);
 	ray_attr->ray_start.x = ray_attr->ray->x;
 	ray_attr->ray_start.y = ray_attr->ray->y;
-	ray_attr->is_in_glass = true;
-	return (0);
+	return (ray_attr->is_in_glass = true, 0);
 }
 
 int	shoot_portal_ray(t_ray_shoot *ray_attr, t_cub *cub, char prtl_id)
