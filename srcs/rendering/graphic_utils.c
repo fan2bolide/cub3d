@@ -35,9 +35,8 @@ void	cub_put_line(t_cub *cub, t_position a, t_position b, int color)
 	{
 		if (round(x) >= 0 && round(x) < cub->win_size[WIDTH] && round(y) >= 0
 			&& round(y) < cub->win_size[HEIGHT])
-			if ((int)round(y) > a.y - MINIMAP_SIZE
-				&& (int)round(y) < a.y + MINIMAP_SIZE
-				&& (int)round(x) > a.x - MINIMAP_SIZE
+			if ((int)round(y) > a.y - MINIMAP_SIZE && (int)round(y) < a.y \
+				+ MINIMAP_SIZE && (int)round(x) > a.x - MINIMAP_SIZE \
 				&& (int)round(x) < a.x + MINIMAP_SIZE)
 				cub_pixel_put(&cub->img, (int)round(x), (int)round(y), color);
 		x += (b.x - a.x) / (double)steps;

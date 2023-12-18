@@ -28,5 +28,6 @@ int		cub_texture_put(int x, t_cub *cub, int wall_height,
 int		get_color_of_wall(int x, int y);
 void	render_view(t_cub *cub, t_position *ray_collision, \
 								const int *wall_height);
+void	put_wall(t_cub *cub, int i, int j, int color);
 
 #endif
