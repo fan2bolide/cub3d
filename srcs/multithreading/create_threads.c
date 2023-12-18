@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_threads.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 23:40:40 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/13 17:43:23 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/15 00:25:07 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,15 @@ void	delete_threads(t_cub *cub, int last_thread)
 int	init_mutex(t_cub *cub)
 {
 	if (pthread_mutex_init(&cub->finished_mutex, NULL) != 0)
-		return (ft_putstr_fd("Mutex 1 initialization failed\n", 2), 0);
+		return (ft_putstr_fd(ERR MUTEX_INIT EOL, 2), 0);
 	if (pthread_mutex_init(&cub->program_ends_mutex, NULL) != 0)
 	{
-		ft_putstr_fd("Mutex 2 initialization failed\n", 2);
+		ft_putstr_fd(ERR MUTEX_INIT EOL, 2);
 		return (pthread_mutex_destroy(&cub->finished_mutex), 0);
 	}
 	if (pthread_mutex_init(&cub->ray_mutex, NULL) != 0)
 	{
-		ft_putstr_fd("Mutex 3 initialization failed\n", 2);
+		ft_putstr_fd(ERR MUTEX_INIT EOL, 2);
 		pthread_mutex_destroy(&cub->finished_mutex);
 		pthread_mutex_destroy(&cub->program_ends_mutex);
 		return (0);
@@ -57,7 +57,7 @@ int	create_threads(t_cub *cub)
 		render_thread[i].cub = cub;
 		render_thread[i].id = i;
 		if (pthread_create(cub->threads + i, NULL, \
-		render_thread_routine, &render_thread[i]))
+		(void *)render_thread_routine, &render_thread[i]))
 			return (delete_threads(cub, i), 0);
 		i++;
 	}

@@ -22,10 +22,14 @@
 static int	cub_check_args(int argc, char **argv, t_cub *cub)
 {
 	if (argc == 4)
+	{
 		if (ft_strequ(argv[2], "-s"))
 			return (cub->win_size[0] = ft_atoi(argv[3]), 0);
+		else
+			return (ft_putstr_fd(ERR USAGE EOL, 2), 1);
+	}
 	if (argc != 2)
-		return (ft_putstr_fd(USAGE EOL, 2), 1);
+		return (ft_putstr_fd(ERR USAGE EOL, 2), 1);
 	return (0);
 }
 
@@ -43,7 +47,7 @@ static t_iposition	get_gun_position(t_cub *cub)
  * \param cub the game
  * \return
  */
-int init_portals(t_cub *cub)
+int init_portals(t_cub *cub) //TODO peut etre changerr le nom
 {
 	cub->blue_prtl = '-';
 	cub->orange_prtl = '-';
@@ -52,7 +56,7 @@ int init_portals(t_cub *cub)
 	cub->portals = ft_calloc(cub->win_size[WIDTH], sizeof (t_prtl_list *));
 	cub->doors = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
 	cub->glass = ft_calloc(cub->win_size[WIDTH], sizeof(t_prtl_list *));
-	return (cub->portals != NULL && cub->doors != NULL && cub->glass);
+	return (cub->portals && cub->doors && cub->glass);
 }
 
 int check_allocations(t_cub *cub)

@@ -51,8 +51,6 @@ SRCS		:=	cub3D.c\
 				init_game/init_game.c\
 				load_screen/load_screen.c\
 				key_handlers/key_handlers.c\
-				glass/glass.c\
-
 
 SRCS_D		:=	srcs/
 
@@ -111,7 +109,9 @@ TSAN_F		:=	-g3 -fsanitize=thread
 
 ENV			:=	env -i
 
-VALGRIND	:=	valgrind --leak-check=full --show-leak-kinds=all\
+IGN_LEAK	:=	valgrind_ignore_leaks.txt
+
+VALGRIND	:=	valgrind --suppressions=valgrind_ignore_leaks.txt --leak-check=full --show-leak-kinds=all\
 				--track-fds=yes --show-mismatched-frees=yes --read-var-info=yes -s
 
 PARAMETERS	:= test.cub
@@ -145,17 +145,21 @@ $(OBJS_D)	:
 			@mkdir -p $(OBJS_D)init_game
 			@mkdir -p $(OBJS_D)player
 			@mkdir -p $(OBJS_D)key_handlers
-			@mkdir -p $(OBJS_D)glass
 
 $(LIB_A)	:	$(LIB_D)
 			make -C $(LIB_D)
 
-leaks		:	CFLAGS += -g3
-leaks		:	all
-			$(VALGRIND) ./$(NAME) $(PARAMETERS)
+$(IGN_LEAK)	:
+			@echo "{"								> $(IGN_LEAK)
+			@echo "	leak mlx_mouse_hide"			>> $(IGN_LEAK)
+			@echo "		Memcheck:Leak"				>> $(IGN_LEAK)
+			@echo "		..."						>> $(IGN_LEAK)
+			@echo "		fun:mlx_mouse_hide" 		>> $(IGN_LEAK)
+			@echo "}"								>> $(IGN_LEAK)
 
-env_leaks	:	all
-			 $(ENV) $(LEAKS) ./$(NAME)
+leaks		:	CFLAGS += -g3
+leaks		:	all $(IGN_LEAK)
+			$(VALGRIND) ./$(NAME) $(PARAMETERS)
 
 clean		:
 			$(RM) $(OBJS) $(OBJS_D) $(OBJSB_D)

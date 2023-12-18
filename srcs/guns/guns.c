@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   guns.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 21:38:36 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/13 01:33:41 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/15 00:26:54 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	display_gun(t_cub *cub,
 	int	y;
 	int	color;
 
-	y = cub->gun_position.y;
-	sin_movement = sin(cub->gun_movement) * 15;
+	y = (int)cub->gun_position.y;
+	sin_movement = (int)(sin(cub->gun_movement) * 15);
 	while (y < (int)(gun_size.y + cub->gun_position.y))
 	{
 		texture.y = (y - cub->gun_position.y) * \
@@ -109,7 +109,7 @@ void	display_portal_gun(t_cub *cub)
 	int			texture_id;
 
 	gun_size.x = (cub->win_size[WIDTH] - cub->gun_position.x) * 1;
-	gun_size.y = (cub->win_size[HEIGHT] - cub->gun_position.y) * 1.5;
+	gun_size.y = (size_t)((double)(cub->win_size[HEIGHT] - (int)cub->gun_position.y) * 1.5);
 	if (cub->last_portal_placed == 'B')
 		texture_id = 13;
 	if (cub->last_portal_placed == 'O')

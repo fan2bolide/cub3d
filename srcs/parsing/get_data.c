@@ -58,15 +58,15 @@ t_data	*get_data(char **argv)
 		return (ft_lstclear(&file, free), NULL);
 	refactor_spaces(file);
 	if (is_empty(file) || get_colors(data, file))
-		return (ft_lstclear(&file, free), destroy_data(data), NULL);
+		return (ft_lstclear(&file, free), NULL);
 	if (parse_textures(data, file))
 		return (ft_lstclear(&file, free), NULL);
 	if (!(data->ceiling_color && data->floor_color))
 		return (ft_putstr_fd(ERR MISS_COL EOL, 2), ft_lstclear(&file, free), \
-		destroy_data(data), NULL);
+		NULL);
 	data->map = get_map_from_file(file);
-	if (!data->map || parse_map(data->map))
-		return (destroy_file(file), destroy_data(data), NULL);
 	destroy_file(file);
+	if (!data->map || parse_map(data->map))
+		return (NULL);
 	return (data);
 }

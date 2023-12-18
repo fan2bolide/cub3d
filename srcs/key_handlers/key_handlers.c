@@ -15,7 +15,7 @@
 int	cub_handle_key_release(int keycode, t_cub *cub)
 {
 	if (keycode && keycode > 65508)
-		return (1);
+		return (0);
 	cub->keys_states[keycode] = RELEASED;
 	return (1);
 }
@@ -23,7 +23,7 @@ int	cub_handle_key_release(int keycode, t_cub *cub)
 int cub_handle_key_press(int keycode, t_cub *cub)
 {
 	if (keycode && keycode > 65508)
-		return (1);
+		return (0);
 	if (cub->load_screen.img && keycode == KEY_RETURN)
 		return (remove_load_screen(cub), 1);
 	if (!cub->menu.on_screen || keycode == KEY_TAB)

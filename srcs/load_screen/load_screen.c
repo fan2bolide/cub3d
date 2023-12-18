@@ -48,6 +48,8 @@ void display_load_screen(t_cub *cub)
 	int 	y;
 
 	cub->load_screen.img = mlx_xpm_file_to_image(cub->mlx, LOAD_SCREEN, &width, &height);
+	if (!cub->load_screen.img)
+		return (close_window(cub), (void) 0);
 	mlx_get_data_addr(cub->load_screen.img, &cub->load_screen.bits_per_pixel, &cub->load_screen.line_length, &cub->load_screen.endian);
 	x = (cub->win_size[WIDTH] / 2) - (width / 2);
 	y = (cub->win_size[HEIGHT] / 2) - (height / 2);
