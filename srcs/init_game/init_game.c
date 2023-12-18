@@ -91,5 +91,6 @@ int	init_game(t_cub *cub)
 		return (close_window(cub));
 	create_threads(cub);
 	mlx_loop_hook(cub->mlx, perform_actions, cub);
+	sleep(1);
 	return (1);
 }
