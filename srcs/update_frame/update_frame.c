@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:50:06 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/18 11:51:08 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/18 11:51:17 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,6 @@ int	update_frame(t_cub *cub)
 		cub_update_view_angle(KEY_LEFT, cub);
 	if (cub->keys_states[KEY_RIGHT])
 		cub_update_view_angle(KEY_RIGHT, cub);
-	if (cub->keys_states[KEY_V] && cub->data->baj->speed < 3000)
-		cub->data->baj->speed += 5;
-	if (cub->keys_states[KEY_N] && cub->data->baj->speed > 100)
-		cub->data->baj->speed -= 5;
-	if (cub->keys_states[KEY_B] && get_time() - cub->data->baj->last_activation > 500)
-	{
-		cub->data->baj->last_activation = get_time();
-		if (cub->data->baj->is_activated)
-			cub->data->baj->is_activated = 0;
-		else
-		{
-			get_next_baj(cub->data->wall_sur, cub->data->baj, cub->data->baj->cur_pos);
-			cub->data->baj->is_activated = 1;
-		}
-	}
 	clear_lists(cub);
 	return (render_frame(cub));
 }
