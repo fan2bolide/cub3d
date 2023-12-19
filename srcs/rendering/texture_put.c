@@ -6,13 +6,13 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/17 19:27:51 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 12:51:09 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-void	set_n_s_textures(int *texture_id, size_t *texture_x,
+void	set_n_s_textures(int *texture_id, ssize_t *texture_x,
 					t_position ray_collision, t_cub *cub)
 {
 	if (cub->player_position->y > ray_collision.y)
@@ -29,7 +29,7 @@ void	set_n_s_textures(int *texture_id, size_t *texture_x,
 	}
 }
 
-void	set_texture_id_and_x(int *texture_id, size_t *texture_x, \
+void	set_texture_id_and_x(int *texture_id, ssize_t *texture_x, \
 							t_position ray_collision, t_cub *cub)
 {
 	if (ray_collision.x == (int) ray_collision.x)
@@ -70,6 +70,7 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	{
 		texture.y = (i + (wall_height - screen_wall_height) / 2) \
 				* cub->textures[texture_id].height / wall_height;
+//		if (texture.y)
 		if (y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
 			cub_pixel_put(&cub->img, x, y, \
 			*((int *)(cub->textures[texture_id].addr + (texture.y * \

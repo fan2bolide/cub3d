@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:05:52 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/04 12:02:49 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 11:48:18 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,11 @@ int	file_exists(char *path)
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 	{
-		printf("%s %i\n", path, fd);
 		ft_putstr_fd(ERR, 2);
 		ft_putstr_fd(strerror(errno), 2);
-		write(2, ": ", 2);
+		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(path, 2);
-		write(2, "\n", 1);
+		ft_putstr_fd("\n", 2);
 		return (0);
 	}
 	close(fd);
@@ -41,7 +40,7 @@ int	is_directory(char *path)
 		close(fd);
 		ft_putstr_fd(ERR IS_DIR, 2);
 		ft_putstr_fd(path, 2);
-		write(2, "\n", 1);
+		ft_putstr_fd("\n", 2);
 		return (1);
 	}
 	return (0);
