@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 08:49:38 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 08:56:54 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 17:00:14 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,6 @@ void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)
 	walk_angle_save = walk_angle;
 	if (teleport_ray(cub, &new_pos, &walk_angle, prtl_id))
 		change_pos(cub, walk_angle, walk_angle_save, new_pos);
+	else
+		report_movement(new_pos.y, new_pos.x, cub);
 }

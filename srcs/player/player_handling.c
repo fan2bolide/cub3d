@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:19:43 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/18 08:52:56 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 17:05:50 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,17 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 	{
 		if ((int)old_y != (int)new_y)
 		{
-			if (ft_isset(cub->data->map[(int) old_y][(int) new_x], "BO"))
-				return ;
-			if (cub->data->map[(int) new_y][(int) old_x] == '1')
+			if (ft_isset(cub->data->map[(int)old_y][(int)new_x], "BOR"))
+				return;
+			if (ft_isset(cub->data->map[(int) new_y][(int) old_x], "1GD"))
 				return (cub->player_position.x = new_x, (void) 0);
 		}
-		if (ft_isset(cub->data->map[(int)new_y][(int)old_x], "BO"))
-			return ;
-		cub->player_position.y = new_y;
+		if (!ft_isset(cub->data->map[(int)new_y][(int)old_x], "BOR"))
+			cub->player_position.y = new_y;
 		return ;
 	}
 	if ((int)old_y != (int)new_y)
-		if (!ft_isset(cub->data->map[(int)old_y][(int)new_x], "BO"))
+		if (!ft_isset(cub->data->map[(int)old_y][(int)new_x], "BOR"))
 			cub->player_position.x = new_x;
 }
 

@@ -534,6 +534,7 @@ void		display_portal_gun(t_cub *cub);
 //==================== PLAYER ======================//
 void		teleport_player(double new_x, double new_y, \
 							char prtl_id, t_cub *cub);
+void		report_movement(double new_y, double new_x, t_cub *cub);
 
 //==================== LOADING ======================//
 int			display_valve_guy(t_cub *cub);
