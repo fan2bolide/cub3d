@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 14:55:28 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 15:45:24 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,10 @@ t_data	*get_data(char **argv)
 		return (ft_putstr_fd(ERR MISS_COL EOL, 2), ft_lstclear(&file, free), \
 		destroy_data(data), NULL);
 	data->map = get_map_from_file(file);
-	if (!data->map || parse_map(data->map))
-		return (destroy_data(data), ft_lstclear(&file, free), NULL);
+	if (!data->map)
+		return (ft_lstclear(&file, free), destroy_data(data), NULL);
+	if (parse_map(data->map))
+		return (destroy_file(file), destroy_data(data), NULL);
 	destroy_file(file);
 	return (data);
 }

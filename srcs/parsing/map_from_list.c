@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 23:17:38 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/19 14:52:23 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 15:22:42 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,10 @@ char	**get_map_from_file(t_list *file)
 
 	if (refactor_file(file))
 		return (NULL);
-	curr = skip_metadata_in_file(file);
-	if (!curr->content)
+	file = skip_metadata_in_file(file);
+	if (!file->content)
 		return (ft_putstr_fd(ERR NO_MAP EOL, 2), NULL);
-	map = create_map(curr);
+	map = create_map(file);
 	if (!map)
 		return (ft_putstr_fd(ERR ALLOC_ERR EOL, 2), NULL);
 	i = 0;

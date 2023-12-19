@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_codes.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:58:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 08:28:03 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 15:25:11 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@
 # define IS_DIR			"Is a directory: "
 # define MISS_COL		"Missings one or several colors in source data\
 before map."
-# define WRONG_COL_ASS	"Wrong color assignation format! expected\
-(0-255,0-255,0-255)"
+# define WRONG_COL_ASS	"Wrong color assignation format! (expected \
+0-255,0-255,0-255)"
 # define UNEXP_LINE		"Unexpected character(s) in line: "
 # define MAP_E			"Could not load map"
 # define EMPTY_FILE 	"Empty data"
