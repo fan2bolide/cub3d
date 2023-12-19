@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 15:42:10 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 10:48:23 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,25 @@ int	main(int argc, char **argv)
 	cub = ft_calloc(1, sizeof(t_cub));
 	if (!cub)
 		return (ft_putstr_fd(ALLOC_ERR EOL, 2), 1);
-	cub->win_size[HEIGHT] = 900;
+	cub->win_size[HEIGHT] = DEFLT_WIN_SIZE;
 	if (cub_check_args(argc, argv, cub))
 		return (free(cub), 1);
-	cub->win_size[WIDTH] = cub->win_size[0] * 16 / 10;
+	cub->win_size[WIDTH] = cub->win_size[HEIGHT] * 16 / 10;
 	cub->data = parsing(argv);
 	if (!cub->data)
 		return (free(cub), 1);
 	cub->mlx = mlx_init();
 	if (!cub->mlx)
 		return (ft_putstr_fd("Failed to create mlx pointer\n", 2), 1);
-	cub->win = mlx_new_window(cub->mlx, cub->win_size[1], cub->win_size[0],
-			"cub3D");
+	cub->win = mlx_new_window(cub->mlx, cub->win_size[WIDTH], \
+		cub->win_size[HEIGHT], "cub3D");
 	if (!cub->win)
 		return (ft_putstr_fd("failed to create window\n", 2), 1);
-	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
+	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[WIDTH], \
+											cub->win_size[HEIGHT]);
+	if (!cub->img.img)
+		return (close_window(cub));
 	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
 	&cub->img.line_length, &cub->img.endian);
-	cub_mlx_config(cub);
-	return (mlx_loop(cub->mlx), 0);
+	return (cub_mlx_config(cub), mlx_loop(cub->mlx), 0);
 }

@@ -46,7 +46,7 @@ before map."
 # define OR				" or "
 # define ALLOC_ERR 		"Allocation error occured"
 # define EOL			"\n"
-# define DEFLT_WIN_SIZE 1080
+# define DEFLT_WIN_SIZE 900
 # define MUTEX_INIT		"Mutex initialization failed."
 # define USAGE			"cub3D: usage: ./cub3D ./path_to_map.cub \
 [-s window_height]"
