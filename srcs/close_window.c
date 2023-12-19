@@ -31,6 +31,9 @@ int	close_window(t_cub *cub)
 		free(cub->mlx);
 		destroy_data(cub->data);
 		free(cub->player_position);
+		free(cub->rays);
+		free(cub->angles);
+		free(cub->wall_heights);
 		free(cub);
 	}
 	exit(0);

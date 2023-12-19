@@ -78,6 +78,8 @@ int	main(int argc, char **argv)
 	convert_path_to_mlx_img(cub);
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[WIDTH], \
 			cub->win_size[HEIGHT]);
+	if (!cub->img.img)
+		close_window(cub);
 	cub->img.addr = mlx_get_data_addr(cub->img.img, \
 			&cub->img.bits_per_pixel, \
 				&cub->img.line_length, &cub->img.endian);
