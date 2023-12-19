@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:58:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/01 20:51:17 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 08:28:03 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,5 @@ before map."
 # define OR				" or "
 # define ALLOC_ERR 		"Allocation error occured"
 # define EOL			"\n"
-# define DEFLT_WIN_SIZE 1080
-# define USAGE			"cub3D: usage: ./cub3D ./path_to_map.cub [-s window_height]"
 
 #endif

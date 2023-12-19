@@ -3,15 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 19:03:54 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 08:34:26 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
+
+//=================== INCLUDES =====================//
+# include "error_codes.h"
+# include <unistd.h>
+# include <string.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <math.h>
+# include "mlx.h"
+# include "libft.h"
+# include <errno.h>
+# include <sys/time.h>
 //=================== DEFINES  =====================//
 
 // X11 masks
@@ -206,29 +221,16 @@ enum e_key_codes
 # define SCREEN_DISTANCE	0.8
 # define HEIGHT 0
 # define WIDTH 1
-
-//=================== INCLUDES =====================//
-# include "error_codes.h"
-# include <unistd.h>
-# include <string.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <math.h>
-# include "mlx.h"
-# include "libft.h"
-# include <errno.h>
-# include <sys/time.h>
+# define DEFLT_WIN_SIZE 900
 
 //=================== STUCTURES ====================//
-typedef struct s_color{
+typedef struct s_color
+{
 	unsigned char	blue;
 	unsigned char	green;
 	unsigned char	red;
 	unsigned char	transparency;
-}		t_color;
+}					t_color;
 
 typedef struct s_iposition
 {
@@ -239,21 +241,22 @@ typedef struct s_iposition
 typedef struct s_bajeanno
 {
 	bool		is_activated;
-	t_iposition *cur_pos;
-	int 		x;
-	int 		y;
+	t_iposition	*cur_pos;
+	int			x;
+	int			y;
 	char		orientation;
 	size_t		last_activation;
 	size_t		last_moove;
 	size_t		speed;
-}			t_bajeanno;
+}				t_bajeanno;
 
-typedef struct s_data{
+typedef struct s_data
+{
 	char	**map;
 	char	*texture[4];
 	t_color	*ceiling_color;
 	t_color	*floor_color;
-}		t_data;
+}			t_data;
 
 typedef struct s_image
 {
@@ -262,7 +265,7 @@ typedef struct s_image
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-	int 	width;
+	int		width;
 	int		height;
 }			t_image;
 
@@ -271,7 +274,6 @@ typedef struct s_position
 	double	x;
 	double	y;
 }			t_position;
-
 
 typedef struct s_cub
 {
@@ -288,45 +290,45 @@ typedef struct s_cub
 	t_position	*rays;
 	double		*angles;
 	int			*wall_heights;
-}		t_cub;
+}				t_cub;
 
 //==================== PARSING =====================//
-t_data	*parsing(int argc, char **argv);
-int		parse_textures(t_data *data, t_list *file);
-t_data	*get_data(char **argv);
-t_list	*skip_metadata_in_file(t_list *file);
-int		check_file_path(t_data *data);
-int		parse_map(char **map);
-int		get_colors(t_data *data, t_list *file);
-int		check_for_illegal_char(t_list *file);
-char	**get_map_from_file(t_list *file);
-t_list	*list_from_file(char *file_path);
+t_data		*parsing(int argc, char **argv);
+int			parse_textures(t_data *data, t_list *file);
+t_data		*get_data(char **argv);
+t_list		*skip_metadata_in_file(t_list *file);
+int			check_file_path(t_data *data);
+int			parse_map(char **map);
+int			get_colors(t_data *data, t_list *file);
+int			check_for_illegal_char(t_list *file);
+char		**get_map_from_file(t_list *file);
+t_list		*list_from_file(char *file_path);
 
 //==================== MOVEMENT ====================//
-void	cub_update_player_position(int keycode, t_cub *cub);
-void	move_player(double x_change, double y_change, t_cub *cub);
-void	report_movement(double new_y, double new_x, t_cub *cub);
-void	cub_update_view_angle(int keycode, t_cub *cub);
-void	cub_update_fov(int keycode, t_cub *cub);
+void		cub_update_player_position(int keycode, t_cub *cub);
+void		move_player(double x_change, double y_change, t_cub *cub);
+void		report_movement(double new_y, double new_x, t_cub *cub);
+void		cub_update_view_angle(int keycode, t_cub *cub);
+void		cub_update_fov(int keycode, t_cub *cub);
 
 //===================== KEYS ======================//
-int	cub_handle_key_press(int keycode, t_cub *cub);
-int	cub_handle_key_release(int keycode, t_cub *cub);
-int	perform_actions(t_cub *cub);
-
+int			cub_handle_key_press(int keycode, t_cub *cub);
+int			cub_handle_key_release(int keycode, t_cub *cub);
+int			perform_actions(t_cub *cub);
 
 //==================== POSITION ====================//
 t_position	*create_position(double i, double j);
 t_position	*get_position(char **map);
 
 //===================== UTILS ======================//
-void	destroy_data(t_data *data);
-void	init_cub(t_cub *cub);
-int		refactor_spaces(t_list *list);
-int		ray_casting(t_cub *cub);
-int		close_window(t_cub *cub);
-void	render_minimap(t_cub *cub, t_position ray_collision[cub->win_size[1]], \
-double angle[cub->win_size[1]], int wall_height[cub->win_size[1]]);
+void		destroy_data(t_data *data);
+void		init_cub(t_cub *cub);
+void		init_player(t_cub *cub);
+int			refactor_spaces(t_list *list);
+int			ray_casting(t_cub *cub);
+int			close_window(t_cub *cub);
+void		render_minimap(t_cub *cub, t_position *ray_collision, \
+								double *angle, int *wall_height);
 int			render_frame(t_cub *cub);
 size_t		get_time(void);
 int			is_directory(char *path);
@@ -336,9 +338,12 @@ int			check_assignation(t_data *data);
 int			check_format(t_data *data);
 t_position	*get_position(char **map);
 int			get_wall_surroundment(t_data *data);
-void 		clear_line(char **w_surr, t_iposition *cur_pos);
-int			paint_w_surr(size_t i, t_bajeanno *next_one, t_iposition *cur_pos, char **w_surr);
+void		clear_line(char **w_surr, t_iposition *cur_pos);
+int			paint_w_surr(size_t i, t_bajeanno *next_one, \
+						t_iposition *cur_pos, char **w_surr);
 void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
-t_iposition get_next_baj(char **w_surr, t_bajeanno *next_one, t_iposition *cur_pos);
+t_iposition	get_next_baj(char **w_surr, t_bajeanno *next_one, \
+										t_iposition *cur_pos);
+double		get_orientation(char **map, t_position *pos);
 
 #endif

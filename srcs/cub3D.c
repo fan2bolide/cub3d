@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 19:03:10 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 08:22:01 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-double	get_orientation(char **map, t_position *pos);
 void	cub_mlx_config(t_cub *cub);
 int		cub_handle_key_press(int keycode, t_cub *cub);
 
@@ -72,22 +71,19 @@ int	main(int argc, char **argv)
 	cub->data = parsing(argc, argv);
 	if (!cub->data)
 		return (close_window(cub));
-	cub->player_position = get_position(cub->data->map);
-	cub->player_position->x += 0.5;
-	cub->player_position->y += 0.5;
+	init_player(cub);
 	cub->mlx = mlx_init();
-	cub->win = mlx_new_window(cub->mlx, cub->win_size[1],
+	cub->win = mlx_new_window(cub->mlx, cub->win_size[WIDTH], \
 			cub->win_size[0], "cub3D");
 	convert_path_to_mlx_img(cub);
-	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[1], cub->win_size[0]);
-	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
-	&cub->img.line_length, &cub->img.endian);
-	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
-	cub->fov = M_PI_2;
+	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[WIDTH], \
+			cub->win_size[HEIGHT]);
+	cub->img.addr = mlx_get_data_addr(cub->img.img, \
+			&cub->img.bits_per_pixel, \
+				&cub->img.line_length, &cub->img.endian);
 	if (!render_frame(cub))
 		return (close_window(cub), 1);
-	cub_mlx_config(cub);
-	return (mlx_loop(cub->mlx), 0);
+	return (cub_mlx_config(cub), mlx_loop(cub->mlx), 0);
 }
 
 void	cub_mlx_config(t_cub *cub)
