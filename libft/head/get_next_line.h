@@ -24,7 +24,7 @@
 #  define OPEN_MAX 10240
 # endif
 # ifndef EOF
-#  define EOF (-1)
+#  define EOF -1
 # endif
 
 char	*ft_strfusion(char const *buf, int *size, char *line, int buf_size);

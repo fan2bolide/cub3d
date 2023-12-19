@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 14:35:51 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 09:34:15 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@
 # ifndef NB_THREADS
 #  define NB_THREADS	16
 # endif
-# if defined (__APPLE__)
+# if defined(__APPLE__)
 #  define MACOS
 # else
 #  define LINUX
@@ -264,7 +264,8 @@ enum e_key_codes
 # define WIDTH 1
 
 //=================== STRUCTURES ====================//
-typedef struct s_color{
+typedef struct s_color
+{
 	unsigned char	blue;
 	unsigned char	green;
 	unsigned char	red;
@@ -277,7 +278,8 @@ typedef struct s_iposition
 	size_t	y;
 }	t_iposition;
 
-typedef struct s_data{
+typedef struct s_data
+{
 	char		**map;
 	char		**wall_sur;
 	char		*texture[4];
@@ -298,44 +300,44 @@ typedef struct s_image
 
 typedef struct s_cursor
 {
-	int	x;
-	int y;
-	bool	is_pressed;
-	int press_x;
-	int press_y;
-	t_iposition initial_pos;
-}			t_cursor;
+	int			x;
+	int			y;
+	bool		is_pressed;
+	int			press_x;
+	int			press_y;
+	t_iposition	initial_pos;
+}				t_cursor;
 
 typedef struct s_menu
 {
-	t_image	menu_bg;
-	t_image	checker_plain;
-	t_image	button;
-	t_image	button_shadow;
-	t_image	cursor;
-	t_image reset;
-	int		x;
-	int		y;
+	t_image		menu_bg;
+	t_image		checker_plain;
+	t_image		button;
+	t_image		button_shadow;
+	t_image		cursor;
+	t_image		reset;
+	int			x;
+	int			y;
 	t_cursor	cursors[2];
 	t_cursor	reseters[2];
-	bool	on_screen;
-	int		cross_hair;
-	int		outline;
-}			t_menu;
+	bool		on_screen;
+	int			cross_hair;
+	int			outline;
+}				t_menu;
 
 typedef struct s_position
 {
 	double	x;
 	double	y;
-}	t_position;
+}			t_position;
 
 typedef struct s_door
 {
-	double opening_percent;
+	double	opening_percent;
 	bool	is_open;
-	size_t x;
-	size_t y;
-}	t_door;
+	size_t	x;
+	size_t	y;
+}			t_door;
 
 typedef struct s_portal
 {
@@ -343,19 +345,19 @@ typedef struct s_portal
 	double		distance;
 	int			height;
 	double		angle;
-}	t_portal;
+}				t_portal;
 
 typedef struct s_prtl_list
 {
-	t_portal				*portal;
+	t_portal			*portal;
 	struct s_prtl_list	*prev;
 	struct s_prtl_list	*next;
-}	t_prtl_list;
+}						t_prtl_list;
 
 typedef struct s_hint
 {
 	bool	is_displayed;
-	int 	x;
+	int		x;
 	int		y;
 }	t_hint;
 
@@ -403,11 +405,11 @@ typedef struct s_cub
 	bool			program_ends;
 	pthread_mutex_t	program_ends_mutex;
 	pthread_mutex_t	ray_mutex;
-	pthread_mutex_t finished_mutex;
+	pthread_mutex_t	finished_mutex;
 	int				next_ray_to_compute;
 	pthread_t		*threads;
 	bool			threads_finished_rendering[NB_THREADS];
-	bool 			is_frame_rendered;
+	bool			is_frame_rendered;
 	double			gun_movement;
 	t_iposition		gun_position;
 	t_iposition		gun_size;
@@ -426,6 +428,7 @@ typedef struct s_render_thread
 # define ALLOWED_CHARS		"NSEW01DG "
 # define NOT_WALLS_CHARS	"NSEWD0G"
 # define ALLOWED_IN_FILE	"10NSEWDG \n"
+
 t_data		*parsing(char **argv);
 int			parse_textures(t_data *data, t_list *file);
 t_data		*get_data(char **argv);
@@ -465,8 +468,8 @@ int			get_wall_surroundment(t_data *data);
 void		clear_line(char **w_surr, t_iposition *cur_pos);
 void		fill_wall_surr_map(char **map, char **wall_surr, int x, int y);
 void		set_portal_on_map(t_cub *cub, char prtl_id);
-void		set_portal_texture(int *texture_id, size_t *texture_x,
-							   int x, t_cub *cub);
+void		set_portal_texture(int *texture_id, size_t *texture_x, \
+				int x, t_cub *cub);
 void		display_crosshair(t_cub *cub);
 int			teleport_ray(t_cub *cub, t_position *ray, double *angle,
 				char entry_portal);
@@ -474,24 +477,28 @@ int			close_window(t_cub *cub);
 double		compute_distance(t_position player, t_position ray);
 
 //============== TEXTURES RENDERING ===============//
-int	get_texture_pixel_color(t_cub *cub, int texture_id, size_t x, size_t y);
-int	set_texture_id_and_x(size_t *texture_x, t_position ray_collision, t_cub *cub, double angle);
-void	set_door_texture(int *texture_id, size_t *texture_x, int x, t_cub *cub);
-int	set_custom_texture(int texture_id, double angle,
-						  t_position ray_collision, t_cub *cub);
-void	portal_put_wall_slice(t_cub *cub, int x, t_iposition texture,
-							  int texture_id);
-void	put_door_wall_slice(t_cub *cub, int texture_id, int x,
+int			get_texture_pixel_color(t_cub *cub, int texture_id, \
+												size_t x, size_t y);
+int			set_texture_id_and_x(size_t *texture_x, \
+				t_position ray_collision, t_cub *cub, double angle);
+void		set_door_texture(int *texture_id, size_t *texture_x, \
+												int x, t_cub *cub);
+int			set_custom_texture(int texture_id, double angle, \
+						t_position ray_collision, t_cub *cub);
+void		portal_put_wall_slice(t_cub *cub, int x, t_iposition texture, \
+				int texture_id);
+void		put_door_wall_slice(t_cub *cub, int texture_id, int x, \
 							t_iposition texture);
-void	glass_put_wall_slice(t_cub *cub, int x, t_iposition texture,
-							 int texture_id);
-void	put_outline_wall_slice(t_cub *cub, int x, int texture_id,
-							   t_iposition texture);
-void	put_wall_slice(t_cub *cub, int x, int texture_id, t_iposition texture);
-void	put_transparency(t_cub *cub, int x, int y, int texture_id);
-bool	is_portal_middle(t_cub *cub, t_iposition texture, int texture_id);
-void	glass_put_transparency(int x, t_cub *cub, int wall_height);
-void put_outline_texture(int x, t_cub *cub, t_position ray_collision);
+void		glass_put_wall_slice(t_cub *cub, int x, t_iposition texture, \
+															int texture_id);
+void		put_outline_wall_slice(t_cub *cub, int x, int texture_id, \
+								t_iposition texture);
+void		put_wall_slice(t_cub *cub, int x, int texture_id, \
+												t_iposition texture);
+void		put_transparency(t_cub *cub, int x, int y, int texture_id);
+bool		is_portal_middle(t_cub *cub, t_iposition texture, int texture_id);
+void		glass_put_transparency(int x, t_cub *cub, int wall_height);
+void		put_outline_texture(int x, t_cub *cub, t_position ray_collision);
 
 //===================== MENU ======================//
 void		summon_game_menu(t_cub *cub, int dir);
@@ -508,43 +515,49 @@ int			compute_ray(t_cub *cub, int ray_id, double segments_size);
 int			create_threads(t_cub *cub);
 
 //===================== DOORS ======================//
-# define	DOOR_MAX_OPENING 2
+# define DOOR_MAX_OPENING	2
+
 void		open_door(t_cub *cub);
 int			init_doors(t_cub *cub);
-t_iposition get_door_index(t_position pos, double angle);
-void	cub_door_texture_put(int x, t_cub *cub, t_position *ray_collision);
+t_iposition	get_door_index(t_position pos, double angle);
+void		cub_door_texture_put(int x, t_cub *cub, t_position *ray_collision);
 t_door		*get_door(t_position ray_collision, double angle, t_cub *cub);
 void		cub_display_door_hint(t_cub *cub);
 void		cub_update_doors(t_cub *cub);
 
 //===================== GUNS =======================//
-void display_portal_gun(t_cub *cub);
+void		display_portal_gun(t_cub *cub);
 
 //==================== PLAYER ======================//
-void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub);
+void		teleport_player(double new_x, double new_y, \
+							char prtl_id, t_cub *cub);
+
+//==================== LOADING ======================//
+int			display_valve_guy(t_cub *cub);
+int			init_game(t_cub *cub);
+void		display_load_screen(t_cub *cub);
+void		remove_load_screen(t_cub *cub);
 
 //=================== HANDLERS =====================//
-int	cub_handle_mouse_move(int x, int y, t_cub *cub);
-int	cub_handle_mouse(int button, int x, int y, t_cub *cub);
-int cub_handle_mouse_release(int button, int x, int y, t_cub *cub);
-int cub_handle_key_press(int keycode, t_cub *cub);
-int	cub_handle_key_release(int keycode, t_cub *cub);
-int	update_frame(t_cub *cub);
+int			cub_handle_mouse_move(int x, int y, t_cub *cub);
+int			cub_handle_mouse(int button, int x, int y, t_cub *cub);
+int			cub_handle_mouse_release(int button, int x, int y, t_cub *cub);
+int			cub_handle_key_press(int keycode, t_cub *cub);
+int			cub_handle_key_release(int keycode, t_cub *cub);
+int			update_frame(t_cub *cub);
 
-void set_random_position(t_cub *cub);
-void put_pixel_transparent(t_image *data, int x, int y, unsigned int color);
+void		set_random_position(t_cub *cub);
+void		put_pixel_transparent(t_image *data, int x, int y, \
+											unsigned int color);
 
-int		init_game(t_cub *cub);
-double	get_orientation(char **map, const t_position pos);
-void	display_load_screen(t_cub *cub);
-void	remove_load_screen(t_cub *cub);
-void	cub_mlx_config(t_cub *cub);
-int		cub_handle_key_press(int keycode, t_cub *cub);
-int		close_window(t_cub *cub);
-void	cub_update_player_position(int keycode, t_cub *cub);
-void	cub_update_view_angle(int keycode, t_cub *cub);
-void	convert_path_to_mlx_img(t_cub *cub);
-int		init_mutex(t_cub *cub);
-int	display_valve_guy(t_cub *cub);
+double		get_orientation(char **map, const t_position pos);
+void		cub_mlx_config(t_cub *cub);
+int			cub_handle_key_press(int keycode, t_cub *cub);
+int			close_window(t_cub *cub);
+void		cub_update_player_position(int keycode, t_cub *cub);
+void		cub_update_view_angle(int keycode, t_cub *cub);
+void		convert_path_to_mlx_img(t_cub *cub);
+int			init_mutex(t_cub *cub);
+void		destroy_threads(t_cub *cub);
 
 #endif

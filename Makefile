@@ -47,6 +47,7 @@ SRCS		:=	cub3D.c\
 				game_menu/menu_mouse_handling.c\
 				multithreading/create_threads.c\
 				multithreading/threads_routine.c\
+				multithreading/destroy_threads.c\
 				doors/doors.c\
 				doors/init_doors.c\
 				doors/doors_utils.c\
