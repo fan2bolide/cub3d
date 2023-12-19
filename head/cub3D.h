@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 09:34:15 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 09:50:16 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,6 @@
 # define RICKS_PORTAL	"textures/rick_portal.xpm"
 # define VALVE_GUY		"textures/valve_guy.xpm"
 
-# ifndef NB_THREADS
-#  define NB_THREADS	16
-# endif
 # if defined(__APPLE__)
 #  define MACOS
 # else
@@ -512,7 +509,14 @@ void		cub_mouse_move(t_cub *cub, int x, int y);
 void		cub_mouse_show(t_cub *cub);
 void		cub_mouse_hide(t_cub *cub);
 int			compute_ray(t_cub *cub, int ray_id, double segments_size);
+
+//=================== THREADS ======================//
+# ifndef NB_THREADS
+#  define NB_THREADS	16
+# endif
+
 int			create_threads(t_cub *cub);
+void		destroy_threads(t_cub *cub);
 
 //===================== DOORS ======================//
 # define DOOR_MAX_OPENING	2
@@ -558,6 +562,5 @@ void		cub_update_player_position(int keycode, t_cub *cub);
 void		cub_update_view_angle(int keycode, t_cub *cub);
 void		convert_path_to_mlx_img(t_cub *cub);
 int			init_mutex(t_cub *cub);
-void		destroy_threads(t_cub *cub);
 
 #endif
