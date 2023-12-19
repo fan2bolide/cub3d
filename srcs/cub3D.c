@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 08:22:01 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 13:11:31 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ int	main(int argc, char **argv)
 	cub->img.addr = mlx_get_data_addr(cub->img.img, \
 			&cub->img.bits_per_pixel, \
 				&cub->img.line_length, &cub->img.endian);
-	if (!render_frame(cub))
-		return (close_window(cub), 1);
 	return (cub_mlx_config(cub), mlx_loop(cub->mlx), 0);
 }
 

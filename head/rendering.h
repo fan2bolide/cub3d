@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rendering.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:38:30 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/11/17 18:05:36 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 13:38:06 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,9 @@ int		get_wall_height(t_cub *cub, t_position ray, double angle);
 void	shoot_ray(t_position *ray, t_cub *cub, double angle);
 void	cub_put_line(t_cub *cub, t_position a, t_position b, int color);
 void	cub_pixel_put(t_image *data, int x, int y, int color);
-int		cub_texture_put(int x, t_cub *cub, int wall_height,
-			t_position ray_collision);
+void cub_texture_put(int x, t_cub *cub, t_position ray_collision);
 int		get_color_of_wall(int x, int y);
-void	render_view(t_cub *cub, t_position *ray_collision, \
-								const int *wall_height);
+void render_view(t_cub *cub, t_position *ray_collision);
 void	put_wall(t_cub *cub, int i, int j, int color);
 
 #endif

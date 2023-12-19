@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 14:38:35 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 12:51:09 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 14:25:00 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,15 @@ void	set_texture_id_and_x(int *texture_id, ssize_t *texture_x, \
 	set_n_s_textures(texture_id, texture_x, ray_collision, cub);
 }
 
-int	cub_texture_put(int x, t_cub *cub, int wall_height,
-			t_position ray_collision)
+void	cub_put_wall_slice(t_iposition texture, int x,
+				int texture_id, t_cub *cub)
 {
-	int			i;
-	int			y;
-	int			screen_wall_height;
-	int			texture_id;
-	t_iposition	texture;
+	int	screen_wall_height;
+	int	wall_height;
+	int	y;
+	int	i;
 
-	set_texture_id_and_x(&texture_id, &texture.x, ray_collision, cub);
+	wall_height = cub->wall_heights[x];
 	screen_wall_height = wall_height;
 	if (wall_height > cub->win_size[0])
 		screen_wall_height = cub->win_size[0];
@@ -70,7 +69,8 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 	{
 		texture.y = (i + (wall_height - screen_wall_height) / 2) \
 				* cub->textures[texture_id].height / wall_height;
-		if (texture.y > 0 && y >= 0 && x >= 0 && y < cub->win_size[0] && x < cub->win_size[1])
+		if (texture.y > 0 && y >= 0 && x >= 0 && y < cub->win_size[0]
+			&& x < cub->win_size[1])
 			cub_pixel_put(&cub->img, x, y, \
 			*((int *)(cub->textures[texture_id].addr + (texture.y * \
 			cub->textures[texture_id].line_length + texture.x * \
@@ -78,5 +78,13 @@ int	cub_texture_put(int x, t_cub *cub, int wall_height,
 		y++;
 		i++;
 	}
-	return (y);
+}
+
+void	cub_texture_put(int x, t_cub *cub, t_position ray_collision)
+{
+	int			texture_id;
+	t_iposition	texture;
+
+	set_texture_id_and_x(&texture_id, &texture.x, ray_collision, cub);
+	cub_put_wall_slice(texture, x, texture_id, cub);
 }

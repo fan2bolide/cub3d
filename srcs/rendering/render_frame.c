@@ -65,7 +65,7 @@ static void	compute_arrays(t_cub *cub, t_position *ray_pos, double *angle, \
 int	render_frame(t_cub *cub)
 {
 	compute_arrays(cub, cub->rays, cub->angles, cub->wall_heights);
-	render_view(cub, cub->rays, cub->wall_heights);
+	render_view(cub, cub->rays);
 	render_mini_map(cub, cub->rays);
 	mlx_put_image_to_window(cub->mlx, cub->win, cub->img.img, 0, 0);
 	return (1);

@@ -3,23 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   render_view.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 03:01:35 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/18 17:56:23 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 13:38:06 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rendering.h"
 
-int	cub_textures_render(t_cub *cub, int wall_height, int x,
-					t_position ray_collision)
+void	cub_textures_render(t_cub *cub, int x, t_position ray_collision)
 {
-	return (cub_texture_put(x, cub, wall_height, ray_collision));
+	return (cub_texture_put(x, cub, ray_collision));
 }
 
-void	render_view(t_cub *cub, t_position *ray_collision, \
-								const int *wall_height)
+void	render_view(t_cub *cub, t_position *ray_collision)
 {
 	int	i;
 	int	j;
@@ -43,7 +41,7 @@ void	render_view(t_cub *cub, t_position *ray_collision, \
 	i = 0;
 	while (i < cub->win_size[WIDTH])
 	{
-		cub_textures_render(cub, wall_height[i], i, ray_collision[i]);
+		cub_textures_render(cub, i, ray_collision[i]);
 		i++;
 	}
 }
