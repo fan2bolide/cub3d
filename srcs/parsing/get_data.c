@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_data.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/29 09:40:51 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 16:13:24 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,15 @@ t_data	*get_data(char **argv)
 		return (ft_lstclear(&file, free), NULL);
 	refactor_spaces(file);
 	if (is_empty(file) || get_colors(data, file))
-		return (ft_lstclear(&file, free), NULL);
+		return (ft_lstclear(&file, free), destroy_data(data), NULL);
 	if (parse_textures(data, file))
-		return (ft_lstclear(&file, free), NULL);
+		return (ft_lstclear(&file, free), destroy_data(data), NULL);
 	if (!(data->ceiling_color && data->floor_color))
 		return (ft_putstr_fd(ERR MISS_COL EOL, 2), ft_lstclear(&file, free), \
-		NULL);
+		destroy_data(data), NULL);
 	data->map = get_map_from_file(file);
 	destroy_file(file);
 	if (!data->map || parse_map(data->map))
-		return (NULL);
+		return (destroy_data(data), NULL);
 	return (data);
 }
