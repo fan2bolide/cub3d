@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:58:32 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/24 00:14:15 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 15:16:50 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,7 @@ before map."
 # define MUTEX_INIT		"Mutex initialization failed."
 # define USAGE			"cub3D: usage: ./cub3D ./path_to_map.cub \
 [-s window_height]"
+# define MLX_FAIL		"Failed to create mlx pointer\n"
+# define WIN_FAIL		"failed to create window\n"
 
 #endif

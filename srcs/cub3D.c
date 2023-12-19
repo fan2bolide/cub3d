@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 10:48:23 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 15:23:28 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,17 @@ static int	cub_check_args(int argc, char **argv, t_cub *cub)
 	return (0);
 }
 
+int init_main_image(t_cub *cub)
+{
+	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[WIDTH], \
+											cub->win_size[HEIGHT]);
+	if (!cub->img.img)
+		return (0);
+	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
+	&cub->img.line_length, &cub->img.endian);
+	return (1);
+}
+
 int	main(int argc, char **argv)
 {
 	t_cub	*cub;
@@ -62,16 +73,12 @@ int	main(int argc, char **argv)
 		return (free(cub), 1);
 	cub->mlx = mlx_init();
 	if (!cub->mlx)
-		return (ft_putstr_fd("Failed to create mlx pointer\n", 2), 1);
+		return (ft_putstr_fd(MLX_FAIL, 2), close_window(cub));
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[WIDTH], \
 		cub->win_size[HEIGHT], "cub3D");
 	if (!cub->win)
-		return (ft_putstr_fd("failed to create window\n", 2), 1);
-	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[WIDTH], \
-											cub->win_size[HEIGHT]);
-	if (!cub->img.img)
+		return (ft_putstr_fd(WIN_FAIL, 2), close_window(cub), 1);
+	if (!init_main_image(cub))
 		return (close_window(cub));
-	cub->img.addr = mlx_get_data_addr(cub->img.img, &cub->img.bits_per_pixel, \
-	&cub->img.line_length, &cub->img.endian);
 	return (cub_mlx_config(cub), mlx_loop(cub->mlx), 0);
 }
