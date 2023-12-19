@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 09:50:16 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 10:08:54 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,9 @@ enum e_key_codes
 # define SCREEN_DISTANCE	0.8
 # define HEIGHT 0
 # define WIDTH 1
+# ifndef NB_THREADS
+#  define NB_THREADS	16
+# endif
 
 //=================== STRUCTURES ====================//
 typedef struct s_color
@@ -511,10 +514,6 @@ void		cub_mouse_hide(t_cub *cub);
 int			compute_ray(t_cub *cub, int ray_id, double segments_size);
 
 //=================== THREADS ======================//
-# ifndef NB_THREADS
-#  define NB_THREADS	16
-# endif
-
 int			create_threads(t_cub *cub);
 void		destroy_threads(t_cub *cub);
 
