@@ -23,7 +23,8 @@ void	destroy_data(t_data *data)
 			free(data->texture[i++]);
 		free(data->ceiling_color);
 		free(data->floor_color);
-		ft_old_split_destroy(data->map);
+		if (data->map)
+			ft_old_split_destroy(data->map);
 		free(data);
 	}
 }

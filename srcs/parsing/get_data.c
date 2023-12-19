@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 07:54:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/11/02 06:22:14 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 14:55:28 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ t_data	*get_data(char **argv)
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
 		return (ft_lstclear(&file, free), NULL);
-	refactor_spaces(file);
-	if (is_empty(file) || get_colors(data, file))
+	if (refactor_spaces(file) || is_empty(file) || get_colors(data, file))
 		return (ft_lstclear(&file, free), destroy_data(data), NULL);
 	if (parse_textures(data, file))
 		return (ft_lstclear(&file, free), NULL);
@@ -66,7 +65,7 @@ t_data	*get_data(char **argv)
 		destroy_data(data), NULL);
 	data->map = get_map_from_file(file);
 	if (!data->map || parse_map(data->map))
-		return (destroy_file(file), destroy_data(data), NULL);
+		return (destroy_data(data), ft_lstclear(&file, free), NULL);
 	destroy_file(file);
 	return (data);
 }

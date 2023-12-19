@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 19:04:24 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 08:19:19 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/19 15:09:54 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,14 @@ void	init_cub(t_cub *cub)
 	cub->wall_heights = malloc(sizeof(int) * cub->win_size[WIDTH]);
 }
 
-void	init_player(t_cub *cub)
+int	init_player(t_cub *cub)
 {
 	cub->player_position = get_position(cub->data->map);
+	if (!cub->player_position)
+		return (0);
 	cub->player_position->x += 0.5;
 	cub->player_position->y += 0.5;
 	cub->view_angle = get_orientation(cub->data->map, cub->player_position);
 	cub->fov = M_PI_2;
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 18:41:52 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 18:54:57 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 14:35:45 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_position	*create_position(double i, double j)
 	t_position	*pos;
 
 	pos = malloc(sizeof(t_position));
+	if (!pos)
+		return (ft_putstr_fd(ERR ALLOC_ERR EOL, 2), NULL);
 	pos->x = j;
 	pos->y = i;
 	return (pos);

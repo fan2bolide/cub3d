@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 18:39:48 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/18 18:39:48 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 14:31:30 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@ int	close_window(t_cub *cub)
 	{
 		i = 0;
 		while (i <= 4)
-			if (cub->textures[i].img)
-				mlx_destroy_image(cub->mlx, cub->textures[i++].img);
+			if (cub->textures[i++].img)
+				mlx_destroy_image(cub->mlx, cub->textures[i - 1].img);
 		if (cub->img.img)
 			mlx_destroy_image(cub->mlx, cub->img.img);
-		mlx_destroy_window(cub->mlx, cub->win);
-		mlx_destroy_display(cub->mlx);
+		if (cub->win)
+			mlx_destroy_window(cub->mlx, cub->win);
+		if (cub->mlx)
+			mlx_destroy_display(cub->mlx);
 		free(cub->mlx);
 		destroy_data(cub->data);
 		free(cub->player_position);

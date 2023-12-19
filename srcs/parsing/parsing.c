@@ -20,6 +20,6 @@ t_data	*parsing(int argc, char **argv)
 		return (ft_putstr_fd(ERR WRONG_ARG_N EOL, 2), NULL);
 	data = get_data(argv);
 	if (!data)
-		return (destroy_data(data), NULL);
+		return (NULL);
 	return (data);
 }

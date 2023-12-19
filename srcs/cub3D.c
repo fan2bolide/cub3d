@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:28:49 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 13:11:31 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 14:35:46 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,8 @@ int	main(int argc, char **argv)
 	if (!cub->rays || !cub->angles || !cub->wall_heights)
 		return (ft_putstr_fd(ERR ALLOC_ERR EOL, 2), close_window(cub), 1);
 	cub->data = parsing(argc, argv);
-	if (!cub->data)
+	if (!cub->data || !init_player(cub))
 		return (close_window(cub));
-	init_player(cub);
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->win_size[WIDTH], \
 			cub->win_size[0], "cub3D");

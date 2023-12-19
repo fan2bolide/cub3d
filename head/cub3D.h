@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 06:30:22 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 12:46:51 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 12:50:17 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,7 @@ t_position	*get_position(char **map);
 //===================== UTILS ======================//
 void		destroy_data(t_data *data);
 void		init_cub(t_cub *cub);
-void		init_player(t_cub *cub);
+int init_player(t_cub *cub);
 int			refactor_spaces(t_list *list);
 int			ray_casting(t_cub *cub);
 int			close_window(t_cub *cub);

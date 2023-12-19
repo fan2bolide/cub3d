@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 16:11:11 by nfaust            #+#    #+#             */
-/*   Updated: 2023/10/30 15:14:15 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/19 14:37:39 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*replace_extra_spaces(char *content)
 			counter++;
 	new_content = malloc(sizeof(char) * counter + 1);
 	if (!new_content)
-		return (free(content), NULL);
+		return (ft_putstr_fd(ERR ALLOC_ERR EOL, 2), free(content), NULL);
 	i = 0;
 	j = 0;
 	while (j < counter && content[i])
