@@ -4,6 +4,7 @@ SRCS		:=	cub3D.c\
 				init_textures.c\
 				mouse/mouse_utils_linux.c\
 				mouse/mouse_utils_apple.c\
+				mouse/handle_button_press.c\
 				player/player_handling.c\
 				player/view_handling.c\
 				player/teleport_player.c\
@@ -105,7 +106,7 @@ CC			:=	cc
 
 RM			:=	rm -rf
 
-CFLAGS		=	-Wall -Wextra -pthread -g3 -Ofast -flto
+CFLAGS		=	-Wall -Wextra -Werror -pthread #-Ofast -flto
 
 DFLAGS		:=	-MP -MMD
 

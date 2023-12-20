@@ -34,11 +34,11 @@ void	clear_lists(t_cub *cub)
 	i = 0;
 	while (i < cub->win_size[WIDTH])
 	{
-		ft_dblstclear(cub->portals + i, free);
+		ft_dblstclear((t_dblist **)cub->portals + i, free);
 		cub->portals[i] = NULL;
-		ft_dblstclear(cub->glass + i, free);
+		ft_dblstclear((t_dblist **)cub->glass + i, free);
 		cub->glass[i] = NULL;
-		ft_dblstclear(cub->doors + i, free);
+		ft_dblstclear((t_dblist **)cub->doors + i, free);
 		cub->doors[i++] = NULL;
 	}
 }

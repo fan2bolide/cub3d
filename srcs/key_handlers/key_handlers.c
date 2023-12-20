@@ -24,11 +24,7 @@ void	handle_special_keys(t_cub *cub, int keycode)
 {
 	if (!cub->menu.on_screen || keycode == KEY_TAB)
 	{
-		if (keycode == KEY_T)
-			set_portal_on_map(cub, 'B');
-		else if (keycode == KEY_Y)
-			set_portal_on_map(cub, 'O');
-		else if (keycode == KEY_R)
+		if (keycode == KEY_R)
 		{
 			set_portal_on_map(cub, 'R');
 			set_random_position(cub);

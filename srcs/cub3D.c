@@ -46,7 +46,7 @@ static int	cub_check_args(int argc, char **argv, t_cub *cub)
 	return (0);
 }
 
-int init_main_image(t_cub *cub)
+int	init_main_image(t_cub *cub)
 {
 	cub->img.img = mlx_new_image(cub->mlx, cub->win_size[WIDTH], \
 											cub->win_size[HEIGHT]);

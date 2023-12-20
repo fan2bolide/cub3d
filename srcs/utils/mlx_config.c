@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_config.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 23:21:31 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/12 23:53:42 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/20 16:37:58 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,7 @@ void	cub_mlx_config(t_cub *cub)
 	mlx_mouse_hook(cub->win, cub_handle_mouse, cub);
 	mlx_hook(cub->win, BUTTON_RELEASE, BUTTON_RELEASE_MASK, \
 		cub_handle_mouse_release, cub);
+	mlx_hook(cub->win, BUTTON_PRESS, BUTTON_PRESS_MASK, \
+		cub_handle_button_press, cub);
 	mlx_loop_hook(cub->mlx, display_valve_guy, cub);
 }

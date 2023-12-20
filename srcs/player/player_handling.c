@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:19:43 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/20 15:47:25 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/20 15:49:09 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 	{
 		if ((int)old_y != (int)new_y)
 		{
-			if (ft_isset(cub->data->map[(int)old_y][(int)new_x], "BOR"))
+			if (!ft_isset(cub->data->map[(int)old_y][(int)new_x], "BOR"))
 				if (ft_isset(cub->data->map[(int) new_y][(int) old_x],
 					"1GDBOR"))
 					return (cub->player_position.x = new_x, (void) 0);

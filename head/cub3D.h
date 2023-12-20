@@ -531,6 +531,7 @@ void		cub_update_doors(t_cub *cub);
 
 //===================== GUNS =======================//
 void		display_portal_gun(t_cub *cub);
+int			cub_handle_button_press(int button, int x, int y, t_cub *cub);
 
 //==================== PLAYER ======================//
 void		teleport_player(double new_x, double new_y, \

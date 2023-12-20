@@ -119,7 +119,7 @@ clean:
 	$(RM) -r obj
 
 fclean: clean
-	$(RM) -f $(NAME)
+	$(RM) $(NAME)
 
 fsan_a: FLAGS += -fsanitize=address -g3
 fsan_a: all
