@@ -16,12 +16,24 @@ double	get_walk_angle(t_cub *cub)
 {
 	double	walk_angle;
 
-	if (cub->keys_states[KEY_S])
+	if (cub->keys_states[KEY_S] && cub->keys_states[KEY_A] \
+		&& !cub->keys_states[KEY_D])
+		walk_angle = cub->view_angle + M_PI + M_PI_4;
+	else if (cub->keys_states[KEY_S] && cub->keys_states[KEY_D] \
+		&& !cub->keys_states[KEY_A])
+		walk_angle = cub->view_angle + M_PI - M_PI_4;
+	else if (cub->keys_states[KEY_W] && cub->keys_states[KEY_A] \
+		&& !cub->keys_states[KEY_D])
+		walk_angle = cub->view_angle - M_PI_4;
+	else if (cub->keys_states[KEY_W] && cub->keys_states[KEY_D] \
+		&& !cub->keys_states[KEY_A])
+		walk_angle = cub->view_angle + M_PI_4;
+	else if (cub->keys_states[KEY_S] && !cub->keys_states[KEY_A])
 		walk_angle = cub->view_angle + M_PI;
-	else if (cub->keys_states[KEY_A])
+	else if (cub->keys_states[KEY_A] && !cub->keys_states[KEY_W])
 		walk_angle = cub->view_angle - M_PI_2;
-	else if (cub->keys_states[KEY_D])
-		walk_angle = cub->view_angle + M_PI;
+	else if (cub->keys_states[KEY_D] && !cub->keys_states[KEY_W])
+		walk_angle = cub->view_angle + M_PI_2;
 	else
 		walk_angle = cub->view_angle;
 	return (walk_angle);
