@@ -6,7 +6,7 @@
 /*   By: bajeanno <bajeanno@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:03:52 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/19 09:21:50 by bajeanno         ###   ########.fr       */
+/*   Updated: 2023/12/20 11:08:09 by bajeanno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,7 @@ static void	free_cub(t_cub *cub)
 
 int	close_window(t_cub *cub)
 {
-	int	i;
-
-	i = 0;
-	pthread_mutex_lock(&cub->program_ends_mutex);
-	cub->program_ends = true;
-	pthread_mutex_unlock(&cub->program_ends_mutex);
-	while (cub->threads && i < NB_THREADS)
-		pthread_join(cub->threads[i++], NULL);
-	pthread_mutex_destroy(&cub->finished_mutex);
-	pthread_mutex_destroy(&cub->program_ends_mutex);
-	pthread_mutex_destroy(&cub->ray_mutex);
+	destroy_threads(cub);
 	mlx_loop_end(cub->mlx);
 	cub_destroy_images(cub);
 	mlx_destroy_window(cub->mlx, cub->win);
