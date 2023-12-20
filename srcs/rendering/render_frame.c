@@ -59,7 +59,7 @@ void	wait_rendering(t_cub *cub, struct timeval start_time)
 		else
 			usleep(100);
 	}
-	while (get_timestamp(start_time, get_current_time()) < 5)
+	while (get_timestamp(start_time, get_current_time()) < 14)
 		usleep(100);
 }
 

@@ -37,6 +37,8 @@ char	get_prtl_or(t_cub *cub, char portal)
 {
 	if (portal == 'B')
 		return (cub->blue_prtl);
+	if (portal == 'R')
+		return (cub->rick_prtl);
 	return (cub->orange_prtl);
 }
 

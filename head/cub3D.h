@@ -475,6 +475,7 @@ int			teleport_ray(t_cub *cub, t_position *ray, double *angle,
 				char entry_portal);
 int			close_window(t_cub *cub);
 double		compute_distance(t_position player, t_position ray);
+char		get_prtl_or(t_cub *cub, char portal);
 
 //============== TEXTURES RENDERING ===============//
 int			get_texture_pixel_color(t_cub *cub, int texture_id, \

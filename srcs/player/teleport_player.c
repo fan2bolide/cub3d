@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 08:49:38 by nfaust            #+#    #+#             */
-/*   Updated: 2023/12/19 17:00:14 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/20 14:10:19 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,24 @@ void	change_pos(t_cub *cub, double walk_angle, double walk_angle_save,
 	cub->view_angle += walk_angle - walk_angle_save;
 }
 
+bool	is_rick_angle_right(t_cub *cub, double angle)
+{
+	double	angle_sin;
+	double	angle_cos;
+
+	angle_sin = sin(angle);
+	if (cub->rick_prtl == 'N' && angle_sin < 0)
+		return (true);
+	if (cub->rick_prtl == 'S' && angle_sin >= 0)
+		return (true);
+	angle_cos = cos(angle);
+	if (cub->rick_prtl == 'W' && angle_cos < 0)
+		return (true);
+	if (cub->rick_prtl == 'E' && angle_cos >= 0)
+		return (true);
+	return (false);
+}
+
 void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)
 {
 	t_position	new_pos;
@@ -53,7 +71,7 @@ void	teleport_player(double new_x, double new_y, char prtl_id, t_cub *cub)
 		new_pos.y = (int)new_y;
 	else
 		new_pos.y = new_y;
-	if (prtl_id == 'R')
+	if (prtl_id == 'R' && is_rick_angle_right(cub, get_walk_angle(cub)))
 		return (cub->player_position = cub->random_position, \
 			cub->view_angle = cub->random_angle, set_random_position(cub),
 			(void)0);
