@@ -6,7 +6,7 @@
 /*   By: nfaust <nfaust@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 20:19:43 by bajeanno          #+#    #+#             */
-/*   Updated: 2023/12/19 17:05:50 by nfaust           ###   ########.fr       */
+/*   Updated: 2023/12/20 13:15:42 by nfaust           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	report_movement(double new_y, double new_x, t_cub *cub)
 		if ((int)old_y != (int)new_y)
 		{
 			if (ft_isset(cub->data->map[(int)old_y][(int)new_x], "BOR"))
-				return;
+				return ;
 			if (ft_isset(cub->data->map[(int) new_y][(int) old_x], "1GD"))
 				return (cub->player_position.x = new_x, (void) 0);
 		}
@@ -47,9 +47,9 @@ void	move_player(double x_change, double y_change, t_cub *cub)
 	new_y = cub->player_position.y + y_change;
 	new_x = cub->player_position.x + x_change;
 	if (ft_isset(cub->data->map[(int)new_y] \
-	[(int) cub->player_position.x], "1DG")
+	[(int) cub->player_position.x], "1DGBORD")
 		&& ft_isset(cub->data->map[(int)cub->player_position.y][(int)new_x],
-		"1DG"))
+		"1DGBORD"))
 		return ;
 	if (ft_isset(cub->data->map[(int)new_y][(int)new_x], "1DG"))
 		return (report_movement(new_y, new_x, cub));
